@@ -20,7 +20,7 @@ class TranslateService(private val translator: NaverTranslator) {
 
     suspend fun translate(requestDTO: List<TranslateRequestDTO>): ObjectResponse<List<TranslateResponseDTO>> {
         val response = translator.translate(requestDTO)
-        return if (response.find { it.isSuccess } != null)
+        return if (response.all { it.isSuccess })
             ObjectResponse(true, response)
         else
             ObjectResponse(false, response) //하나라도 성공한게 없으면
