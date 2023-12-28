@@ -2,10 +2,16 @@ package com.example.demo.component.ocr.format
 
 import com.google.cloud.vision.v1.*
 import com.google.cloud.vision.v1.TextAnnotation.TextProperty
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.util.regex.Pattern
 
 @Component
 class BlockFormatter : OCRFormatter {
+
+    @Value("\${ocr.ignore_unnecessary}")
+    private var ignoreUnnecessaryData : Boolean = false
+
     // https://stackoverflow.com/questions/57071788/google-vision-api-text-detection-display-words-by-block참고
     override fun format(response: AnnotateImageResponse): String {
         return getTextBlocks(response).joinToString(separator = "\n")
@@ -24,6 +30,12 @@ class BlockFormatter : OCRFormatter {
         return response.fullTextAnnotation.pagesList
                 .flatMap { page -> page.blocksList }
                 .map { block -> getTextInBlock(block) }
+                .filter { text ->
+                    if (ignoreUnnecessaryData)
+                        Pattern.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*", text)
+                    else
+                        true
+                }
                 .toList()
 
     }
