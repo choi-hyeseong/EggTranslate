@@ -8,7 +8,7 @@ import com.example.demo.common.response.ObjectResponse
 import org.springframework.stereotype.Service
 
 @Service
-class TranslateService(private val translator: NaverTranslator) {
+class TranslateService(private val translator: GoogleTranslator) {
 
     suspend fun translate(requestDTO: TranslateRequestDTO): ObjectResponse<TranslateResponseDTO> {
         val response = translator.translate(requestDTO)
