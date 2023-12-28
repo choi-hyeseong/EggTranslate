@@ -8,11 +8,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class GoogleTranslator(private val webClient: GoogleWebClient) : Translator {
-    override suspend fun translate(requestDTO: TranslateRequestDTO): ObjectResponse<TranslateResponseDTO> {
+    override suspend fun translate(requestDTO: TranslateRequestDTO): TranslateResponseDTO {
         val response = webClient.request(requestDTO)
-        return if (response == null)
-            ObjectResponse(false, TranslateResponseDTO.empty())
-        else
-            ObjectResponse(true, response.toResponseDTO())
+        return response?.toResponseDTO() ?: TranslateResponseDTO.empty()
     }
 }

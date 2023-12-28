@@ -17,10 +17,13 @@ class ImageService(private val ocrService: OCRService, private val translateServ
     private lateinit var outPath: String
     private val log = logger()
 
-    suspend fun handleImage(image: MultipartFile): ObjectResponse<TranslateResponseDTO> {
+    suspend fun handleImage(image: List<MultipartFile>): ObjectResponse<List<TranslateResponseDTO>> {
         //save image
-        saveImage(image)
-        return translateService.translate(TranslateRequestDTO("ko", "en", ocrService.readImage(image)))
+        image.forEach { saveImage(it) }
+        return translateService.translate(image
+                .map { TranslateRequestDTO("ko", "en", ocrService.readImage(it)) }
+                .toList()
+        )
     }
 
     suspend fun saveImage(image: MultipartFile) {

@@ -6,5 +6,9 @@ import com.example.demo.response.ObjectResponse
 
 interface Translator {
 
-    suspend fun translate(requestDTO: TranslateRequestDTO) : ObjectResponse<TranslateResponseDTO>
+    suspend fun translate(requestDTO: TranslateRequestDTO) : TranslateResponseDTO
+
+    suspend fun translate(requestDTO: List<TranslateRequestDTO>) : List<TranslateResponseDTO> {
+        return requestDTO.map { translate(it) }.toList()
+    }
 }

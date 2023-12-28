@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile
 class ImageController(private val imageService: ImageService, private val translateService: TranslateService) {
 
     @PostMapping("/upload")
-    suspend fun uploadImage(@RequestParam(name = "image", required = true) image : MultipartFile) : ObjectResponse<TranslateResponseDTO> {
+    suspend fun uploadImage(@RequestParam(name = "image", required = true) image : List<MultipartFile>) : ObjectResponse<List<TranslateResponseDTO>> {
         return imageService.handleImage(image)
     }
 

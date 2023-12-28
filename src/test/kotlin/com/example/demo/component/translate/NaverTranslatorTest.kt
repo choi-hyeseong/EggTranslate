@@ -25,11 +25,11 @@ class NaverTranslatorTest {
         val translator = NaverTranslator(naverWebClient)
         val dto = mockk<NaverResponseDTO>()
         coEvery { naverWebClient.request(any()) } returns dto
-        every { dto.toResponseDTO() } returns TranslateResponseDTO("", target, "", converted)
+        every { dto.toResponseDTO() } returns TranslateResponseDTO(true,"", target, "", converted)
         runBlocking {
             val response = translator.translate(TranslateRequestDTO("ko", target, "asdf"))
             assertTrue(response.isSuccess)
-            assertEquals(converted, response.response.result)
+            assertEquals(converted, response.result)
         }
     }
 

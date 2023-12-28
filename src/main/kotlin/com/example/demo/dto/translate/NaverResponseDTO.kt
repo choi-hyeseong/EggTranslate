@@ -6,7 +6,7 @@ class NaverResponseDTO {
     lateinit var origin: String
 
     fun toResponseDTO(): TranslateResponseDTO {
-        return TranslateResponseDTO(message.result.srcLangType, message.result.tarLangType, origin, message.result.translatedText)
+        return TranslateResponseDTO(true, message.result.srcLangType, message.result.tarLangType, origin, message.result.translatedText) //전환되는 경우는 성공
     }
 
     class Message {
