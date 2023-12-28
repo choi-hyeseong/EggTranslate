@@ -1,4 +1,4 @@
-package com.example.demo.config
+package com.example.demo.common.config
 
 import com.google.cloud.vision.v1.ImageAnnotatorClient
 import com.google.cloud.vision.v1.ImageAnnotatorSettings

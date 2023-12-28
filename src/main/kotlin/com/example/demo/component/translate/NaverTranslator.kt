@@ -4,7 +4,7 @@ import com.example.demo.component.web.NaverWebClient
 import com.example.demo.dto.translate.NaverResponseDTO
 import com.example.demo.dto.translate.TranslateRequestDTO
 import com.example.demo.dto.translate.TranslateResponseDTO
-import com.example.demo.response.ObjectResponse
+import com.example.demo.common.response.ObjectResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient

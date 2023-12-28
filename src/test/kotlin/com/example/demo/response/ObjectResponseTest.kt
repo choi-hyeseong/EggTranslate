@@ -1,5 +1,6 @@
 package com.example.demo.response
 
+import com.example.demo.common.response.ObjectResponse
 import com.example.demo.component.translate.Translator
 import com.example.demo.dto.translate.TranslateRequestDTO
 import io.mockk.coEvery

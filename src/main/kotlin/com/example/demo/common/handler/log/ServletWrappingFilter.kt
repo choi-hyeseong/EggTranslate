@@ -1,4 +1,4 @@
-package com.example.demo.handler.log
+package com.example.demo.common.handler.log
 
 import jakarta.servlet.AsyncEvent
 import jakarta.servlet.AsyncListener

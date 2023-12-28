@@ -1,6 +1,6 @@
-package com.example.demo.config
+package com.example.demo.common.config
 
-import com.example.demo.handler.log.LoggingInterceptor
+import com.example.demo.common.handler.log.LoggingInterceptor
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer

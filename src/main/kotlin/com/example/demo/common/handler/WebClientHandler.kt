@@ -1,7 +1,7 @@
-package com.example.demo.handler
+package com.example.demo.common.handler
 
 import com.example.demo.logger
-import com.example.demo.response.MessageResponse
+import com.example.demo.common.response.MessageResponse
 import org.apache.coyote.BadRequestException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

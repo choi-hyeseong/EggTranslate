@@ -4,7 +4,7 @@ import com.example.demo.component.translate.GoogleTranslator
 import com.example.demo.component.translate.NaverTranslator
 import com.example.demo.dto.translate.TranslateRequestDTO
 import com.example.demo.dto.translate.TranslateResponseDTO
-import com.example.demo.response.ObjectResponse
+import com.example.demo.common.response.ObjectResponse
 import org.springframework.stereotype.Service
 
 @Service
@@ -23,6 +23,6 @@ class TranslateService(private val translator: NaverTranslator) {
         return if (response.find { it.isSuccess } != null)
             ObjectResponse(true, response)
         else
-            ObjectResponse(false, response)
+            ObjectResponse(false, response) //하나라도 성공한게 없으면
     }
 }

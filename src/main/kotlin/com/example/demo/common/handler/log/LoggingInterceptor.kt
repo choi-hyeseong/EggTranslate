@@ -1,6 +1,6 @@
-package com.example.demo.handler.log
+package com.example.demo.common.handler.log
 
-import com.example.demo.handler.log.print.JsonConverter
+import com.example.demo.common.handler.log.print.JsonConverter
 import com.example.demo.logger
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

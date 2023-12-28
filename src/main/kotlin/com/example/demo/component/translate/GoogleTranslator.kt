@@ -3,7 +3,7 @@ package com.example.demo.component.translate
 import com.example.demo.component.web.GoogleWebClient
 import com.example.demo.dto.translate.TranslateRequestDTO
 import com.example.demo.dto.translate.TranslateResponseDTO
-import com.example.demo.response.ObjectResponse
+import com.example.demo.common.response.ObjectResponse
 import org.springframework.stereotype.Component
 
 @Component

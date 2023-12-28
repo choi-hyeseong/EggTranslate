@@ -1,4 +1,4 @@
-package com.example.demo.handler.log.print
+package com.example.demo.common.handler.log.print
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

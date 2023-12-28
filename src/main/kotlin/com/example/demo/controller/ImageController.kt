@@ -2,8 +2,8 @@ package com.example.demo.controller
 
 import com.example.demo.dto.translate.TranslateRequestDTO
 import com.example.demo.dto.translate.TranslateResponseDTO
-import com.example.demo.response.MessageResponse
-import com.example.demo.response.ObjectResponse
+import com.example.demo.common.response.MessageResponse
+import com.example.demo.common.response.ObjectResponse
 import com.example.demo.service.ImageService
 import com.example.demo.service.TranslateService
 import org.springframework.http.HttpStatus
