@@ -17,11 +17,11 @@ class NormalConverter : Converter {
 }
 
 @Component
-class JsonConverter : NormalConverter() {
+class JsonConverter(private val normalConverter: NormalConverter) : Converter {
     private val gson : Gson = GsonBuilder().setPrettyPrinting().create()
 
     override fun convert(obj: ByteArray): String {
-        return gson.toJson(JsonParser.parseString(super.convert(obj)))
+        return gson.toJson(JsonParser.parseString(normalConverter.convert(obj)))
     }
 
 }
