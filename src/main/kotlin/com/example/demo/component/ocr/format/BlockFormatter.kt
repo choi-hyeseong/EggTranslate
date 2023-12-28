@@ -11,6 +11,7 @@ class BlockFormatter : OCRFormatter {
 
     @Value("\${ocr.ignore_unnecessary}")
     private var ignoreUnnecessaryData : Boolean = false
+    private val pattern : Pattern = Pattern.compile(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")
 
     // https://stackoverflow.com/questions/57071788/google-vision-api-text-detection-display-words-by-block참고
     override fun format(response: AnnotateImageResponse): String {
@@ -32,7 +33,7 @@ class BlockFormatter : OCRFormatter {
                 .map { block -> getTextInBlock(block) }
                 .filter { text ->
                     if (ignoreUnnecessaryData)
-                        Pattern.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*", text)
+                        pattern.matcher(text).matches()
                     else
                         true
                 }
