@@ -34,10 +34,10 @@ class ObjectResponseTest {
     fun TEST_RETURN_RESULT() {
         val mockTrans = mockk<Translator>()
         val response = ObjectResponse(false, mockTrans)
-        coEvery { mockTrans.translate(any())} returns mockk()
+        coEvery { mockTrans.translate(any<TranslateRequestDTO>())} returns mockk()
         runBlocking {
             response.response.translate(TranslateRequestDTO("", "", ""))
-            coVerify(atLeast = 1) { mockTrans.translate(any()) }
+            coVerify(atLeast = 1) { mockTrans.translate(any<TranslateRequestDTO>()) }
         }
 
     }
