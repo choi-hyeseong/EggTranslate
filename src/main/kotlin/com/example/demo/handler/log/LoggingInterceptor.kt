@@ -16,9 +16,11 @@ class LoggingInterceptor(private val converter: JsonConverter) : HandlerIntercep
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         if (request.contentType.contains("application/json")) {
-            val wrapRequest = request as MultiAccessRequestWrapper
-            val body = converter.convert(wrapRequest.getContents())
-            log.info("---> [REQUEST] {} {} {} BODY\n{}", request.method, request.requestURL, request.remoteAddr, body)
+            val wrapRequest = request as? MultiAccessRequestWrapper
+            wrapRequest?.let {
+                val body = converter.convert(it.getContents())
+                log.info("---> [REQUEST] {} {} {} BODY\n{}", request.method, request.requestURL, request.remoteAddr, body)
+            }
         }
         else
             log.info("---> [REQUEST] {} {} {}", request.method, request.requestURL, request.remoteAddr)
@@ -26,10 +28,13 @@ class LoggingInterceptor(private val converter: JsonConverter) : HandlerIntercep
     }
 
     override fun afterCompletion(request: HttpServletRequest, response: HttpServletResponse, handler: Any, ex: Exception?) {
-        val wrapResponse = response as ContentCachingResponseWrapper
-        val body = converter.convert(wrapResponse.contentAsByteArray)
-        log.info("<--- [RESPONSE] {} BODY\n{}", response.status, body)
-        super.afterCompletion(request, response, handler, ex)
+        val wrapResponse = response as? ContentCachingResponseWrapper
+        wrapResponse?.let {
+            val body = converter.convert(it.contentAsByteArray)
+            log.info("<--- [RESPONSE] {} BODY\n{}", response.status, body)
+            super.afterCompletion(request, response, handler, ex)
+        }
+
 
     }
 
