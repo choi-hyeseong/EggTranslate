@@ -22,6 +22,6 @@ class VisionConfig {
         val settings: ImageAnnotatorSettings = ImageAnnotatorSettings.newBuilder()
                 .setCredentialsProvider(DefaultCredentialsProvider { Credentials() })
                 .build()
-        return ImageAnnotatorClient.create(settings).apply { }
+        return ImageAnnotatorClient.create(settings)
     }
 }
