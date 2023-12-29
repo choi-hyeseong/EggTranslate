@@ -1,20 +1,20 @@
 package com.example.demo.common.handler.log
 
-import jakarta.servlet.AsyncEvent
-import jakarta.servlet.AsyncListener
-import jakarta.servlet.FilterChain
+import jakarta.servlet.*
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component
-import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.util.ContentCachingResponseWrapper
 
 @Component
-class ServletWrappingFilter : OncePerRequestFilter() {
-    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+class ServletWrappingFilter : Filter {
+
+    override fun doFilter(p0: ServletRequest?, p1: ServletResponse?, p2: FilterChain?) {
+        val request = p0 as HttpServletRequest
+        val response = p1 as HttpServletResponse
         val wrapRequest = MultiAccessRequestWrapper(request)
         val wrapResponse = ContentCachingResponseWrapper(response)
-        filterChain.doFilter(wrapRequest, wrapResponse)
+        p2?.doFilter(wrapRequest, wrapResponse)
         //wrapResponse.copyBodyToResponse() //break point 사용가능
         //async controller는 listener를 통해 copy
         if (wrapRequest.isAsyncStarted)
@@ -22,6 +22,7 @@ class ServletWrappingFilter : OncePerRequestFilter() {
         else
             wrapResponse.copyBodyToResponse()
     }
+
 
     inner class AsyncResponseHandler(private val wrapResponse : ContentCachingResponseWrapper) : AsyncListener {
         override fun onComplete(p0: AsyncEvent?) {
@@ -38,4 +39,8 @@ class ServletWrappingFilter : OncePerRequestFilter() {
         }
 
     }
+
+
+
+
 }
