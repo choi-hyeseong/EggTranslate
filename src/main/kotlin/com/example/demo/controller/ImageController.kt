@@ -20,19 +20,10 @@ import org.springframework.web.multipart.MultipartFile
 @RequestMapping("/api/image")
 class ImageController(private val imageService: ImageService, private val translateService: TranslateService) {
 
+    //분리가능
     @PostMapping("/upload")
     suspend fun uploadImage(@ImageValid @RequestParam(name = "image", required = true) image : List<MultipartFile>) : ObjectResponse<List<TranslateResponseDTO>> {
         return imageService.handleImage(image)
-    }
-
-    //for test
-    @PostMapping("/")
-    suspend fun image(@RequestBody translateRequestDTO: TranslateRequestDTO) : ResponseEntity<ObjectResponse<TranslateResponseDTO>> {
-        val result = translateService.translate(translateRequestDTO)
-        return if (result.isSuccess)
-            ResponseEntity(result, HttpStatus.OK)
-        else
-            ResponseEntity(result, HttpStatus.BAD_REQUEST)
     }
 
 }
