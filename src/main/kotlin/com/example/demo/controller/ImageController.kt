@@ -18,11 +18,12 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/image")
-class ImageController(private val imageService: ImageService, private val translateService: TranslateService) {
+class ImageController(private val imageService: ImageService) {
 
     //분리가능
     @PostMapping("/upload")
     suspend fun uploadImage(@ImageValid @RequestParam(name = "image", required = true) image : List<MultipartFile>) : ObjectResponse<List<TranslateResponseDTO>> {
+        //withContext로 dispatcher 지정해도 안전.
         return imageService.handleImage(image)
     }
 
