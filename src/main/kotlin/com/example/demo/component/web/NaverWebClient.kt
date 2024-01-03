@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import java.net.URLEncoder
 
-@Component
+
 class NaverWebClient {
 
     @Value("\${naver.client-id}")
