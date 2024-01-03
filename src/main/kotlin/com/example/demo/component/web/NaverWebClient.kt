@@ -2,7 +2,6 @@ package com.example.demo.component.web
 
 import com.example.demo.dto.translate.NaverResponseDTO
 import com.example.demo.dto.translate.TranslateRequestDTO
-import com.example.demo.common.response.Response
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient

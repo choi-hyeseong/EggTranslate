@@ -1,6 +1,6 @@
 package com.example.demo.component.message
 
-import com.example.demo.common.response.ObjectResponse
+import com.example.demo.common.response.Response
 import com.example.demo.dto.push.FirebaseRequestDTO
 import com.example.demo.dto.push.FirebaseResponseDTO
 import com.example.demo.logger
@@ -16,7 +16,7 @@ class FirebaseMessenger(private val firebaseMessaging: FirebaseMessaging) {
     private val log = logger()
 
     // list로 받는 이유 = api 1회 call 마다 500개 limit -> 끊어서 보내기
-    suspend fun requestNotification(requests: List<FirebaseRequestDTO>): ObjectResponse<FirebaseResponseDTO> {
+    suspend fun requestNotification(requests: List<FirebaseRequestDTO>): Response<FirebaseResponseDTO> {
         var response : FirebaseResponseDTO = FirebaseResponseDTO.empty()
         var count = 0
         var startIndex = 0
@@ -37,9 +37,9 @@ class FirebaseMessenger(private val firebaseMessaging: FirebaseMessaging) {
         }
 
         return if (response.failCount > 0 || response.isEmpty())
-            ObjectResponse(false, response)
+            Response.ofFailure(null, response)
         else
-            ObjectResponse(true, response)
+            Response.ofSuccess(null, response)
     }
 
     private suspend fun callNotification(requests: List<FirebaseRequestDTO>): FirebaseResponseDTO {

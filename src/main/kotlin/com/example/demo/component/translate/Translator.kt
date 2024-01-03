@@ -2,7 +2,6 @@ package com.example.demo.component.translate
 
 import com.example.demo.dto.translate.TranslateRequestDTO
 import com.example.demo.dto.translate.TranslateResponseDTO
-import com.example.demo.common.response.ObjectResponse
 
 interface Translator {
 

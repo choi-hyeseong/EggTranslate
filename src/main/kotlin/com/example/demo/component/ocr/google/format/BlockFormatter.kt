@@ -1,7 +1,8 @@
 package com.example.demo.component.ocr.google.format
 
-import com.google.cloud.vision.v1.*
-import com.google.cloud.vision.v1.TextAnnotation.TextProperty
+import com.google.cloud.vision.v1.AnnotateImageResponse
+import com.google.cloud.vision.v1.Block
+import com.google.cloud.vision.v1.TextAnnotation
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.regex.Pattern

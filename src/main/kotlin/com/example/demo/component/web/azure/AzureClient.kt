@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 import java.time.Duration
 import java.util.regex.Pattern
-import kotlin.jvm.Throws
 
 @Component
 class AzureClient(private val documentAnalysis : DocumentAnalysisClient) {

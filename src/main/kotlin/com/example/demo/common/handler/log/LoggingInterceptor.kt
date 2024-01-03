@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.util.ContentCachingResponseWrapper
-import java.lang.Exception
 
 @Component
 class LoggingInterceptor(private val converter: JsonConverter) : HandlerInterceptor {

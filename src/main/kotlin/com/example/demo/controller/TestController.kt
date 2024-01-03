@@ -1,6 +1,6 @@
 package com.example.demo.controller
 
-import com.example.demo.common.response.ObjectResponse
+import com.example.demo.common.response.Response
 import com.example.demo.component.message.FirebaseMessenger
 import com.example.demo.dto.push.FirebaseRequestDTO
 import com.example.demo.dto.push.FirebaseResponseDTO
@@ -20,7 +20,7 @@ class TestController(private val translateService: TranslateService, private val
 
     //for test
     @PostMapping("/")
-    suspend fun image(@RequestBody translateRequestDTO: TranslateRequestDTO) : ResponseEntity<ObjectResponse<TranslateResponseDTO>> {
+    suspend fun image(@RequestBody translateRequestDTO: TranslateRequestDTO) : ResponseEntity<Response<TranslateResponseDTO>> {
         val result = translateService.translate(translateRequestDTO)
         return if (result.isSuccess)
             ResponseEntity(result, HttpStatus.OK)
@@ -29,7 +29,7 @@ class TestController(private val translateService: TranslateService, private val
     }
 
     @PostMapping("/firebase")
-    suspend fun notify(@RequestBody firebaseRequestDTO: List<FirebaseRequestDTO>) : ObjectResponse<FirebaseResponseDTO> {
+    suspend fun notify(@RequestBody firebaseRequestDTO: List<FirebaseRequestDTO>) : Response<FirebaseResponseDTO> {
         return firebaseMessenger.requestNotification(firebaseRequestDTO)
     }
 

@@ -24,7 +24,7 @@ class FirebaseMessengerTest {
         runBlocking {
             val response = messenger.requestNotification(listOf())
             assertFalse(response.isSuccess)
-            assertTrue(response.response.isEmpty())
+            assertTrue(response.data?.isEmpty()!!)
             verify(exactly = 0) { messaging.sendEach(any()) }
         }
     }
@@ -50,9 +50,9 @@ class FirebaseMessengerTest {
         }
         runBlocking {
             val response = messenger.requestNotification(listOf(requestContent))
-            assertEquals(response.response.successCount, 1)
+            assertEquals(response.data?.successCount, 1)
             assertTrue(response.isSuccess)
-            assertEquals(response.response.failCount, 0)
+            assertEquals(response.data?.failCount, 0)
             //assertEquals(listSlot.captured[0].getToken())
         }
     }
@@ -82,9 +82,9 @@ class FirebaseMessengerTest {
         }
         runBlocking {
             val response = messenger.requestNotification(listOf(requestContent))
-            assertEquals(response.response.successCount, list.size)
+            assertEquals(response.data?.successCount, list.size)
             assertTrue(response.isSuccess)
-            assertEquals(response.response.failCount, 0)
+            assertEquals(response.data?.failCount, 0)
             //assertEquals(listSlot.captured[0].getToken())
         }
     }
@@ -114,9 +114,9 @@ class FirebaseMessengerTest {
         }
         runBlocking {
             val response = messenger.requestNotification(listOf(requestContent))
-            assertEquals(response.response.successCount, list.size)
+            assertEquals(response.data?.successCount, list.size)
             assertTrue(response.isSuccess)
-            assertEquals(response.response.failCount, 0)
+            assertEquals(response.data?.failCount, 0)
             //assertEquals(listSlot.captured[0].getToken())
         }
     }

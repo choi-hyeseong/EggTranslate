@@ -4,7 +4,6 @@ import com.example.demo.common.handler.log.LoggingInterceptor
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import kotlin.math.log
 
 
 //interceptor는 mvc config에 넣어야 작동

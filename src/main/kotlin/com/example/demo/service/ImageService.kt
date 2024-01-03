@@ -1,10 +1,11 @@
 package com.example.demo.service
 
+import com.example.demo.common.response.Response
 import com.example.demo.dto.translate.TranslateRequestDTO
 import com.example.demo.dto.translate.TranslateResponseDTO
 import com.example.demo.logger
-import com.example.demo.common.response.ObjectResponse
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -17,7 +18,7 @@ class ImageService(private val ocrService: OCRService, private val translateServ
     private lateinit var outPath: String
     private val log = logger()
 
-    suspend fun handleImage(image: List<MultipartFile>): ObjectResponse<List<TranslateResponseDTO>> {
+    suspend fun handleImage(image: List<MultipartFile>): Response<List<TranslateResponseDTO>> {
         //save image
         image.forEach { saveImage(it) }
         return translateService.translate(image

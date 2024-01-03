@@ -2,7 +2,6 @@ package com.example.demo.common.config
 
 import com.google.cloud.vision.v1.ImageAnnotatorClient
 import com.google.cloud.vision.v1.ImageAnnotatorSettings
-import org.apache.http.client.CredentialsProvider
 import org.springframework.cloud.gcp.core.Credentials
 import org.springframework.cloud.gcp.core.DefaultCredentialsProvider
 import org.springframework.cloud.gcp.vision.CloudVisionTemplate

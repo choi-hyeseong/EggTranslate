@@ -1,28 +1,27 @@
 package com.example.demo.service
 
+import com.example.demo.common.response.Response
 import com.example.demo.component.translate.GoogleTranslator
-import com.example.demo.component.translate.NaverTranslator
 import com.example.demo.dto.translate.TranslateRequestDTO
 import com.example.demo.dto.translate.TranslateResponseDTO
-import com.example.demo.common.response.ObjectResponse
 import org.springframework.stereotype.Service
 
 @Service
 class TranslateService(private val translator: GoogleTranslator) {
 
-    suspend fun translate(requestDTO: TranslateRequestDTO): ObjectResponse<TranslateResponseDTO> {
+    suspend fun translate(requestDTO: TranslateRequestDTO): Response<TranslateResponseDTO> {
         val response = translator.translate(requestDTO)
         return if (response.isSuccess)
-            ObjectResponse(true, response)
+            Response.ofSuccess(null, response)
         else
-            ObjectResponse(false, response)
+            Response.ofFailure(null, response)
     }
 
-    suspend fun translate(requestDTO: List<TranslateRequestDTO>): ObjectResponse<List<TranslateResponseDTO>> {
+    suspend fun translate(requestDTO: List<TranslateRequestDTO>): Response<List<TranslateResponseDTO>> {
         val response = translator.translate(requestDTO)
         return if (response.all { it.isSuccess })
-            ObjectResponse(true, response)
+            Response.ofSuccess(null, response)
         else
-            ObjectResponse(false, response) //하나라도 성공한게 없으면
+            Response.ofFailure(null, response) //하나라도 성공한게 없으면
     }
 }
