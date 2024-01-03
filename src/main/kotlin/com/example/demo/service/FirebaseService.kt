@@ -6,7 +6,7 @@ import com.example.demo.dto.push.FirebaseRequestDTO
 import com.example.demo.dto.push.FirebaseResponseDTO
 import org.springframework.stereotype.Service
 
-@Service
+@Deprecated("Unused")
 class FirebaseService(private val firebaseMessenger: FirebaseMessenger) {
 
     suspend fun notify(requestDTO: FirebaseRequestDTO) : Response<FirebaseResponseDTO> {

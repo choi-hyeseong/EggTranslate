@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/test")
-class TestController(private val translateService: TranslateService, private val firebaseMessenger: FirebaseMessenger) {
+class TestController(private val translateService: TranslateService) {
 
     //for test
     @PostMapping("/")
@@ -28,10 +28,10 @@ class TestController(private val translateService: TranslateService, private val
             ResponseEntity(result, HttpStatus.BAD_REQUEST)
     }
 
-    @PostMapping("/firebase")
-    suspend fun notify(@RequestBody firebaseRequestDTO: List<FirebaseRequestDTO>) : Response<FirebaseResponseDTO> {
-        return firebaseMessenger.requestNotification(firebaseRequestDTO)
-    }
+//    @PostMapping("/firebase")
+//    suspend fun notify(@RequestBody firebaseRequestDTO: List<FirebaseRequestDTO>) : Response<FirebaseResponseDTO> {
+//        return firebaseMessenger.requestNotification(firebaseRequestDTO)
+//    }
 
 
 

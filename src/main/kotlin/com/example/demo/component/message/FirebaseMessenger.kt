@@ -10,7 +10,7 @@ import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification
 import org.springframework.stereotype.Component
 
-@Component
+@Deprecated("Unused")
 class FirebaseMessenger(private val firebaseMessaging: FirebaseMessaging) {
 
     private val log = logger()
