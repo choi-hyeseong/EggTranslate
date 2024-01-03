@@ -1,4 +1,4 @@
-package com.example.demo.component.ocr.format
+package com.example.demo.component.ocr.google.format
 
 import com.google.cloud.vision.v1.*
 import com.google.cloud.vision.v1.TextAnnotation.TextProperty
