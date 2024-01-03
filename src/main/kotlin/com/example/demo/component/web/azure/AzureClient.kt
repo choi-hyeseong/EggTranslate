@@ -28,8 +28,8 @@ class AzureClient(private val documentAnalysis : DocumentAnalysisClient) {
     suspend fun requestImage(file : MultipartFile) : String {
         val documentData = BinaryData.fromBytes(file.bytes)
         //stream이 아닌 byte array로 받아와서 여러군데서 써도 문제 없음
-        val request : SyncPoller<OperationResult, AnalyzeResult> = documentAnalysis.beginAnalyzeDocument("prebuilt-layout", documentData)
         try {
+            val request : SyncPoller<OperationResult, AnalyzeResult> = documentAnalysis.beginAnalyzeDocument("prebuilt-layout", documentData)
             val response : PollResponse<OperationResult> = request.waitForCompletion(Duration.ofSeconds(timeout)) // 30초 대기
             val status : LongRunningOperationStatus = response.status
             if (status == LongRunningOperationStatus.FAILED)
