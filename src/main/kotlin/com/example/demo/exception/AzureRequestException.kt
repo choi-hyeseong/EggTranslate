@@ -1,3 +1,5 @@
 package com.example.demo.exception
 
-class AzureRequestException(message : String) : Exception(message)
+import org.springframework.http.HttpStatusCode
+
+class AzureRequestException(val code : HttpStatusCode, message : String) : Exception(message)

@@ -9,9 +9,11 @@ import com.azure.core.util.polling.PollResponse
 import com.azure.core.util.polling.SyncPoller
 import com.example.demo.exception.AzureRequestException
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 import java.time.Duration
+import java.util.concurrent.TimeoutException
 import java.util.regex.Pattern
 
 @Component
@@ -31,13 +33,21 @@ class AzureClient(private val documentAnalysis : DocumentAnalysisClient) {
             val response : PollResponse<OperationResult> = request.waitForCompletion(Duration.ofSeconds(timeout)) // 30초 대기
             val status : LongRunningOperationStatus = response.status
             if (status == LongRunningOperationStatus.FAILED)
-                throw AzureRequestException("failed to request.")
+                throw AzureRequestException(HttpStatus.INTERNAL_SERVER_ERROR, "failed to request.")
+            else if (request.finalResult.paragraphs.isNullOrEmpty())
+                throw AzureRequestException(HttpStatus.BAD_REQUEST, "인식된 텍스트가 없습니다.")
             else
                 return parseParagraph(request.finalResult).joinToString(separator = "\n")
         }
         catch (e : Exception) {
-            throw AzureRequestException(e.localizedMessage)
+            //왜 TimeoutException이 안걸리는지 의문. -> RuntimeException 내에 Timeout except가 호출됨.
+            //try문 내에서 throw한게 다 잡힘. -> Timeout만 잡게 수정
+            if (e is AzureRequestException)
+                throw e
+            else
+                throw AzureRequestException(HttpStatus.INTERNAL_SERVER_ERROR, e.localizedMessage)
         }
+
     }
 
     private fun parseParagraph(result : AnalyzeResult) : List<String> {
