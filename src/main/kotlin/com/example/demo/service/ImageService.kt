@@ -17,7 +17,7 @@ class ImageService(private val ocrService: OCRService, private val translateServ
     private lateinit var outPath: String
     private val log = logger()
 
-    suspend fun handleImage(image: List<MultipartFile>): Response<List<TranslateResponseDTO>> {
+    suspend fun handleImage(lang : String, image: List<MultipartFile>): Response<List<TranslateResponseDTO>> {
         //save image
         saveImage(image)
         return coroutineScope {
@@ -27,7 +27,7 @@ class ImageService(private val ocrService: OCRService, private val translateServ
                     ocrService.readImage(it)
                 }
             }.toList()
-            val ocrData = requestList.awaitAll().map { TranslateRequestDTO("ko", "en", it) }.toList()
+            val ocrData = requestList.awaitAll().map { TranslateRequestDTO("ko", lang, it) }.toList()
             // return translated string
             translateService.translate(ocrData)
         }

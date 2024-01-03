@@ -16,9 +16,9 @@ class ImageController(private val imageService: ImageService) {
 
     //분리가능
     @PostMapping("/upload")
-    suspend fun uploadImage(@ImageValid @RequestParam(name = "image", required = true) image : List<MultipartFile>) : Response<List<TranslateResponseDTO>> {
+    suspend fun uploadImage(@ImageValid @RequestParam(name = "image", required = true) image : List<MultipartFile>, @RequestParam(name = "lang", required = true) lang : String) : Response<List<TranslateResponseDTO>> {
         //withContext로 dispatcher 지정해도 안전.
-        return imageService.handleImage(image)
+        return imageService.handleImage(lang, image)
     }
 
 }
