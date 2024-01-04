@@ -10,7 +10,6 @@ import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 
-@Component
 class GoogleOCRApi(private val cloudVisionTemplate: CloudVisionTemplate, private val blockFormatter: BlockFormatter) :
     OCRApi {
         //vision Template는 spring cloud dependency가 모두 있을경우 AutoConfig class에 의해 bean으로 제공됨.
