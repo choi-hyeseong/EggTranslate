@@ -27,7 +27,12 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.cloud:spring-cloud-gcp-starter-vision:1.2.8.RELEASE")
+
+    //google cloud vision
+    implementation(platform("com.google.cloud:spring-cloud-gcp-dependencies:5.0.0"))
+    implementation("com.google.cloud:spring-cloud-gcp-starter-vision")
+    implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
