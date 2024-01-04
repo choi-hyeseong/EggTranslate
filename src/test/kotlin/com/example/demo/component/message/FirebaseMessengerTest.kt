@@ -1,13 +1,12 @@
 package com.example.demo.component.message
 
-import com.example.demo.dto.push.FirebaseRequestDTO
+import com.example.demo.notification.component.FirebaseMessenger
+import com.example.demo.notification.dto.push.FirebaseRequestDTO
 import com.google.firebase.messaging.BatchResponse
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.SendResponse
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*

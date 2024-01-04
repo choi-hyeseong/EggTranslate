@@ -1,7 +1,7 @@
 package com.example.demo.common.handler
 
+import com.example.demo.common.exception.ParameterNotValidException
 import com.example.demo.common.response.Response
-import com.example.demo.exception.ParameterNotValidException
 import com.example.demo.logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

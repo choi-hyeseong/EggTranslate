@@ -7,13 +7,13 @@ import com.azure.core.exception.HttpRequestException
 import com.azure.core.util.polling.LongRunningOperationStatus
 import com.azure.core.util.polling.PollResponse
 import com.azure.core.util.polling.SyncPoller
-import com.example.demo.exception.AzureRequestException
+import com.example.demo.ocr.component.ocr.azure.AzureClient
+import com.example.demo.ocr.exception.AzureRequestException
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.http.HttpStatus
 import org.springframework.web.multipart.MultipartFile
 import java.util.concurrent.TimeoutException

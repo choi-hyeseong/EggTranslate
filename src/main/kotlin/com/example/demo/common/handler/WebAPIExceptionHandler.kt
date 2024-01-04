@@ -1,9 +1,9 @@
 package com.example.demo.common.handler
 
 import com.example.demo.common.response.Response
-import com.example.demo.exception.AzureRequestException
-import com.example.demo.exception.GoogleVisionException
 import com.example.demo.logger
+import com.example.demo.ocr.exception.AzureRequestException
+import com.example.demo.ocr.exception.GoogleVisionException
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode

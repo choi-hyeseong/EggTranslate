@@ -1,9 +1,10 @@
 package com.example.demo.component.translate
 
-import com.example.demo.component.web.NaverWebClient
-import com.example.demo.dto.translate.NaverResponseDTO
-import com.example.demo.dto.translate.TranslateRequestDTO
-import com.example.demo.dto.translate.TranslateResponseDTO
+import com.example.demo.translate.component.naver.NaverWebClient
+import com.example.demo.translate.component.naver.NaverTranslator
+import com.example.demo.translate.dto.NaverResponseDTO
+import com.example.demo.translate.dto.TranslateRequestDTO
+import com.example.demo.translate.dto.TranslateResponseDTO
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -11,7 +12,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 
 class NaverTranslatorTest {
 
