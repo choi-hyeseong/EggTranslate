@@ -1,6 +1,6 @@
 package com.example.demo.common.valid.image
 
-import com.example.demo.exception.ImageNotValidException
+import com.example.demo.exception.ParameterNotValidException
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 import org.springframework.stereotype.Component
@@ -15,7 +15,7 @@ class ImageValidator : ConstraintValidator<ImageValid, List<MultipartFile>> {
     //이걸 원래 여기서 throw 하는게 맞는지 헷갈리긴함. MethodValidException 던져줘서 그거 핸들링 했었는데 최근에는 달라진듯
     override fun isValid(p0: List<MultipartFile>?, p1: ConstraintValidatorContext?): Boolean {
         if (p0.isNullOrEmpty() || p0.any { !isImageFile(it) })
-            throw ImageNotValidException("잘못된 이미지 파일입니다.")
+            throw ParameterNotValidException("잘못된 이미지 파일입니다.", null)
         return true
     }
 

@@ -2,6 +2,7 @@ package com.example.demo.controller
 
 import com.example.demo.common.response.Response
 import com.example.demo.common.valid.image.ImageValid
+import com.example.demo.common.valid.lang.LangValid
 import com.example.demo.dto.translate.TranslateResponseDTO
 import com.example.demo.service.ImageService
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,7 +17,7 @@ class ImageController(private val imageService: ImageService) {
 
     //분리가능
     @PostMapping("/upload")
-    suspend fun uploadImage(@ImageValid @RequestParam(name = "image", required = true) image : List<MultipartFile>, @RequestParam(name = "lang", required = true) lang : String) : Response<List<TranslateResponseDTO>> {
+    suspend fun uploadImage(@ImageValid @RequestParam(name = "image", required = true) image : List<MultipartFile>, @LangValid @RequestParam(name = "lang", required = true) lang : String) : Response<List<TranslateResponseDTO>> {
         //withContext로 dispatcher 지정해도 안전.
         return imageService.handleImage(lang, image)
     }
