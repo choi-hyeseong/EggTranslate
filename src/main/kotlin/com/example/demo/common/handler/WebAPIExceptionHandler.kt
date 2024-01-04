@@ -4,6 +4,7 @@ import com.example.demo.common.response.Response
 import com.example.demo.exception.AzureRequestException
 import com.example.demo.exception.GoogleVisionException
 import com.example.demo.logger
+import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.reactive.function.client.WebClientResponseException
 
 @RestControllerAdvice
-class WebClientExceptionHandler {
+class WebAPIExceptionHandler {
 
     private val log = logger()
 
@@ -35,6 +36,12 @@ class WebClientExceptionHandler {
             buildResponse(e.code, e.message ?: "")
         else
             buildResponse()
+    }
+
+    @ExceptionHandler(GoogleJsonResponseException::class)
+    protected fun handleGoogleException(e : GoogleJsonResponseException) : ResponseEntity<Response<Nothing>> {
+        log.error("encountered google translation exception : ${e.details.message}")
+        return buildResponse()
     }
 
     private fun buildResponse() : ResponseEntity<Response<Nothing>> {
