@@ -33,6 +33,9 @@ dependencies {
     implementation("com.google.cloud:spring-cloud-gcp-starter-vision")
     implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
 
+    //google translation client
+    implementation("com.google.cloud:google-cloud-translate")
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

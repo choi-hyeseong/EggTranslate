@@ -8,7 +8,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
 
-@Component
+@Deprecated("Use GoogleTranslation.kt")
 class GoogleWebClient {
 
     @Value("\${rapid.api-key}")

@@ -1,7 +1,7 @@
 package com.example.demo.service
 
 import com.example.demo.common.response.Response
-import com.example.demo.component.translate.GoogleTranslator
+import com.example.demo.component.translate.google.GoogleTranslator
 import com.example.demo.dto.translate.TranslateRequestDTO
 import com.example.demo.dto.translate.TranslateResponseDTO
 import org.springframework.stereotype.Service
