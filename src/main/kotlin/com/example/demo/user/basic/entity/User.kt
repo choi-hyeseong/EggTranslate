@@ -5,29 +5,29 @@ import com.example.demo.common.database.entity.BaseEntity
 import jakarta.persistence.*
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 open class User : BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1
+    open var id: Long = -1
 
     @Column(nullable = false, unique = true, length = 30)
-    lateinit var userId: String
+    open lateinit var userId: String
 
     @Column(nullable = false, unique = false, length = 50)
-    lateinit var password: String
+    open lateinit var password: String
 
     @Column(nullable = false, unique = false, length = 50)
-    lateinit var name: String
+    open lateinit var name: String
 
     @Column(nullable = false, unique = false, length = 35)
-    lateinit var phone: String
+    open lateinit var phone: String
 
     @Column(nullable = true, unique = false, length = 50)
-    lateinit var email: String
+    open lateinit var email: String
 
     @Column
     @Convert(converter = StringFlatter::class)
-    lateinit var language: List<String>
+    open lateinit var language: List<String>
 }
