@@ -6,28 +6,29 @@ import jakarta.persistence.*
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-open class User : BaseEntity() {
+open class User(
+    @Column(nullable = false, unique = true, length = 30)
+    open var userId: String,
 
+    @Column(nullable = false, unique = false, length = 50)
+    open var password: String,
+
+    @Column(nullable = false, unique = false, length = 50)
+    open var name: String,
+
+    @Column(nullable = false, unique = false, length = 35)
+    open var phone: String,
+
+    @Column(nullable = true, unique = false, length = 50)
+    open var email: String?,
+
+    @Column
+    @Convert(converter = StringFlatter::class)
+    open var language: List<String>
+
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Long = -1
 
-    @Column(nullable = false, unique = true, length = 30)
-    open lateinit var userId: String
-
-    @Column(nullable = false, unique = false, length = 50)
-    open lateinit var password: String
-
-    @Column(nullable = false, unique = false, length = 50)
-    open lateinit var name: String
-
-    @Column(nullable = false, unique = false, length = 35)
-    open lateinit var phone: String
-
-    @Column(nullable = true, unique = false, length = 50)
-    open lateinit var email: String
-
-    @Column
-    @Convert(converter = StringFlatter::class)
-    open lateinit var language: List<String>
 }
