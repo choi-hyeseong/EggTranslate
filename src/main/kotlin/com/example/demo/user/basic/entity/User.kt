@@ -4,6 +4,7 @@ import com.example.demo.common.database.converter.StringFlatter
 import com.example.demo.common.database.entity.BaseEntity
 import jakarta.persistence.*
 
+// TODO FCM TOKEN
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 open class User(
