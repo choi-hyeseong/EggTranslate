@@ -1,5 +1,6 @@
 package com.example.demo.user.parent.child.entity
 
+import com.example.demo.user.basic.type.Gender
 import jakarta.persistence.*
 
 @Entity
@@ -18,8 +19,11 @@ class Child(
     var grade : Int,
 
     @Column(nullable = false, length = 15)
-    var className: String
+    var className: String,
 
+    @Column(length = 20)
+    @Enumerated(EnumType.STRING)
+    var gender : Gender
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

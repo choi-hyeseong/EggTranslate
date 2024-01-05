@@ -1,5 +1,6 @@
 package com.example.demo.user.parent.entity
 
+import com.example.demo.user.basic.type.Gender
 import com.example.demo.user.parent.child.dto.ChildRequestDto
 import com.example.demo.user.parent.child.entity.Child
 import com.example.demo.user.parent.child.repository.ChildRepository
@@ -20,13 +21,15 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             "전화",
             "학교",
             2,
-            "병아리"
+            "병아리",
+            Gender.MAN
         ), ChildRequestDto(
             "두마리",
             "전화",
             "학교",
             2,
-            "돌고래"
+            "돌고래",
+            Gender.MAN
         ))
         val dto = ParentDTO(
             "${System.currentTimeMillis()}",
@@ -50,13 +53,15 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             "전화",
             "학교",
             2,
-            "병아리"
+            "병아리",
+            Gender.MAN
         ), ChildRequestDto(
             "두마리",
             "전화",
             "학교",
             2,
-            "돌고래"
+            "돌고래",
+            Gender.MAN
         ))
         val dto = ParentDTO(
             "${System.currentTimeMillis()}",
@@ -75,6 +80,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
         assertEquals("NAME", load.name)
         assertEquals("호식이", load.children[0].name)
         assertEquals("두마리", load.children[1].name)
+        assertEquals(Gender.MAN, load.children[0].gender)
         parentRepository.delete(load)
         //cascade로 지워져야됨.
         assertFalse(childRepository.existsById(firstId))
