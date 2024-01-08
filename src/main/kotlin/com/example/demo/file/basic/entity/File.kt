@@ -5,6 +5,10 @@ import jakarta.persistence.*
 
 @Entity
 class File( // 괄호 안에는 기본 생성자들
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var id : Long = -1,
+
         @JoinColumn(name = "user_id")
            var user : User,
 
@@ -17,7 +21,4 @@ class File( // 괄호 안에는 기본 생성자들
         @OneToMany(mappedBy = "file")
            var translate_file : List<TranslateFile>
 ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long = -1
 }
