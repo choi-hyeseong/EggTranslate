@@ -2,6 +2,7 @@ package com.example.demo.user.parent.entity
 
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
+import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.child.type.Gender
 import com.example.demo.user.parent.child.dto.ChildRequestDto
 import com.example.demo.user.parent.child.repository.ChildRepository
@@ -23,7 +24,8 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
         name = "테스트",
         phone = "010",
         email = null,
-        languages = mutableListOf("한글", "영어")
+        languages = mutableListOf("한글", "영어"),
+        userType = UserType.PARENT
     )
 
     @Transactional
@@ -88,6 +90,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
         assertEquals("호식이", load.children[0].name)
         assertEquals("두마리", load.children[1].name)
         assertEquals(Gender.MAN, load.children[0].gender)
+        assertEquals(UserType.PARENT, user.userType)
         parentRepository.delete(load)
         //cascade로 지워져야됨.
         assertFalse(childRepository.existsById(firstId))
@@ -108,6 +111,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
         assertNotNull(load.children)
         assertEquals(0, load.children.size)
     }
+
 
 
 }
