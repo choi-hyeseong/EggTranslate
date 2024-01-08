@@ -18,4 +18,3 @@ class Parent(
     var children: List<Child>
 
 ) : User(userId, password, name, phone, email, language)
-
