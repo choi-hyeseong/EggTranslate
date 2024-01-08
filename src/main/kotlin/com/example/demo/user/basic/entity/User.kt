@@ -2,6 +2,8 @@ package com.example.demo.user.basic.entity
 
 import com.example.demo.common.database.converter.StringFlatter
 import com.example.demo.common.database.entity.BaseEntity
+import com.example.demo.user.basic.type.UserType
+import com.example.demo.user.heart.entity.TranslatorHeart
 import jakarta.persistence.*
 
 // TODO FCM TOKEN
@@ -29,9 +31,14 @@ class User(
 
     @Column
     @Convert(converter = StringFlatter::class)
-    var language: List<String>
+    var language: MutableList<String>,
+
+    @Enumerated(value = EnumType.STRING)
+    var userType: UserType
 
 ) : BaseEntity() {
 
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "user")
+    var heartList : MutableList<TranslatorHeart> = mutableListOf()
 
 }

@@ -2,9 +2,9 @@ package com.example.demo.user.basic.entity
 
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
+import com.example.demo.user.basic.type.UserType
 import jakarta.transaction.Transactional
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,7 +25,8 @@ class UserTest {
             name = "테스트",
             phone = "010",
             email = null,
-            languages = mutableListOf("한글", "영어")
+            languages = mutableListOf("한글", "영어"),
+            userType = UserType.PARENT
         ).toEntity()
         val response =  assertDoesNotThrow { userRepository.save(user) }
         assertNotEquals(-1, response.id)
@@ -42,7 +43,8 @@ class UserTest {
             name = "테스트",
             phone = "010",
             email = null,
-            languages = mutableListOf("한글", "영어")
+            languages = mutableListOf("한글", "영어"),
+            userType = UserType.PARENT
         ).toEntity()
         val response =  assertDoesNotThrow { userRepository.save(user) }
         assertNotEquals(-1, response.id)
@@ -50,6 +52,8 @@ class UserTest {
         assertEquals("테스트", findUser.name)
         assertEquals("010", findUser.phone)
         assertEquals("영어", findUser.language[1])
+        assertEquals(UserType.PARENT, findUser.userType)
+        assertNotNull(user.heartList)
 
 
     }

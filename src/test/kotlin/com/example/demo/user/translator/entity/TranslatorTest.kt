@@ -2,6 +2,7 @@ package com.example.demo.user.translator.entity
 
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
+import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
 import com.example.demo.user.translator.type.TranslatorCategory
@@ -32,7 +33,8 @@ class TranslatorTest {
         name = "테스트",
         phone = "010",
         email = null,
-        languages = mutableListOf("한글", "영어")
+        languages = mutableListOf("한글", "영어"),
+        userType = UserType.TRANSLATOR
     )
     @Transactional
     @Test
@@ -85,6 +87,8 @@ class TranslatorTest {
 
                 assertEquals("한글", response.user.language[0]) //관계 잘 저장되었는지
                 //1대1 단방향 매핑이라 User의 Translator 참조여부는 상관할 필요 X
+                assertEquals(UserType.TRANSLATOR, user.userType)
+                assertNotNull(response.hearts)
             }
 
 
