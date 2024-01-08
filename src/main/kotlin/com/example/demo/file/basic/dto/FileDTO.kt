@@ -6,7 +6,7 @@ class FileDTO(
         val origin_name : String,
         val save_name : String,
         val user : UserDto
-        val translate_file : List<TranslateFileRequestDTO>
+        val translate_file : List<TranslateFileDTO>
 ){
 
 }
