@@ -37,7 +37,7 @@ class Translator(
 
 
 
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "translator")
+    @OneToMany( mappedBy = "translator")
     var hearts : MutableList<TranslatorHeart> = mutableListOf()
 
 
