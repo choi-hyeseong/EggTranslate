@@ -8,6 +8,10 @@ import jakarta.persistence.*
 @Table(name = "autotranslate")
 class AutoTranslate(
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1,
+
     @OneToOne
     @JoinColumn(name = "user_id")
     var user: User,
@@ -18,16 +22,18 @@ class AutoTranslate(
     @Column(nullable = false)
     var translate: String,
 
-    @Column(nullable = false, length = 3)
+    @Column(nullable = false, length = 10)
     var fromLang: String,
 
-    @Column(nullable = false, length = 3)
-    var toLang: String
+    @Column(nullable = false, length = 10)
+    var toLang: String,
+
+
 ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1
+
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "autoTranslate") //mappedBy -> table명이 아닌 field(property) 명
     var translateFiles: MutableList<TranslateFile> = mutableListOf()
+
+
 }
