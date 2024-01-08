@@ -5,7 +5,7 @@ import com.example.demo.user.parent.child.dto.ChildRequestDto
 import com.example.demo.user.parent.entity.Parent
 
 class ParentDTO(
-    val children : List<ChildRequestDto>,
+    var children : List<ChildRequestDto>,
     val user : UserDto
 
 ) {
