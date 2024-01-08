@@ -2,6 +2,7 @@ package com.example.demo.user.heart.entity
 
 import com.example.demo.user.basic.entity.User
 import com.example.demo.user.translator.entity.Translator
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -16,11 +17,11 @@ class TranslatorHeart(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id : Long = -1,
 
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     @JoinColumn(name = "user_id")
     var user : User,
 
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     @JoinColumn(name = "translator_id")
     var translator: Translator
 )
