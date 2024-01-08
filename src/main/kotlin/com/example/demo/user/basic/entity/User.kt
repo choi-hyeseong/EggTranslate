@@ -6,30 +6,32 @@ import jakarta.persistence.*
 
 // TODO FCM TOKEN
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-open class User(
+class User(
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1,
+
     @Column(nullable = false, unique = true, length = 30)
-    open var userId: String,
+    var username: String,
 
     @Column(nullable = false, unique = false, length = 50)
-    open var password: String,
+    var password: String,
 
     @Column(nullable = false, unique = false, length = 50)
-    open var name: String,
+    var name: String,
 
     @Column(nullable = false, unique = false, length = 35)
-    open var phone: String,
+    var phone: String,
 
     @Column(nullable = true, unique = false, length = 50)
-    open var email: String?,
+    var email: String?,
 
     @Column
     @Convert(converter = StringFlatter::class)
-    open var language: List<String>
+    var language: List<String>
 
 ) : BaseEntity() {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open var id: Long = -1
+
 
 }

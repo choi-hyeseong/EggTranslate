@@ -6,15 +6,18 @@ import jakarta.persistence.*
 
 @Entity
 class Parent(
-    userId: String,
-    password: String,
-    name: String,
-    phone: String,
-    email: String?,
-    language: List<String>,
-
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parent", cascade = [CascadeType.ALL])
     //mappedby는 양방향 관계 지정시.
-    var children: List<Child>
+    var children: List<Child>,
 
-) : User(userId, password, name, phone, email, language)
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    var user: User
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1
+
+
+
+}

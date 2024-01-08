@@ -4,7 +4,7 @@ import com.example.demo.user.basic.entity.User
 import jakarta.persistence.*
 
 @Entity
-class File(
+class File( // 괄호 안에는 기본 생성자들
         @JoinColumn(name = "user_id")
            var user : User,
 

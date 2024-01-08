@@ -1,6 +1,7 @@
 package com.example.demo.user.parent.child.entity
 
-import com.example.demo.user.basic.type.Gender
+import com.example.demo.user.parent.child.type.Gender
+import com.example.demo.user.parent.entity.Parent
 import jakarta.persistence.*
 
 @Entity
@@ -23,12 +24,16 @@ class Child(
 
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
-    var gender : Gender
+    var gender : Gender,
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    var parent : Parent
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id : Long = -1
 
-    @Column(name = "parent_id")
-    var parentId : Long = -1
+
+
 }
