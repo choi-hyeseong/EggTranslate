@@ -42,6 +42,7 @@ class TranslatorTest {
         val user = userRepository.save(user.toEntity())
         assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
+            -1,
             3,
             TranslatorLevel.HIGH,
             UserDto(user),
@@ -61,6 +62,7 @@ class TranslatorTest {
         val user = userRepository.save(user.toEntity())
         assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
+            -1,
             3,
             TranslatorLevel.HIGH,
             UserDto(user),

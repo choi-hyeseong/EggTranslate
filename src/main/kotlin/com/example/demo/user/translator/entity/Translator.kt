@@ -10,6 +10,10 @@ import jakarta.persistence.*
 
 @Entity
 class Translator(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1,
+
     @Column
     var career: Int,
 
@@ -31,9 +35,7 @@ class Translator(
 
 ) {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1
+
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "translator")
     var hearts : MutableList<TranslatorHeart> = mutableListOf()

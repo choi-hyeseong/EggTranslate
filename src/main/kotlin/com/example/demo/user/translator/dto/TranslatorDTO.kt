@@ -7,6 +7,7 @@ import com.example.demo.user.translator.type.TranslatorCategory
 import com.example.demo.user.translator.type.TranslatorLevel
 
 class TranslatorDTO(
+    val id : Long = -1,
     val career : Int,
     val level : TranslatorLevel,
     val user : UserDto,
@@ -15,6 +16,6 @@ class TranslatorDTO(
 
     ) {
 
-    constructor(translator: Translator) : this(translator.career, translator.level, UserDto(translator.user), translator.certificates, translator.categories)
-    fun toEntity() : Translator = Translator( career, user.toEntity(), level, certificates, categories)
+    constructor(translator: Translator) : this(translator.id, translator.career, translator.level, UserDto(translator.user), translator.certificates, translator.categories)
+    fun toEntity() : Translator = Translator(id, career, user.toEntity(), level, certificates, categories)
 }
