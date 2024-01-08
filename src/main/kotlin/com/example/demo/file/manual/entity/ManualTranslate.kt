@@ -4,16 +4,14 @@ import com.example.demo.file.auto.entity.AutoTranslate
 import com.example.demo.file.request.entity.TranslateRequest
 import jakarta.persistence.*
 
+@Entity
 class ManualTranslate(
+
         @Column(nullable = false)
-        var translate_content : String,
+        var translateContent : String,
 
         @OneToOne
-        @JoinColumn(name = "autoTranslate_id")
-        var autoTranslate : AutoTranslate,
-
-        @OneToOne
-        @JoinColumn(name = "translateRequest_id")
+        @JoinColumn(name = "translaterequest_id")
         var translateRequest : TranslateRequest
 ) {
     @Id

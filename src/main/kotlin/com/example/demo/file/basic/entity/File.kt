@@ -10,16 +10,17 @@ class File( // 괄호 안에는 기본 생성자들
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id : Long = -1,
 
+        @ManyToOne
         @JoinColumn(name = "user_id")
-           var user : User,
+        var user : User,
 
         @Column(nullable = false, length = 255)
-           var origin_name : String,
+        var originName : String,
 
         @Column(nullable = false, length = 255)
-           var save_name : String,
+        var saveName : String,
 
-        @OneToMany(mappedBy = "file")
-           var translate_file : List<TranslateFile>
-) {
-}
+        var savePath : String,
+
+
+)
