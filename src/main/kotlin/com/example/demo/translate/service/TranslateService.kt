@@ -2,14 +2,14 @@ package com.example.demo.translate.service
 
 import com.example.demo.common.response.Response
 import com.example.demo.translate.component.google.GoogleTranslator
-import com.example.demo.translate.dto.TranslateRequestDTO
-import com.example.demo.translate.dto.TranslateResponseDTO
+import com.example.demo.translate.dto.AutoTranslateRequestDTO
+import com.example.demo.translate.dto.AutoTranslateResponseDTO
 import org.springframework.stereotype.Service
 
 @Service
 class TranslateService(private val translator: GoogleTranslator) {
 
-    suspend fun translate(requestDTO: TranslateRequestDTO): Response<TranslateResponseDTO> {
+    suspend fun translate(requestDTO: AutoTranslateRequestDTO): Response<AutoTranslateResponseDTO> {
         val response = translator.translate(requestDTO)
         return if (response.isSuccess)
             Response.ofSuccess(null, response)
@@ -17,7 +17,7 @@ class TranslateService(private val translator: GoogleTranslator) {
             Response.ofFailure(null, response)
     }
 
-    suspend fun translate(requestDTO: List<TranslateRequestDTO>): Response<List<TranslateResponseDTO>> {
+    suspend fun translate(requestDTO: List<AutoTranslateRequestDTO>): Response<List<AutoTranslateResponseDTO>> {
         val response = translator.translate(requestDTO)
         return if (response.all { it.isSuccess })
             Response.ofSuccess(null, response)

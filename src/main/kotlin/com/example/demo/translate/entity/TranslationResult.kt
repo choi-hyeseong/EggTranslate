@@ -3,14 +3,14 @@ package com.example.demo.translate.entity
 import jakarta.persistence.*
 
 @Entity
-class TranslateResult(
+class TranslationResult(
 
         @Column(nullable = false)
         var translateContent : String,
 
         @OneToOne
         @JoinColumn(name = "translaterequest_id")
-        var translateRequest : TranslateRequest
+        var translationRequest : TranslationRequest
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

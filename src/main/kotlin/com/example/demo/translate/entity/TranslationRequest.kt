@@ -8,7 +8,7 @@ import com.example.demo.user.translator.entity.Translator
 import jakarta.persistence.*
 
 @Entity
-class TranslateRequest(
+class TranslationRequest(
 
         @OneToOne
         @JoinColumn(name = "user_id")
