@@ -1,9 +1,12 @@
 package com.example.demo.user.translator.entity
 
+import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
 import com.example.demo.user.translator.type.TranslatorCategory
 import com.example.demo.user.translator.type.TranslatorLevel
+import jakarta.transaction.Transactional
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -16,43 +19,49 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class TranslatorTest {
 
+
     @Autowired
     private lateinit var translatorRepository: TranslatorRepository
+
+    @Autowired
+    private lateinit var userRepository: UserRepository
+
+    val user = UserDto(
+        userName = "테스트",
+        password = "PASS",
+        name = "테스트",
+        phone = "010",
+        email = null,
+        languages = mutableListOf("한글", "영어")
+    )
+    @Transactional
     @Test
     fun TEST_SAVE_TRANSLATOR() {
+        val user = userRepository.save(user.toEntity())
+        assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
-            "${System.currentTimeMillis()}",
-            "12345678",
-            "TEST",
-            "PHONE",
-            "EMAIL",
-            mutableListOf("한국어", "영어"),
             3,
             TranslatorLevel.HIGH,
+            UserDto(user),
             mutableListOf("정보처리기사", "ITQ"),
             mutableListOf(TranslatorCategory.CULTURE, TranslatorCategory.EDUCATION)
         )
             val response = assertDoesNotThrow { translatorRepository.save(translator.toEntity()) }
-            assertEquals(2, response.language.size)
-            assertEquals("TEST", response.name)
             assertEquals(TranslatorLevel.HIGH, response.level)
             assertEquals(2, response.categories.size)
-            assertEquals("EMAIL", response.email)
 
     }
 
 
     @Test
+    @Transactional
     fun TEST_LOAD_TRANSLATOR() {
+        val user = userRepository.save(user.toEntity())
+        assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
-            "${System.currentTimeMillis()}",
-            "12345678",
-            "TEST",
-            "PHONE",
-            "EMAIL",
-            mutableListOf("한국어", "영어"),
             3,
             TranslatorLevel.HIGH,
+            UserDto(user),
             mutableListOf("정보처리기사", "ITQ"),
             mutableListOf(TranslatorCategory.CULTURE, TranslatorCategory.EDUCATION)
         )
@@ -62,15 +71,8 @@ class TranslatorTest {
             val response = assertDoesNotThrow { translatorRepository.save(translator.toEntity()) }
             val load = translatorRepository.findById(response.id).get()
             assertNotNull(load) //response가 있는지
-            load?.let {
+            load.let {
                 //기본 저장여부 측정
-                assertEquals(response.id, load.id)
-                assertEquals(2, load.language.size)
-                assertEquals("TEST", load.name)
-
-                assertEquals(2, load.categories.size)
-                assertEquals("EMAIL", load.email)
-
                 //ENUM 저장여부
                 assertEquals(TranslatorLevel.HIGH, load.level)
                 assertTrue(load.categories.contains(TranslatorCategory.CULTURE))
@@ -80,7 +82,11 @@ class TranslatorTest {
 
                 assertTrue(load.certificates.contains("정보처리기사"))
                 assertTrue(load.certificates.contains("ITQ"))
+
+                assertEquals("한글", response.user.language[0]) //관계 잘 저장되었는지
             }
+
+
 
         }
     }
