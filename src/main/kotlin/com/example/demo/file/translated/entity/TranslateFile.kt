@@ -8,8 +8,8 @@ class TranslateFile (
        @JoinColumn(name = "file_id")
        var file : File,
 
-       @JoinColumn(name = "translate_result_id")
-       var translate_result : TranslateResult
+       @JoinColumn(name = "autoTranslate_id")
+       var autoTranslate : AutoTranslate
 
 ) {
     @Id

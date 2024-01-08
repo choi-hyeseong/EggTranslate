@@ -4,7 +4,7 @@ import com.example.demo.file.basic.dto.FileDTO
 
 class TranslateFileDTO {
     val file : FileDTO,
-    val autoTranslate : autoTranslateDTO
+    val autoTranslate : AutoTranslateDTO
 } {
 
 }
