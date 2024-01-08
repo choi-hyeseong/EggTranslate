@@ -12,6 +12,6 @@ class UserDto(
     val languages : List<String>
 ) {
     constructor(user: User) : this(user.id, user.username, user.password, user.name, user.phone, user.email, user.language)
-    fun toEntity() : User = User(id, userName, password, name, phone, email, languages)
+    fun toEntity(id: Long, name: String, password: String, phone: String, email: String?, languages: List<String>): User = User(this.id, userName, this.password, this.name, this.phone, this.email, this.languages)
 
 }
