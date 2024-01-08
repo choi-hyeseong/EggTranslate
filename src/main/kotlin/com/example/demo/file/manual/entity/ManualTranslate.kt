@@ -1,6 +1,7 @@
 package com.example.demo.file.manual.entity
 
 import com.example.demo.file.auto.entity.AutoTranslate
+import com.example.demo.file.request.entity.TranslateRequest
 import jakarta.persistence.*
 
 class ManualTranslate(
