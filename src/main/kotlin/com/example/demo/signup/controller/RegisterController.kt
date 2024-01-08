@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/register")
-class RegisterController(private val userRepository: UserRepository, private val registerService: RegisterService) {
+class RegisterController(private val userRepository: UserRepository) {
 
     @PostMapping("/signup")
     suspend fun createUser(@RequestBody userDto: UserDto) : User {
         val user = userDto.toEntity()
         return userRepository.save(user);
     }
-
 }

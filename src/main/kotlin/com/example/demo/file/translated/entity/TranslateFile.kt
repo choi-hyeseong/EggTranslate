@@ -1,5 +1,6 @@
 package com.example.demo.file.translated.entity
 
+import com.example.demo.file.auto.entity.AutoTranslate
 import jakarta.persistence.*
 import java.io.File
 
