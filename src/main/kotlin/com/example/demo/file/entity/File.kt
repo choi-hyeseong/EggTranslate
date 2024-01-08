@@ -1,6 +1,5 @@
-package com.example.demo.file.basic.entity
+package com.example.demo.file.entity
 
-import com.example.demo.file.translated.entity.TranslateFile
 import com.example.demo.user.basic.entity.User
 import jakarta.persistence.*
 

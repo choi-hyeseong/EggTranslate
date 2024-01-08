@@ -1,6 +1,7 @@
-package com.example.demo.file.request.entity
+package com.example.demo.translate.entity
 
-import com.example.demo.file.auto.entity.AutoTranslate
+import com.example.demo.translate.type.TranslateState
+import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.child.entity.Child
 import com.example.demo.user.translator.entity.Translator
@@ -9,8 +10,12 @@ import jakarta.persistence.*
 @Entity
 class TranslateRequest(
 
-        @Column(nullable = false, length = 10)
-        var status : String,
+        @OneToOne
+        @JoinColumn(name = "user_id")
+        var user : User,
+
+        @Enumerated(EnumType.STRING)
+        var status : TranslateState,
 
         @Enumerated(EnumType.STRING)
         var userType : UserType,

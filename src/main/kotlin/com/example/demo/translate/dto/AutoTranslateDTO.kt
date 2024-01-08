@@ -1,6 +1,6 @@
-package com.example.demo.file.auto.dto
+package com.example.demo.translate.dto
 
-import com.example.demo.file.translated.dto.TranslateFileDTO
+import com.example.demo.file.dto.TranslateFileDTO
 
 class AutoTranslateDTO(
         val origin : String,

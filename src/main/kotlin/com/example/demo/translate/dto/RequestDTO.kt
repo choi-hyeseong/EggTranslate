@@ -1,10 +1,9 @@
-package com.example.demo.file.request.dto
+package com.example.demo.translate.dto
 
-import com.example.demo.file.auto.dto.AutoTranslateDTO
 import com.example.demo.user.parent.child.dto.ChildRequestDto
 import com.example.demo.user.translator.dto.TranslatorDTO
 
-class TranslateRequestDTO(
+class RequestDTO(
         val status : String,
         val translator : TranslatorDTO,
         val autoTranslate : AutoTranslateDTO,

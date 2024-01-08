@@ -1,6 +1,6 @@
-package com.example.demo.file.auto.repository
+package com.example.demo.translate.repository
 
-import com.example.demo.file.auto.entity.AutoTranslate
+import com.example.demo.translate.entity.AutoTranslate
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface AutoTranslateRepository : JpaRepository<AutoTranslate, Long> {

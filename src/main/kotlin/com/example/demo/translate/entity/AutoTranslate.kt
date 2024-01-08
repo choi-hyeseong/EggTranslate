@@ -1,6 +1,6 @@
-package com.example.demo.file.auto.entity
+package com.example.demo.translate.entity
 
-import com.example.demo.file.translated.entity.TranslateFile
+import com.example.demo.file.entity.TranslateFile
 import com.example.demo.user.basic.entity.User
 import jakarta.persistence.*
 
@@ -19,10 +19,10 @@ class AutoTranslate(
     var translate: String,
 
     @Column(nullable = false, length = 3)
-    var from: String,
+    var fromLang: String,
 
     @Column(nullable = false, length = 3)
-    var to: String
+    var toLang: String
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
