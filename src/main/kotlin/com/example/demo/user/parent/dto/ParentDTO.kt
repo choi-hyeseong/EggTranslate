@@ -1,17 +1,15 @@
 package com.example.demo.user.parent.dto
 
+import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.parent.child.dto.ChildRequestDto
 import com.example.demo.user.parent.entity.Parent
 
 class ParentDTO(
-    val userId : String,
-    val password : String,
-    val name : String,
-    val phone : String,
-    val email : String?,
-    val languages : List<String>,
-    val children : List<ChildRequestDto>
+    val children : List<ChildRequestDto>,
+    val user : UserDto
 
 ) {
-    fun toEntity() : Parent = Parent(userId, password, name, phone, email, languages, children.map { it.toEntity() })
+
+    constructor(parent: Parent) : this(parent.children.map { ChildRequestDto(it) }, UserDto(parent.user))
+    fun toEntity() : Parent = Parent(children.map { it.toEntity() }, user.toEntity())
 }

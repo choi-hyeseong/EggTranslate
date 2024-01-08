@@ -9,14 +9,12 @@ import jakarta.persistence.*
 
 @Entity
 class Translator(
-    userId: String,
-    password: String,
-    name: String,
-    phone: String,
-    email: String?,
-    language: List<String>,
     @Column
     var career: Int,
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    var user: User,
 
     @Column(length = 20)
     @Enumerated(EnumType.STRING) //enum값 그대로 string으로 저장
@@ -30,4 +28,12 @@ class Translator(
     @Convert(converter = TranslatorCategoryFlatter::class)
     var categories: List<TranslatorCategory>
 
-) : User(userId, password, name, phone, email, language)
+) {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1
+
+
+
+}

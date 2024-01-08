@@ -1,23 +1,22 @@
 package com.example.demo.user.teacher.dto
 
+import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.user.basic.entity.User
 import com.example.demo.user.teacher.entity.Teacher
 import com.example.demo.user.translator.entity.Translator
 import com.example.demo.user.translator.type.TranslatorCategory
 import com.example.demo.user.translator.type.TranslatorLevel
 
 class TeacherDTO(
-    val userId : String,
-    val password : String,
-    val name : String,
-    val phone : String,
-    val email : String?,
-    val language : List<String>,
     val school : String,
     val grade : Int,
     val className : String,
     val course : String?,
-    val address : String?
+    val address : String?,
+    val userDto: UserDto
 
 ) {
-    fun toEntity() : Teacher = Teacher(userId, password, name, phone, email, language, school, grade, className, course, address)
+
+    constructor(teacher: Teacher) : this(teacher.school, teacher.grade, teacher.className, teacher.course, teacher.address, UserDto(teacher.user))
+    fun toEntity() : Teacher = Teacher(school, grade, className, course, address, userDto.toEntity())
 }

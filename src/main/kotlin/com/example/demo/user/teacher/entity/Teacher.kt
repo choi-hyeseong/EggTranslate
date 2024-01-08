@@ -1,17 +1,10 @@
 package com.example.demo.user.teacher.entity
 
 import com.example.demo.user.basic.entity.User
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
+import jakarta.persistence.*
 
 @Entity
 class Teacher(
-    userId: String,
-    password: String,
-    name: String,
-    phone: String,
-    email: String?,
-    language: List<String>,
 
     @Column(nullable = false, unique = false, length = 25)
     var school : String,
@@ -26,9 +19,18 @@ class Teacher(
     var course : String?,
 
     @Column(nullable = true)
-    var address : String?
+    var address : String?,
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    var user: User
+
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1
 
 
-) : User(userId, password, name, phone, email, language) {
+
 
 }
