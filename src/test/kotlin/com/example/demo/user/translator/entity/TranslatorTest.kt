@@ -84,6 +84,7 @@ class TranslatorTest {
                 assertTrue(load.certificates.contains("ITQ"))
 
                 assertEquals("한글", response.user.language[0]) //관계 잘 저장되었는지
+                //1대1 단방향 매핑이라 User의 Translator 참조여부는 상관할 필요 X
             }
 
 

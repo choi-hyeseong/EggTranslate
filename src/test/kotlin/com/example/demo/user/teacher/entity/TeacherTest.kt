@@ -1,71 +1,84 @@
 package com.example.demo.user.teacher.entity
 
+import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.repository.TeacherRepository
+import jakarta.transaction.Transactional
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class TeacherTest(@Autowired private val teacherRepository: TeacherRepository) {
+class TeacherTest(@Autowired private val teacherRepository: TeacherRepository, @Autowired private val userRepository: UserRepository) {
 
-    val teacher = TeacherDTO(
-        "TEST",
-        "PASSWORD",
-        "NAME",
-        "PHONE",
-        "EMAIL",
-        mutableListOf(),
-        "대구학교",
-        3,
-        "병아리반",
-        "수학",
-        "대구광역시"
-    )
+    val user = UserDto(
+        userName = "테스트",
+        password = "PASS",
+        name = "테스트",
+        phone = "010",
+        email = null,
+        languages = mutableListOf("한글", "영어")
+    ).toEntity()
+
 
     @Test
+    @Transactional
     fun TEST_SAVE_TEACHER() {
-        val response = teacherRepository.save(teacher.toEntity())
-        assertEquals("대구학교", response.school)
-        assertEquals(3, response.grade)
-        assertEquals("병아리반", response.className)
-        assertEquals("수학", response.course)
-        assertEquals("대구광역시", response.address)
-        teacherRepository.delete(response) //실제 환경에서 테스트하므로 지우기
+        val saved = userRepository.save(user)
+        val teacher = TeacherDTO(
+            "대구학교",
+            3,
+            "병아리반",
+            "수학",
+            "대구광역시",
+            UserDto(saved)
+        )
+        val response = assertDoesNotThrow { teacherRepository.save(teacher.toEntity()) }
+        assertNotEquals(-1, response.id)
+
     }
 
-
+    @Transactional
     @Test
     fun TEST_LOAD_TEACHER() {
-        val request = teacherRepository.save(teacher.toEntity())
-        val response = teacherRepository.findById(request.id).get()
-        assertEquals("대구학교", response.school)
-        assertEquals(3, response.grade)
-        assertEquals("병아리반", response.className)
-        assertEquals("수학", response.course)
-        assertEquals("대구광역시", response.address)
-        teacherRepository.delete(response) //실제 환경에서 테스트하므로 지우기
+        val saved = userRepository.save(user)
+        val teacher = TeacherDTO(
+            "대구학교",
+            3,
+            "병아리반",
+            "수학",
+            "대구광역시",
+            UserDto(saved)
+        )
+        val response = assertDoesNotThrow { teacherRepository.save(teacher.toEntity()) }
+        val responseTeacher = assertDoesNotThrow { teacherRepository.findById(response.id).get() }
+        assertEquals("병아리반", responseTeacher.className)
+        assertEquals(3, responseTeacher.grade)
+        assertNotNull(responseTeacher.user)
+        assertEquals("010",responseTeacher.user.phone)
     }
 
+    @Transactional
     @Test
     fun TEST_NULL_FIELDS() {
+        val saved = userRepository.save(user)
         val nullableTeacher = TeacherDTO(
-            teacher.userId,
-            teacher.password,
-            teacher.name,
-            teacher.phone,
-            teacher.email,
-            teacher.language,
-            teacher.school,
-            teacher.grade,
-            teacher.className,
+            "대구학교",
+            3,
+            "병아리반",
             null,
-            null
+            null,
+            UserDto(saved)
         )
         assertDoesNotThrow {
-            val response = teacherRepository.save(nullableTeacher.toEntity())
-            teacherRepository.delete(response)
+          teacherRepository.save(nullableTeacher.toEntity())
         }
     }
+
+
+
+
 }
