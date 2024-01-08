@@ -2,6 +2,7 @@ package com.example.demo.user.teacher.entity
 
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
+import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.repository.TeacherRepository
 import jakarta.transaction.Transactional
@@ -20,7 +21,8 @@ class TeacherTest(@Autowired private val teacherRepository: TeacherRepository, @
         name = "테스트",
         phone = "010",
         email = null,
-        languages = mutableListOf("한글", "영어")
+        languages = mutableListOf("한글", "영어"),
+        userType = UserType.TEACHER
     ).toEntity()
 
 
@@ -58,6 +60,7 @@ class TeacherTest(@Autowired private val teacherRepository: TeacherRepository, @
         assertEquals("병아리반", responseTeacher.className)
         assertEquals(3, responseTeacher.grade)
         assertNotNull(responseTeacher.user)
+        assertEquals(UserType.TEACHER, saved.userType)
         assertEquals("010",responseTeacher.user.phone)
     }
 

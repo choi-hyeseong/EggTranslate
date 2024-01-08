@@ -10,8 +10,8 @@ class TranslatorDTO(
     val career : Int,
     val level : TranslatorLevel,
     val user : UserDto,
-    val certificates : List<String>,
-    val categories : List<TranslatorCategory>,
+    val certificates : MutableList<String>,
+    val categories : MutableList<TranslatorCategory>,
 
     ) {
 
