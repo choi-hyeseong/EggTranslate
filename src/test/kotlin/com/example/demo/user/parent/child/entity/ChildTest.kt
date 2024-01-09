@@ -30,7 +30,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
     @Transactional
     @Test
     fun TEST_ADD_CHILD() {
-        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val user = userRepository.save(user.toEntity())
         val children = mutableListOf<ChildRequestDto>()
         val dto = ParentDTO(
             children,
@@ -40,13 +40,14 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val load = parentRepository.findById(response.id).get()
         load.children.add(
             ChildRequestDto(
+                -1,
             "호식이",
             "전화",
             "학교",
             2,
             "병아리",
             Gender.MAN
-        ).toEntity(childDTO.get(i).name, childDTO.get(i).phone, childDTO.get(i).school, childDTO.get(i).grade, childDTO.get(i).className, childDTO.get(i).gender))
+        ).toEntity())
         parentRepository.save(load)
         val saved = parentRepository.findById(response.id).get()
         assertTrue(childRepository.existsById(saved.children[0].id))
@@ -56,7 +57,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
     @Transactional
     @Test
     fun TEST_REMOVE_CHILD() {
-        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val user = userRepository.save(user.toEntity())
         val children = mutableListOf<ChildRequestDto>()
         val dto = ParentDTO(
             children,
@@ -66,13 +67,14 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val load = parentRepository.findById(response.id).get()
         load.children.add(
             ChildRequestDto(
+                -1,
             "호식이",
             "전화",
             "학교",
             2,
             "병아리",
             Gender.MAN
-        ).toEntity(childDTO.get(i).name, childDTO.get(i).phone, childDTO.get(i).school, childDTO.get(i).grade, childDTO.get(i).className, childDTO.get(i).gender))
+        ).toEntity())
         parentRepository.save(load)
         val saved = parentRepository.findById(response.id).get()
         val child = saved.children[0].id
@@ -88,7 +90,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
     @Transactional
     @Test
     fun TEST_EDIT_CHILD() {
-        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val user = userRepository.save(user.toEntity())
         val children = mutableListOf<ChildRequestDto>()
         val dto = ParentDTO(
             children,
@@ -98,13 +100,14 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val load = parentRepository.findById(response.id).get()
         load.children.add(
             ChildRequestDto(
+                -1,
             "호식이",
             "전화",
             "학교",
             2,
             "병아리",
             Gender.MAN
-        ).toEntity(childDTO.get(i).name, childDTO.get(i).phone, childDTO.get(i).school, childDTO.get(i).grade, childDTO.get(i).className, childDTO.get(i).gender))
+        ).toEntity())
         parentRepository.save(load)
         val saved = parentRepository.findById(response.id).get()
         val child = saved.children[0].id

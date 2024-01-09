@@ -39,15 +39,15 @@ class TranslateFileTest {
     @Test
     @Transactional
     fun TEST_SAVE_FILE() {
-        val saveUser = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val saveUser = userRepository.save(user.toEntity())
         val file1 = FileDTO(-1, "FILE1", "", UserDto(saveUser), "")
         val saveFile1 = fileRepository.save(file1.toEntity())
 
 
-        val autoTrans = AutoTranslateDTO(-1, UserDto(saveUser), "ORIGIN", "TRANSLATE", "FROM", "TO")
+        val autoTrans = AutoTranslateDTO(-1, UserDto(saveUser), "ORIGIN", "TRANSLATE", "FROM", "TO", mutableListOf())
         val saveAuto = autoTranslateRepository.save(autoTrans.toEntity())
 
-        val translateFile = TranslateFileDTO(FileDTO(saveFile1), AutoTranslateDTO(saveAuto))
+        val translateFile = TranslateFileDTO(-1, FileDTO(saveFile1), AutoTranslateDTO(saveAuto))
         val saved = translateFileRepository.save(translateFile.toEntity())
 
         saveAuto.translateFiles.add(saved)
@@ -61,19 +61,19 @@ class TranslateFileTest {
     @Test
     @Transactional
     fun TEST_LOAD_FIlES() {
-        val saveUser = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val saveUser = userRepository.save(user.toEntity())
         val file1 = FileDTO(-1, "FILE1", "", UserDto(saveUser), "")
         val file2 = FileDTO(-1, "FILE2", "", UserDto(saveUser), "")
         val saveFile1 = fileRepository.save(file1.toEntity())
         val saveFile2 = fileRepository.save(file2.toEntity())
 
-        val autoTrans = AutoTranslateDTO(-1, UserDto(saveUser), "ORIGIN", "TRANSLATE", "FROM", "TO")
+        val autoTrans = AutoTranslateDTO(-1, UserDto(saveUser), "ORIGIN", "TRANSLATE", "FROM", "TO", mutableListOf())
         val saveAuto = autoTranslateRepository.save(autoTrans.toEntity())
 
-        val translateFile = TranslateFileDTO(FileDTO(saveFile1), AutoTranslateDTO(saveAuto))
+        val translateFile = TranslateFileDTO(-1, FileDTO(saveFile1), AutoTranslateDTO(saveAuto))
         val saved = translateFileRepository.save(translateFile.toEntity())
 
-        val translateFile2 = TranslateFileDTO(FileDTO(saveFile2), AutoTranslateDTO(saveAuto))
+        val translateFile2 = TranslateFileDTO(-1, FileDTO(saveFile2), AutoTranslateDTO(saveAuto))
         val save2 = translateFileRepository.save(translateFile2.toEntity())
 
 

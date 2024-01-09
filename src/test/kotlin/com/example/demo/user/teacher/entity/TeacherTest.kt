@@ -23,7 +23,7 @@ class TeacherTest(@Autowired private val teacherRepository: TeacherRepository, @
         email = null,
         languages = mutableListOf("한글", "영어"),
         userType = UserType.TEACHER
-    ).toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType)
+    ).toEntity()
 
 
     @Test

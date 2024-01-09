@@ -10,6 +10,10 @@ import jakarta.persistence.*
 @Entity
 class TranslationRequest(
 
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var id : Long = -1,
+
         @OneToOne
         @JoinColumn(name = "user_id")
         var user : User,
@@ -30,9 +34,7 @@ class TranslationRequest(
 
         @OneToOne
         @JoinColumn(name = "child_id", nullable = true)
-        var child : Child,
+        var child : Child?,
 ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long = -1
+
 }

@@ -6,6 +6,10 @@ import jakarta.persistence.*
 @Entity
 class TranslateFile(
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1,
+
     @ManyToOne
     @JoinColumn(name = "file_id")
     var file: File,
@@ -15,7 +19,5 @@ class TranslateFile(
     var autoTranslate: AutoTranslate
 
 ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1
+
 }

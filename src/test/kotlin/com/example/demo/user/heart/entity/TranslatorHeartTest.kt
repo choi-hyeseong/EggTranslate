@@ -56,8 +56,8 @@ class TranslatorHeartTest(
     @Test
     @Transactional
     fun TEST_SAVE_HEART() {
-        val translatorUser = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
-        val other = userRepository.save(user2.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val translatorUser = userRepository.save(user.toEntity())
+        val other = userRepository.save(user2.toEntity())
         val translatorDto = TranslatorDTO(
             -1,
             3,
@@ -99,7 +99,7 @@ class TranslatorHeartTest(
     @Transactional
     fun TEST_COUNT_ALL_HEART() {
         TEST_SAVE_HEART()
-        val saveUser3 = userRepository.save(user3.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val saveUser3 = userRepository.save(user3.toEntity())
         val translator = translatorRepository.findByUser(userRepository.findByUsername("테스트").get())!!
 
         val dto = TranslatorHeartDTO(UserDto(saveUser3), TranslatorDTO(translator))
