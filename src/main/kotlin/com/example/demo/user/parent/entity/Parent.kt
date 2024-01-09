@@ -6,9 +6,10 @@ import jakarta.persistence.*
 
 @Entity
 class Parent(
-    @OneToMany(mappedBy = "parent", cascade = [CascadeType.ALL])
+    @JoinColumn(name = "parent_id")
+    @OneToMany(cascade = [CascadeType.ALL] , orphanRemoval = true)
     //mappedby는 양방향 관계 지정시.
-    var children: List<Child>,
+    var children: MutableList<Child>,
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -21,3 +22,5 @@ class Parent(
 
 
 }
+
+

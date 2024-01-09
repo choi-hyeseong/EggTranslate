@@ -26,9 +26,6 @@ class Child(
     @Enumerated(EnumType.STRING)
     var gender : Gender,
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    var parent : Parent
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,8 @@
 package com.example.demo.image.service
 
 import com.example.demo.common.response.Response
-import com.example.demo.translate.dto.TranslateRequestDTO
-import com.example.demo.translate.dto.TranslateResponseDTO
+import com.example.demo.translate.dto.AutoTranslateRequestDTO
+import com.example.demo.translate.dto.AutoTranslateResponseDTO
 import com.example.demo.logger
 import com.example.demo.ocr.service.OCRService
 import com.example.demo.translate.service.TranslateService
@@ -19,7 +19,7 @@ class ImageService(private val ocrService: OCRService, private val translateServ
     private lateinit var outPath: String
     private val log = logger()
 
-    suspend fun handleImage(lang : String, image: List<MultipartFile>): Response<List<TranslateResponseDTO>> {
+    suspend fun handleImage(lang : String, image: List<MultipartFile>): Response<List<AutoTranslateResponseDTO>> {
         //save image
         saveImage(image)
         return coroutineScope {
@@ -29,7 +29,7 @@ class ImageService(private val ocrService: OCRService, private val translateServ
                     ocrService.readImage(it)
                 }
             }.toList()
-            val ocrData = requestList.awaitAll().map { TranslateRequestDTO("ko", lang, it) }.toList()
+            val ocrData = requestList.awaitAll().map { AutoTranslateRequestDTO("ko", lang, it) }.toList()
             // return translated string
             translateService.translate(ocrData)
         }

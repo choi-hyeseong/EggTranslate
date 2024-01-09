@@ -2,6 +2,7 @@ package com.example.demo.user.translator.entity
 
 import com.example.demo.common.database.converter.StringFlatter
 import com.example.demo.user.basic.entity.User
+import com.example.demo.user.heart.entity.TranslatorHeart
 import com.example.demo.user.translator.converter.TranslatorCategoryFlatter
 import com.example.demo.user.translator.type.TranslatorCategory
 import com.example.demo.user.translator.type.TranslatorLevel
@@ -9,6 +10,10 @@ import jakarta.persistence.*
 
 @Entity
 class Translator(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1,
+
     @Column
     var career: Int,
 
@@ -22,17 +27,18 @@ class Translator(
 
     @Column
     @Convert(converter = StringFlatter::class)
-    var certificates: List<String>,
+    var certificates: MutableList<String>,
 
     @Column
     @Convert(converter = TranslatorCategoryFlatter::class)
-    var categories: List<TranslatorCategory>
+    var categories: MutableList<TranslatorCategory>
 
 ) {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1
+
+
+    @OneToMany( mappedBy = "translator")
+    var hearts : MutableList<TranslatorHeart> = mutableListOf()
 
 
 

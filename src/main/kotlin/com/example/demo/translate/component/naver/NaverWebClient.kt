@@ -1,7 +1,7 @@
 package com.example.demo.translate.component.naver
 
 import com.example.demo.translate.dto.NaverResponseDTO
-import com.example.demo.translate.dto.TranslateRequestDTO
+import com.example.demo.translate.dto.AutoTranslateRequestDTO
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.reactive.function.client.WebClient
 import java.net.URLEncoder
@@ -15,7 +15,7 @@ class NaverWebClient {
     @Value("\${naver.client-secret}")
     private lateinit var clientSecret : String
 
-    suspend fun request(requestDTO: TranslateRequestDTO) : NaverResponseDTO? {
+    suspend fun request(requestDTO: AutoTranslateRequestDTO) : NaverResponseDTO? {
         val client = WebClient.builder().baseUrl("https://openapi.naver.com/v1/papago/n2mt").build()
         val response = client.post().uri { builder ->
             builder.queryParam("source", requestDTO.from)

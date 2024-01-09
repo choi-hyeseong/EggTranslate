@@ -1,8 +1,8 @@
 package com.example.demo
 
 import com.example.demo.common.response.Response
-import com.example.demo.translate.dto.TranslateRequestDTO
-import com.example.demo.translate.dto.TranslateResponseDTO
+import com.example.demo.translate.dto.AutoTranslateRequestDTO
+import com.example.demo.translate.dto.AutoTranslateResponseDTO
 import com.example.demo.translate.service.TranslateService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,8 +17,8 @@ class TestController(private val translateService: TranslateService) {
 
     //for test
     @PostMapping("/")
-    suspend fun image(@RequestBody translateRequestDTO: TranslateRequestDTO) : ResponseEntity<Response<TranslateResponseDTO>> {
-        val result = translateService.translate(translateRequestDTO)
+    suspend fun image(@RequestBody autoTranslateRequestDTO: AutoTranslateRequestDTO) : ResponseEntity<Response<AutoTranslateResponseDTO>> {
+        val result = translateService.translate(autoTranslateRequestDTO)
         return if (result.isSuccess)
             ResponseEntity(result, HttpStatus.OK)
         else
