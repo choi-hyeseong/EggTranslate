@@ -2,6 +2,7 @@ package com.example.demo.signup.service
 
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
+import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.child.entity.Child
 import com.example.demo.user.parent.child.repository.ChildRepository
 import com.example.demo.user.parent.dto.ParentDTO
@@ -15,16 +16,15 @@ import org.springframework.stereotype.Service
 
 @Service
 class RegistrationService(
-        private val userRepository: UserRepository,
+        private val userService: UserService,
         private val parentRepository: ParentRepository,
         private val childRepository: ChildRepository,
         private val teacherRepository: TeacherRepository,
         private val translatorRepository: TranslatorRepository
 ) {
 
-    fun registerUser(userDTO: UserDto) {
-        val user = userDTO.toEntity()
-        userRepository.save(user)
+    fun registerUser(userDTO: UserDto) : Boolean {
+        return userService.signUp(userDTO)
     }
 
     fun registerParent(parentDTO: ParentDTO) {
