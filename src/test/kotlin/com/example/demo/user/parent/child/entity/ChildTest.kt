@@ -40,6 +40,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val load = parentRepository.findById(response.id).get()
         load.children.add(
             ChildRequestDto(
+                -1,
             "호식이",
             "전화",
             "학교",
@@ -66,6 +67,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val load = parentRepository.findById(response.id).get()
         load.children.add(
             ChildRequestDto(
+                -1,
             "호식이",
             "전화",
             "학교",
@@ -98,6 +100,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val load = parentRepository.findById(response.id).get()
         load.children.add(
             ChildRequestDto(
+                -1,
             "호식이",
             "전화",
             "학교",

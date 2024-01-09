@@ -28,12 +28,13 @@ class AutoTranslate(
     @Column(nullable = false, length = 10)
     var toLang: String,
 
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "autoTranslate") //mappedBy -> table명이 아닌 field(property) 명
+    var translateFiles: MutableList<TranslateFile> = mutableListOf()
 
 ) {
 
 
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "autoTranslate") //mappedBy -> table명이 아닌 field(property) 명
-    var translateFiles: MutableList<TranslateFile> = mutableListOf()
+
 
 
 }

@@ -7,6 +7,10 @@ import jakarta.persistence.*
 @Entity
 class Child(
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id : Long = -1,
+
     @Column(nullable = false, length = 50)
     var name : String,
 
@@ -27,9 +31,7 @@ class Child(
     var gender : Gender,
 
 ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long = -1
+
 
 
 

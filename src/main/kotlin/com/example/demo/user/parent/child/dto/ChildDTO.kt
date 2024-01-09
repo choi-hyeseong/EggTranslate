@@ -4,6 +4,7 @@ import com.example.demo.user.parent.child.type.Gender
 import com.example.demo.user.parent.child.entity.Child
 
 class ChildRequestDto(
+    val id : Long = -1,
     val name: String,
     val phone: String,
     val school: String,
@@ -11,6 +12,6 @@ class ChildRequestDto(
     val className: String,
     val gender: Gender
 ) {
-    constructor(child: Child) : this(child.name, child.phone, child.school, child.grade, child.className, child.gender)
-    fun toEntity() : Child = Child(name, phone, school, grade, className, gender)
+    constructor(child: Child) : this(child.id, child.name, child.phone, child.school, child.grade, child.className, child.gender)
+    fun toEntity() : Child = Child(id, name, phone, school, grade, className, gender)
 }
