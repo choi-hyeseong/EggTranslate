@@ -38,7 +38,7 @@ class RegistrationService(
     }
 
     fun registerTeacher(teacherDTO: TeacherDTO) : TeacherDTO {
-        val userResult = registerUser(teacherDTO.userDto) // 등록한 유저의 id
+        val userResult = registerUser(teacherDTO.user) // 등록한 유저의 id
         if (userResult == -1L)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
