@@ -34,6 +34,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
         val user = userRepository.save(user.toEntity())
 
         val children = mutableListOf(ChildRequestDto(
+            -1,
             "호식이",
             "전화",
             "학교",
@@ -41,6 +42,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             "병아리",
             Gender.MAN,
         ), ChildRequestDto(
+            -1,
             "두마리",
             "전화",
             "학교",
@@ -64,6 +66,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
     fun TEST_LOAD_PARENT() {
         val user = userRepository.save(user.toEntity())
         val children = mutableListOf(ChildRequestDto(
+            -1,
             "호식이",
             "전화",
             "학교",
@@ -71,6 +74,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             "병아리",
             Gender.MAN
         ), ChildRequestDto(
+            -1,
             "두마리",
             "전화",
             "학교",
