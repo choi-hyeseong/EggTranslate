@@ -16,6 +16,7 @@ import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RegistrationService(
@@ -24,12 +25,12 @@ class RegistrationService(
         private val teacherService: TeacherService,
         private val translatorRepository: TranslatorRepository
 ) {
-
+    @Transactional
     fun registerUser(userDTO: UserDto) : Long {
         return userService.signUp(userDTO)
     }
 
-
+    @Transactional
     fun registerParent(parentDTO: ParentDTO) : ParentDTO {
         val userResult = registerUser(parentDTO.user)
         if (userResult == -1L)
@@ -42,6 +43,7 @@ class RegistrationService(
         return parentService.findByParentUserId(userResult)
     }
 
+    @Transactional
     fun registerTeacher(teacherDTO: TeacherDTO) : TeacherDTO {
         val userResult = registerUser(teacherDTO.userDto)
         if (userResult == -1L)
@@ -54,6 +56,7 @@ class RegistrationService(
         return teacherService.findTeacherByUserId(userResult)
     }
 
+    @Transactional
     fun registerTranslator(translatorDTO: TranslatorDTO) {
         val userDTO = translatorDTO.user
         registerUser(userDTO)
