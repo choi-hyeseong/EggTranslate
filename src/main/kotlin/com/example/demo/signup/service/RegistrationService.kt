@@ -1,5 +1,6 @@
 package com.example.demo.signup.service
 
+import com.example.demo.signup.dto.ParentSignUpDTO
 import com.example.demo.signup.exception.RegistrationFailedException
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
@@ -25,12 +26,13 @@ class RegistrationService(
         return userService.signUp(userDTO)
     }
 
-    fun registerParent(parentDTO: ParentDTO) : ParentDTO {
-        val userResult = registerUser(parentDTO.user)
+    fun registerParent(parentDTO: ParentSignUpDTO) : ParentDTO {
+        val dto = parentDTO.toParentDTO() // ParentDTO 반환
+        val userResult = registerUser(dto.user) // dto.user -> UserDTO
         if (userResult == -1L)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        val parentResult = parentService.signUp(parentDTO)
+        val parentResult = parentService.signUp(dto)
         if (parentResult == -1L)
             throw RegistrationFailedException("부모 회원가입에 실패하였습니다.")
 
