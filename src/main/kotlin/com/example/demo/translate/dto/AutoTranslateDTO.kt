@@ -1,7 +1,5 @@
 package com.example.demo.translate.dto
 
-import com.example.demo.file.dto.TranslateFileDTO
-import com.example.demo.file.entity.TranslateFile
 import com.example.demo.translate.entity.AutoTranslate
 import com.example.demo.user.basic.dto.UserDto
 
