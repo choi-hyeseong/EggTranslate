@@ -75,6 +75,7 @@ class TranslationResultTest {
 
         val parent = parentRepository.save(
             ParentDTO(
+                -1,
                 mutableListOf(
                     ChildRequestDto(
                         -1,
@@ -129,6 +130,7 @@ class TranslationResultTest {
 
         val parent = parentRepository.save(
             ParentDTO(
+                -1,
                 mutableListOf(
                     ChildRequestDto(
                         -1,

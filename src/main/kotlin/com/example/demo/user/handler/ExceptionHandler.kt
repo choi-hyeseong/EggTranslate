@@ -10,4 +10,5 @@ class ExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException::class)
     fun handleUserNotFound(e : UserNotFoundException) = Response.ofFailure(e.message, e.id)
+
 }

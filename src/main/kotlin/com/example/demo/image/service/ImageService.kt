@@ -7,6 +7,7 @@ import com.example.demo.translate.dto.AutoTranslateResponseDTO
 import com.example.demo.logger
 import com.example.demo.ocr.service.OCRService
 import com.example.demo.translate.service.TranslateService
+import com.example.demo.user.basic.service.UserService
 import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -15,7 +16,8 @@ import org.springframework.web.multipart.MultipartFile
 class ImageService(
     private val ocrService: OCRService,
     private val translateService: TranslateService,
-    private val fileService: FileService
+    private val fileService: FileService,
+    private val userService: UserService
 ) {
 
 
@@ -23,7 +25,8 @@ class ImageService(
 
     suspend fun handleImage(id : Long, lang: String, image: List<MultipartFile>): Response<List<AutoTranslateResponseDTO>> {
         //save image
-        //fileService.saveAllEntity(fileService.saveImage(image))
+        val user = userService.getUser(id)
+        fileService.saveAllEntity(fileService.saveImage(user, image))
 
         return coroutineScope {
             //read parallel logic

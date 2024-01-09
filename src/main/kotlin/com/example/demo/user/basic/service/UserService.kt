@@ -11,9 +11,12 @@ class UserService(private val userRepository: UserRepository) {
 
 
     @Transactional
-    fun signUp(userDto: UserDto): Boolean {
-        return userRepository.save(userDto.toEntity()).id != -1L
+    fun signUp(userDto: UserDto): Long {
+        return userRepository.save(userDto.toEntity()).id
     }
+
+    @Transactional(readOnly = true)
+    fun existUser(id : Long) = userRepository.existsById(id)
 
     @Transactional(readOnly = true)
     fun getUser(id: Long): UserDto {
