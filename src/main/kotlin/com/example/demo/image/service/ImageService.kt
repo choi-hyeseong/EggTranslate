@@ -1,7 +1,7 @@
 package com.example.demo.image.service
 
 import com.example.demo.common.response.Response
-import com.example.demo.file.FileService
+import com.example.demo.file.service.FileService
 import com.example.demo.translate.dto.AutoTranslateRequestDTO
 import com.example.demo.translate.dto.AutoTranslateResponseDTO
 import com.example.demo.logger
