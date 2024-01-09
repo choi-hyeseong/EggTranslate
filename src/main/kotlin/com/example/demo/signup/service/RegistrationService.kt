@@ -10,7 +10,6 @@ import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.service.TranslatorService
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
