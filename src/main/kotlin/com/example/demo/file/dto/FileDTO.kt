@@ -14,7 +14,7 @@ class FileDTO(
         constructor(file: File) : this(file.id, file.originName, file.saveName, UserDto(file.user), file.savePath)
         fun toEntity() : File = File(
                 id = fileId,
-                user = user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType),
+                user = user.toEntity(),
                 originName = originName,
                 saveName = saveName,
                 savePath = savePath
