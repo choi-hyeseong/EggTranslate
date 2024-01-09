@@ -12,5 +12,5 @@ class AutoTranslateDTO(
         val to : String
 ) {
         constructor(autoTranslate: AutoTranslate) : this(autoTranslate.id,UserDto(autoTranslate.user), autoTranslate.origin, autoTranslate.translate, autoTranslate.fromLang, autoTranslate.toLang)
-        fun toEntity() : AutoTranslate = AutoTranslate(id, userDto.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType), origin, translate, from, to)
+        fun toEntity() : AutoTranslate = AutoTranslate(id, userDto.toEntity(), origin, translate, from, to)
 }

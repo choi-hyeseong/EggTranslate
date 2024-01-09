@@ -11,9 +11,11 @@ import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.repository.TeacherRepository
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
+@Transactional
 class RegistrationService(
         private val userRepository: UserRepository,
         private val parentRepository: ParentRepository,
