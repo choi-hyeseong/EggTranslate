@@ -4,7 +4,7 @@ import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.type.UserType
 
 class UserDto(
-    val id : Long = -1,
+    var id : Long = -1,
     val userName : String,
     val password : String,
     val name : String,

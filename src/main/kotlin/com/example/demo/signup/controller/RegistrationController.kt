@@ -1,5 +1,7 @@
 package com.example.demo.signup.controller
 
+import com.example.demo.common.response.Response
+import com.example.demo.signup.dto.ParentSignUpDTO
 import com.example.demo.signup.service.RegistrationService
 import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.teacher.dto.TeacherDTO
@@ -32,17 +34,10 @@ class RegistrationController(private val registrationService: RegistrationServic
 //    }
 
     @PostMapping("/teacher")
-    fun registerParent(@RequestBody teacherDTO: TeacherDTO): ResponseEntity<String> {
-        try {
-            registrationService.registerTeacher(teacherDTO)
-            return ResponseEntity.ok("Teacher registered successfully.")
-        } catch (e: Exception) {
-            return ResponseEntity.status(500).body("Failed to register teacher.")
-        }
-    }
+    fun registerTeacher(@RequestBody teacherDTO: TeacherDTO): Response<TeacherDTO> = Response.ofSuccess(null, registrationService.registerTeacher(teacherDTO))
 
     @PostMapping("/parent")
-    fun registerParent(@RequestBody parentDTO: ParentDTO): ResponseEntity<String> {
+    fun registerParent(@RequestBody parentDTO: ParentSignUpDTO): ResponseEntity<String> {
         try {
             registrationService.registerParent(parentDTO)
             return ResponseEntity.ok("Parent registered successfully.")
