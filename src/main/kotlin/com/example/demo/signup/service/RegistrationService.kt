@@ -9,6 +9,7 @@ import com.example.demo.user.parent.entity.Parent
 import com.example.demo.user.parent.repository.ParentRepository
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.repository.TeacherRepository
+import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
 import org.springframework.stereotype.Service
 
@@ -22,9 +23,7 @@ class RegistrationService(
 ) {
 
     fun registerUser(userDTO: UserDto) {
-        val user = userDTO.toEntity(
-                userDTO.id, userDTO.name, userDTO.password,userDTO.phone,userDTO.email, userDTO.languages, userDTO.userType
-        )
+        val user = userDTO.toEntity()
         userRepository.save(user)
     }
 
@@ -32,43 +31,42 @@ class RegistrationService(
         val userDTO = parentDTO.user
         registerUser(userDTO)
 
-//        parent.user = userRepository.findByUsername(userDTO.username)
-//        parentRepository.save(parent)
+        // ParentDTO를 Parent 엔티티로 변환
+        val parent = parentDTO.toEntity()
 
-        val parent = Parent(user = userRepository.findByUsername(userDTO.username))
-        // 부모의 children 필드가 null인 경우 빈 리스트로 초기화
-        if (parent.children == null) {
-            parent.children = mutableListOf()
+        // 부모 엔티티에 자식들 추가
+        parentDTO.children.forEach { childDTO ->
+            // ChildDTO를 Child 엔티티로 변환
+            val child = childDTO.toEntity()
+
+            // 자식 엔티티를 저장
+            childRepository.save(child)
+
+            // 부모 엔티티에 자식 추가
+            parent.children.add(child)
         }
 
+        // 부모 엔티티를 저장
         parentRepository.save(parent)
-        val childDTO = parentDTO.children // MutableList<ChildRequestDto>
-        val children : MutableList<Child>
-        for(i in 0 until childDTO.size){
-            Parent(childDTO.map { it.toEntity(it.name, it.phone, it.school, it.grade, it.className, it.gender) }.toMutableList(), userDTO.toEntity(
-                    userDTO.id, userDTO.name, userDTO.password,userDTO.phone,userDTO.email, userDTO.languages, userDTO.userType
-            ))
-        }
-
-        val parent = Parent(childDTO, parentDTO.user)))
-        childRepository.save(children)
     }
 
     fun registerTeacher(teacherDTO: TeacherDTO) {
-        val userDTO = teacherDTO.userDTO
+        val userDTO = teacherDTO.userDto
         registerUser(userDTO)
 
-        val teacher = Teacher(/* 추가적인 선생님 정보 설정 */)
-        teacher.user = userRepository.findByUsername(userDTO.username)
+        // TeacherDTO를 Teacher 엔티티로 변환
+        val teacher = teacherDTO.toEntity()
+
         teacherRepository.save(teacher)
     }
 
     fun registerTranslator(translatorDTO: TranslatorDTO) {
-        val userDTO = translatorDTO.userDTO
+        val userDTO = translatorDTO.user
         registerUser(userDTO)
 
-        val translator = Translator(/* 추가적인 번역가 정보 설정 */)
-        translator.user = userRepository.findByUsername(userDTO.username)
+        // TranslatorDTO를 Translator 엔티티로 변환
+        val translator = translatorDTO.toEntity()
+
         translatorRepository.save(translator)
     }
 }

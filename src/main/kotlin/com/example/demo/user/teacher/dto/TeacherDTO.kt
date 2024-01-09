@@ -14,5 +14,5 @@ class TeacherDTO(
 ) {
 
     constructor(teacher: Teacher) : this(teacher.school, teacher.grade, teacher.className, teacher.course, teacher.address, UserDto(teacher.user))
-    fun toEntity() : Teacher = Teacher(school, grade, className, course, address, userDto.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages))
+    fun toEntity() : Teacher = Teacher(school, grade, className, course, address, userDto.toEntity())
 }
