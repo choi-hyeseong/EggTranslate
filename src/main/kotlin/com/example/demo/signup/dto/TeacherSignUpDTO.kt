@@ -1,4 +1,4 @@
 package com.example.demo.signup.dto
 
-class TranslatorSignupDTO {
+class TeacherSignUpDTO {
 }
