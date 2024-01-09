@@ -4,10 +4,10 @@ import com.example.demo.user.parent.child.dto.ChildRequestDto
 import com.example.demo.user.parent.dto.ParentDTO
 
 class ParentSignUpDTO(
-    var children : MutableList<ChildRequestDto>,
+    var children : MutableList<ChildSignUpDTO>,
     val user : UserSignUpDTO
 
 ) {
-    fun toParentDTO() : ParentDTO = ParentDTO(-1, children, user.toUserDTO())
+    fun toParentDTO() : ParentDTO = ParentDTO(-1, children.map { it.toChildDTO() }.toMutableList(), user.toUserDTO())
 
 }

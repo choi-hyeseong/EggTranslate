@@ -12,8 +12,9 @@ import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.service.TranslatorService
-import jakarta.transaction.Transactional
+
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
@@ -34,7 +35,7 @@ class RegistrationService(
         if (userResult == -1L)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        val parentResult = parentService.signUp(dto)
+        val parentResult = parentService.signUp(dto.apply {user.id = userResult})
         if (parentResult == -1L)
             throw RegistrationFailedException("부모 회원가입에 실패하였습니다.")
 
@@ -47,7 +48,7 @@ class RegistrationService(
         if (userResult == -1L)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        val teacherResult = teacherService.signUp(dto)
+        val teacherResult = teacherService.signUp(dto.apply { user.id = userResult})
         if (teacherResult == -1L)
             throw RegistrationFailedException("선생 회원가입에 실패하였습니다.")
 
@@ -55,14 +56,14 @@ class RegistrationService(
     }
 
     fun registerTranslator(translatorDTO: TranslatorSignUpDTO) : TranslatorDTO {
-        val dto = translatorDTO.toTranslatorDTO()
-        val userResult = registerUser(dto.user)
+        val dto = translatorDTO.toTranslatorDTO() // translatorDTO 반환
+        val userResult = registerUser(dto.user) // translator의 user (UserDTO타입)
         if (userResult == -1L)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        val translatorResult = translatorService.signUp(dto)
+        val translatorResult = translatorService.signUp(dto.apply { user.id = userResult})
         if (translatorResult == -1L)
-            throw RegistrationFailedException("선생 회원가입에 실패하였습니다.")
+            throw RegistrationFailedException("번역가 회원가입에 실패하였습니다.")
 
         return translatorService.findTranslatorByUserId(userResult)
 

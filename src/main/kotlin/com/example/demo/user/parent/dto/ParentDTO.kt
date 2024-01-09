@@ -15,3 +15,4 @@ class ParentDTO(
     fun toEntity() : Parent = Parent(id, children.map { it.toEntity() }.toMutableList(), user.toEntity())
 
 }
+
