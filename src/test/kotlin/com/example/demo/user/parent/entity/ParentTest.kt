@@ -51,6 +51,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             Gender.MAN,
         ))
         val dto = ParentDTO(
+            -1,
             children,
             UserDto(user)
         )
@@ -83,6 +84,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             Gender.MAN
         ))
         val dto = ParentDTO(
+            -1,
             children,
             UserDto(user)
         )
@@ -107,6 +109,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
         val user = userRepository.save(user.toEntity())
         val children = mutableListOf<ChildRequestDto>()
         val dto = ParentDTO(
+            -1,
             children,
             UserDto(user)
         )

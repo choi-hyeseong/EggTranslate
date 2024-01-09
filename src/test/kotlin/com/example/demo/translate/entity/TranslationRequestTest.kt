@@ -69,6 +69,7 @@ class TranslationRequestTest {
         val savedUser = userRepository.save(user)
         val savedParentUser = userRepository.save(parent)
         val parent = ParentDTO(
+            -1,
             mutableListOf(
                 ChildRequestDto(-1, "하늘", "010", "학교", 3, "개나리", Gender.MAN)
             ),
@@ -94,6 +95,7 @@ class TranslationRequestTest {
         val savedUser = userRepository.save(user)
         val savedParentUser = userRepository.save(parent)
         val parent = ParentDTO(
+            -1,
             mutableListOf(
                 ChildRequestDto(-1, "하늘", "010", "학교", 3, "개나리", Gender.MAN)
             ),
@@ -125,6 +127,7 @@ class TranslationRequestTest {
         val savedUser = userRepository.save(user)
         val savedParentUser = userRepository.save(parent)
         val parent = ParentDTO(
+            -1,
             mutableListOf(),
             UserDto(savedUser)
         )
@@ -154,6 +157,7 @@ class TranslationRequestTest {
         val savedUser = userRepository.save(user)
         val savedParentUser = userRepository.save(parent)
         val parent = ParentDTO(
+            -1,
             mutableListOf(),
             UserDto(savedUser)
         )

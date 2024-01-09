@@ -1,14 +1,18 @@
 package com.example.demo.signup.service
 
+import com.example.demo.signup.exception.RegistrationFailedException
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
+import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.child.entity.Child
 import com.example.demo.user.parent.child.repository.ChildRepository
 import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.parent.entity.Parent
 import com.example.demo.user.parent.repository.ParentRepository
+import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.repository.TeacherRepository
+import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
 import jakarta.transaction.Transactional
@@ -17,49 +21,39 @@ import org.springframework.stereotype.Service
 @Service
 @Transactional
 class RegistrationService(
-        private val userRepository: UserRepository,
-        private val parentRepository: ParentRepository,
-        private val childRepository: ChildRepository,
-        private val teacherRepository: TeacherRepository,
+        private val userService: UserService,
+        private val parentService: ParentService,
+        private val teacherService: TeacherService,
         private val translatorRepository: TranslatorRepository
 ) {
 
-    fun registerUser(userDTO: UserDto) {
-        val user = userDTO.toEntity()
-        userRepository.save(user)
+    fun registerUser(userDTO: UserDto) : Long {
+        return userService.signUp(userDTO)
     }
 
-    fun registerParent(parentDTO: ParentDTO) {
-        val userDTO = parentDTO.user
-        registerUser(userDTO)
 
-        // ParentDTO를 Parent 엔티티로 변환
-        val parent = parentDTO.toEntity()
+    fun registerParent(parentDTO: ParentDTO) : ParentDTO {
+        val userResult = registerUser(parentDTO.user)
+        if (userResult == -1L)
+            throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        // 부모 엔티티에 자식들 추가
-        parentDTO.children.forEach { childDTO ->
-            // ChildDTO를 Child 엔티티로 변환
-            val child = childDTO.toEntity()
+        val parentResult = parentService.signUp(parentDTO)
+        if (parentResult == -1L)
+            throw RegistrationFailedException("부모 회원가입에 실패하였습니다.")
 
-            // 자식 엔티티를 저장
-            childRepository.save(child)
-
-            // 부모 엔티티에 자식 추가
-            parent.children.add(child)
-        }
-
-        // 부모 엔티티를 저장
-        parentRepository.save(parent)
+        return parentService.findByParentUserId(userResult)
     }
 
-    fun registerTeacher(teacherDTO: TeacherDTO) {
-        val userDTO = teacherDTO.userDto
-        registerUser(userDTO)
+    fun registerTeacher(teacherDTO: TeacherDTO) : TeacherDTO {
+        val userResult = registerUser(teacherDTO.userDto)
+        if (userResult == -1L)
+            throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        // TeacherDTO를 Teacher 엔티티로 변환
-        val teacher = teacherDTO.toEntity()
+        val teacherResult = teacherService.signUp(teacherDTO)
+        if (teacherResult == -1L)
+            throw RegistrationFailedException("선생 회원가입에 실패하였습니다.")
 
-        teacherRepository.save(teacher)
+        return teacherService.findTeacherByUserId(userResult)
     }
 
     fun registerTranslator(translatorDTO: TranslatorDTO) {
