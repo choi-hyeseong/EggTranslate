@@ -6,6 +6,10 @@ import jakarta.persistence.*
 @Entity
 class Teacher(
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1,
+
     @Column(nullable = false, unique = false, length = 25)
     var school : String,
 
@@ -26,9 +30,7 @@ class Teacher(
     var user: User
 
 ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1
+
 
 
 

@@ -69,7 +69,7 @@ class TranslatorHeartTest(
         val translator = translatorRepository.save(translatorDto.toEntity())
         assertNotEquals(-1, translator.id)
 
-        val dto = TranslatorHeartDTO(UserDto(other), TranslatorDTO(translator))
+        val dto = TranslatorHeartDTO(-1, UserDto(other), TranslatorDTO(translator))
         val response = translatorHeartRepository.save(dto.toEntity()) //중간 테이블을 저장해야 전파됨..
         other.heartList.add(response) //other 기준으로 해야됨..
         translator.hearts.add(response) // 양쪽다 리스트 추가해야 작동함. M:N에선
@@ -102,7 +102,7 @@ class TranslatorHeartTest(
         val saveUser3 = userRepository.save(user3.toEntity())
         val translator = translatorRepository.findByUser(userRepository.findByUsername("테스트").get())!!
 
-        val dto = TranslatorHeartDTO(UserDto(saveUser3), TranslatorDTO(translator))
+        val dto = TranslatorHeartDTO(-1, UserDto(saveUser3), TranslatorDTO(translator))
         val response = translatorHeartRepository.save(dto.toEntity())
 
         saveUser3.heartList.add(response)
