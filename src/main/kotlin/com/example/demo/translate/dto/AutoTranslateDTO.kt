@@ -6,7 +6,7 @@ import com.example.demo.translate.entity.AutoTranslate
 import com.example.demo.user.basic.dto.UserDto
 
 class AutoTranslateDTO(
-        val id : Long,
+        val id : Long = -1,
         val userDto: UserDto,
         val origin : String,
         val translate : String,
