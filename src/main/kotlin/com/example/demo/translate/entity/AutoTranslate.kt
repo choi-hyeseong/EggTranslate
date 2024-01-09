@@ -11,23 +11,12 @@ class AutoTranslate(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = -1,
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     var user: User,
 
-    @Column(nullable = false)
-    var origin: String,
-
-    @Column(nullable = false)
-    var translate: String,
-
-    @Column(nullable = false, length = 10)
-    var fromLang: String,
-
-    @Column(nullable = false, length = 10)
-    var toLang: String,
-
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "autoTranslate") //mappedBy -> table명이 아닌 field(property) 명
+    @OneToMany(fetch = FetchType.EAGER) //mappedBy -> table명이 아닌 field(property) 명
+    @JoinColumn(name = "autotranslate_id")
     var translateFiles: MutableList<TranslateFile> = mutableListOf()
 
 ) {

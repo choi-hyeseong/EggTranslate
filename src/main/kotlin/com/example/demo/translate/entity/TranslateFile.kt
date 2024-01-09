@@ -14,10 +14,16 @@ class TranslateFile(
     @JoinColumn(name = "file_id")
     var file: File,
 
-    @ManyToOne
-    @JoinColumn(name = "autotranslate_id")
-    var autoTranslate: AutoTranslate
+    @Column(nullable = false, columnDefinition = "TEXT")
+    var origin: String,
 
-) {
+    @Column(nullable = false, columnDefinition = "TEXT")
+    var translate: String,
 
-}
+    @Column(nullable = false, length = 10)
+    var fromLang: String,
+
+    @Column(nullable = false, length = 10)
+    var toLang: String,
+
+)

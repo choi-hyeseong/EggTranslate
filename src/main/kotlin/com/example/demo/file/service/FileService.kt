@@ -24,14 +24,14 @@ class FileService(
     private val log = logger()
 
     @Transactional
-    fun findFileById(id : Long) : FileDTO =
+    fun findFileById(id: Long): FileDTO =
         FileDTO(fileRepository
             .findById(id)
             .orElseThrow { FileException("존재하지 않는 파일입니다.") }
         )
 
     @Transactional
-    fun getFile(userId : Long, fileId : Long) : FileDTO {
+    fun getFile(userId: Long, fileId: Long): FileDTO {
         val isUserExists = userService.existUser(userId)
         val fileDto = findFileById(fileId)
 
@@ -43,7 +43,7 @@ class FileService(
     }
 
     @Transactional
-    fun saveEntity(fileDTO: FileDTO) : Long {
+    fun saveEntity(fileDTO: FileDTO): Long {
         return fileRepository.save(fileDTO.toEntity()).id
     }
 
@@ -52,19 +52,29 @@ class FileService(
         fileRepository.saveAll(fileDTO.map { it.toEntity() }.toList())
     }
 
-    suspend fun saveImage(userDto: UserDto, image: List<MultipartFile>) : List<FileDTO> {
+    suspend fun saveImage(userDto: UserDto, image: List<MultipartFile>): List<FileDTO> {
         //parallel image save
         return coroutineScope {
             image.map { image ->
                 async {
-                    val ext = FileUtil.findExtension(image.originalFilename ?: image.name)
-                    val saveName = "${System.currentTimeMillis()}.$ext"
-                    val path = outPath.plus("\\$saveName") //value로 형식 부여받기?
-                    FileUtil.saveFile(image.bytes, path)
-                    log.info("image file saved to $path")
-                    FileDTO(-1, image.name, saveName, userDto, path)
+                    saveImage(userDto, image)
                 }
             }.toList().awaitAll()
         }
     }
+
+    suspend fun saveImage(userDto: UserDto, image: MultipartFile): FileDTO {
+        //parallel image save
+        return coroutineScope {
+            async {
+                val ext = FileUtil.findExtension(image.originalFilename ?: image.name)
+                val saveName = "${System.currentTimeMillis()}.$ext"
+                val path = outPath.plus("\\$saveName") //value로 형식 부여받기?
+                FileUtil.saveFile(image.bytes, path)
+                log.info("image file saved to $path")
+                FileDTO(-1, image.name, saveName, userDto, path)
+            }.await()
+        }
+    }
+
 }
