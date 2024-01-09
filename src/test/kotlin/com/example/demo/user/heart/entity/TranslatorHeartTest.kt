@@ -5,8 +5,6 @@ import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.heart.dto.TranslatorHeartDTO
 import com.example.demo.user.heart.repository.TranslatorHeartRepository
-import com.example.demo.user.teacher.dto.TeacherDTO
-import com.example.demo.user.teacher.repository.TeacherRepository
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
 import com.example.demo.user.translator.type.TranslatorLevel

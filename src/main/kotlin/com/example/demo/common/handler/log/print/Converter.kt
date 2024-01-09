@@ -6,7 +6,7 @@ import com.google.gson.JsonParser
 import org.springframework.stereotype.Component
 
 interface Converter {
-    fun convert(obj : ByteArray) : String
+    fun convert(obj: ByteArray): String
 }
 
 @Component
@@ -18,10 +18,15 @@ class NormalConverter : Converter {
 
 @Component
 class JsonConverter(private val normalConverter: NormalConverter) : Converter {
-    private val gson : Gson = GsonBuilder().setPrettyPrinting().create()
+    private val gson: Gson = GsonBuilder().setPrettyPrinting().create()
 
     override fun convert(obj: ByteArray): String {
-        return gson.toJson(JsonParser.parseString(normalConverter.convert(obj)))
+        return try {
+            gson.toJson(JsonParser.parseString(normalConverter.convert(obj)))
+        }
+        catch (e: Exception) {
+            return normalConverter.convert(obj)
+        }
     }
 
 }

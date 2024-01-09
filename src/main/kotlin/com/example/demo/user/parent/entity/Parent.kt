@@ -6,19 +6,19 @@ import jakarta.persistence.*
 
 @Entity
 class Parent(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1,
+
     @JoinColumn(name = "parent_id")
     @OneToMany(cascade = [CascadeType.ALL] , orphanRemoval = true)
     //mappedby는 양방향 관계 지정시.
-    var children: MutableList<Child>,
+    var children: MutableList<Child> = mutableListOf(),
 
     @OneToOne
     @JoinColumn(name = "user_id")
     var user: User
 ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1
-
 
 
 }

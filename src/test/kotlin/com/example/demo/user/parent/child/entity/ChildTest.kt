@@ -33,6 +33,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val user = userRepository.save(user.toEntity())
         val children = mutableListOf<ChildRequestDto>()
         val dto = ParentDTO(
+            -1,
             children,
             UserDto(user)
         )
@@ -40,6 +41,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val load = parentRepository.findById(response.id).get()
         load.children.add(
             ChildRequestDto(
+                -1,
             "호식이",
             "전화",
             "학교",
@@ -59,6 +61,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val user = userRepository.save(user.toEntity())
         val children = mutableListOf<ChildRequestDto>()
         val dto = ParentDTO(
+            -1,
             children,
             UserDto(user)
         )
@@ -66,6 +69,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val load = parentRepository.findById(response.id).get()
         load.children.add(
             ChildRequestDto(
+                -1,
             "호식이",
             "전화",
             "학교",
@@ -91,6 +95,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val user = userRepository.save(user.toEntity())
         val children = mutableListOf<ChildRequestDto>()
         val dto = ParentDTO(
+            -1,
             children,
             UserDto(user)
         )
@@ -98,6 +103,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val load = parentRepository.findById(response.id).get()
         load.children.add(
             ChildRequestDto(
+                -1,
             "호식이",
             "전화",
             "학교",
