@@ -12,4 +12,5 @@ class ParentDTO(
 
     constructor(parent: Parent) : this(parent.children.map { ChildRequestDto(it) }.toMutableList(), UserDto(parent.user))
     fun toEntity() : Parent = Parent(children.map { it.toEntity() }.toMutableList(), user.toEntity())
+
 }

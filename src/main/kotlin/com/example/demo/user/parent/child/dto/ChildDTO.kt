@@ -1,9 +1,7 @@
 package com.example.demo.user.parent.child.dto
 
-import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.parent.child.type.Gender
 import com.example.demo.user.parent.child.entity.Child
-import com.example.demo.user.parent.dto.ParentDTO
 
 class ChildRequestDto(
     val id : Long = -1,
