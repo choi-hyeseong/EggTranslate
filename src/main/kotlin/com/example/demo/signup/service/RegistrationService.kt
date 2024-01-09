@@ -2,19 +2,13 @@ package com.example.demo.signup.service
 
 import com.example.demo.signup.exception.RegistrationFailedException
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.service.UserService
-import com.example.demo.user.parent.child.entity.Child
-import com.example.demo.user.parent.child.repository.ChildRepository
 import com.example.demo.user.parent.dto.ParentDTO
-import com.example.demo.user.parent.entity.Parent
-import com.example.demo.user.parent.repository.ParentRepository
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.dto.TeacherDTO
-import com.example.demo.user.teacher.repository.TeacherRepository
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.TranslatorDTO
-import com.example.demo.user.translator.repository.TranslatorRepository
+import com.example.demo.user.translator.service.TranslatorService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -24,7 +18,7 @@ class RegistrationService(
         private val userService: UserService,
         private val parentService: ParentService,
         private val teacherService: TeacherService,
-        private val translatorRepository: TranslatorRepository
+        private val translatorService: TranslatorService
 ) {
 
     fun registerUser(userDTO: UserDto) : Long {
@@ -55,8 +49,8 @@ class RegistrationService(
         return teacherService.findTeacherByUserId(userResult)
     }
 
-    fun registerTranslator(translatorDTO: TranslatorDTO) {
-        val userResult = registerUser(translatorDTO.userDto)
+    fun registerTranslator(translatorDTO: TranslatorDTO) : TranslatorDTO {
+        val userResult = registerUser(translatorDTO.user)
         if (userResult == -1L)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
