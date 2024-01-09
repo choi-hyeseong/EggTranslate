@@ -1,9 +1,7 @@
 package com.example.demo.user.parent.child.dto
 
-import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.parent.child.type.Gender
 import com.example.demo.user.parent.child.entity.Child
-import com.example.demo.user.parent.dto.ParentDTO
 
 class ChildRequestDto(
     val name: String,
@@ -14,5 +12,5 @@ class ChildRequestDto(
     val gender: Gender
 ) {
     constructor(child: Child) : this(child.name, child.phone, child.school, child.grade, child.className, child.gender)
-    fun toEntity() : Child = Child(name, phone, school, grade, className, gender)
+    fun toEntity(name: String, phone: String, school: String, grade: Int, className: String, gender: Gender): Child = Child(this.name, this.phone, this.school, this.grade, this.className, this.gender)
 }

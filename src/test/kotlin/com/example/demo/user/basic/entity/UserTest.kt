@@ -27,7 +27,7 @@ class UserTest {
             email = null,
             languages = mutableListOf("한글", "영어"),
             userType = UserType.PARENT
-        ).toEntity()
+        ).toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType)
         val response =  assertDoesNotThrow { userRepository.save(user) }
         assertNotEquals(-1, response.id)
 
@@ -45,7 +45,7 @@ class UserTest {
             email = null,
             languages = mutableListOf("한글", "영어"),
             userType = UserType.PARENT
-        ).toEntity()
+        ).toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType)
         val response =  assertDoesNotThrow { userRepository.save(user) }
         assertNotEquals(-1, response.id)
         val findUser = assertDoesNotThrow { userRepository.findById(response.id).get() }

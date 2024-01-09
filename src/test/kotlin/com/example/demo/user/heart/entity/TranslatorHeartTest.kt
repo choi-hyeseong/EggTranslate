@@ -5,8 +5,6 @@ import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.heart.dto.TranslatorHeartDTO
 import com.example.demo.user.heart.repository.TranslatorHeartRepository
-import com.example.demo.user.teacher.dto.TeacherDTO
-import com.example.demo.user.teacher.repository.TeacherRepository
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
 import com.example.demo.user.translator.type.TranslatorLevel
@@ -58,8 +56,8 @@ class TranslatorHeartTest(
     @Test
     @Transactional
     fun TEST_SAVE_HEART() {
-        val translatorUser = userRepository.save(user.toEntity())
-        val other = userRepository.save(user2.toEntity())
+        val translatorUser = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val other = userRepository.save(user2.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
         val translatorDto = TranslatorDTO(
             -1,
             3,
@@ -101,7 +99,7 @@ class TranslatorHeartTest(
     @Transactional
     fun TEST_COUNT_ALL_HEART() {
         TEST_SAVE_HEART()
-        val saveUser3 = userRepository.save(user3.toEntity())
+        val saveUser3 = userRepository.save(user3.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
         val translator = translatorRepository.findByUser(userRepository.findByUsername("테스트").get())!!
 
         val dto = TranslatorHeartDTO(UserDto(saveUser3), TranslatorDTO(translator))

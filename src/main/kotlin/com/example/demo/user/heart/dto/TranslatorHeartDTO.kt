@@ -3,8 +3,6 @@ package com.example.demo.user.heart.dto
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.heart.entity.TranslatorHeart
 import com.example.demo.user.translator.dto.TranslatorDTO
-import com.example.demo.user.translator.entity.Translator
-import org.apache.catalina.User
 
 class TranslatorHeartDTO(
     val user : UserDto,
@@ -12,7 +10,7 @@ class TranslatorHeartDTO(
 ) {
 
     fun toEntity() : TranslatorHeart = TranslatorHeart(
-        user = user.toEntity(),
+        user = user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType),
         translator = translator.toEntity()
     )
 }

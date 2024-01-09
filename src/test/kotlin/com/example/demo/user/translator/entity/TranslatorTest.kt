@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
@@ -39,7 +37,7 @@ class TranslatorTest {
     @Transactional
     @Test
     fun TEST_SAVE_TRANSLATOR() {
-        val user = userRepository.save(user.toEntity())
+        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
         assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
             -1,
@@ -59,7 +57,7 @@ class TranslatorTest {
     @Test
     @Transactional
     fun TEST_LOAD_TRANSLATOR() {
-        val user = userRepository.save(user.toEntity())
+        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
         assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
             -1,
