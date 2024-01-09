@@ -9,16 +9,18 @@ import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.TranslatorDTO
-import com.example.demo.user.translator.repository.TranslatorRepository
+import com.example.demo.user.translator.service.TranslatorService
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class RegistrationService(
         private val userService: UserService,
         private val parentService: ParentService,
         private val teacherService: TeacherService,
-        private val translatorRepository: TranslatorRepository
+        private val translatorService: TranslatorService
 ) {
     @Transactional
     fun registerUser(userDTO: UserDto) : Long {
@@ -52,13 +54,16 @@ class RegistrationService(
         return teacherService.findTeacherByUserId(userResult)
     }
 
-    fun registerTranslator(translatorDTO: TranslatorDTO) {
-        val userDTO = translatorDTO.user
-        registerUser(userDTO)
+    fun registerTranslator(translatorDTO: TranslatorDTO) : TranslatorDTO {
+        val userResult = registerUser(translatorDTO.user)
+        if (userResult == -1L)
+            throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        // TranslatorDTO를 Translator 엔티티로 변환
-        val translator = translatorDTO.toEntity()
+        val translatorResult = translatorService.signUp(translatorDTO)
+        if (translatorResult == -1L)
+            throw RegistrationFailedException("선생 회원가입에 실패하였습니다.")
 
-        translatorRepository.save(translator)
+        return translatorService.findTranslatorByUserId(userResult)
+
     }
 }

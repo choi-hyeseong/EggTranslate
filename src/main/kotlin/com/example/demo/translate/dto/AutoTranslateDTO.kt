@@ -16,4 +16,5 @@ class AutoTranslateDTO(
 ) {
         constructor(autoTranslate: AutoTranslate) : this(autoTranslate.id,UserDto(autoTranslate.user), autoTranslate.origin, autoTranslate.translate, autoTranslate.fromLang, autoTranslate.toLang, autoTranslate.translateFiles.map { TranslateFileDTO(it) }.toMutableList())
         fun toEntity() : AutoTranslate = AutoTranslate(id, userDto.toEntity(), origin, translate, from, to, translateFile.map { it.toEntity() }.toMutableList())
+
 }
