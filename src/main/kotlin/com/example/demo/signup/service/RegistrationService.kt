@@ -1,17 +1,12 @@
 package com.example.demo.signup.service
 
+import com.example.demo.signup.dto.ParentSignUpDTO
 import com.example.demo.signup.exception.RegistrationFailedException
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.service.UserService
-import com.example.demo.user.parent.child.entity.Child
-import com.example.demo.user.parent.child.repository.ChildRepository
 import com.example.demo.user.parent.dto.ParentDTO
-import com.example.demo.user.parent.entity.Parent
-import com.example.demo.user.parent.repository.ParentRepository
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.dto.TeacherDTO
-import com.example.demo.user.teacher.repository.TeacherRepository
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
@@ -31,12 +26,13 @@ class RegistrationService(
     }
 
     @Transactional
-    fun registerParent(parentDTO: ParentDTO) : ParentDTO {
-        val userResult = registerUser(parentDTO.user)
+    fun registerParent(parentDTO: ParentSignUpDTO) : ParentDTO {
+        val dto = parentDTO.toParentDTO()
+        val userResult = registerUser(dto.user)
         if (userResult == -1L)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        val parentResult = parentService.signUp(parentDTO)
+        val parentResult = parentService.signUp(dto.apply { user.id = userResult })
         if (parentResult == -1L)
             throw RegistrationFailedException("부모 회원가입에 실패하였습니다.")
 
@@ -45,18 +41,17 @@ class RegistrationService(
 
     @Transactional
     fun registerTeacher(teacherDTO: TeacherDTO) : TeacherDTO {
-        val userResult = registerUser(teacherDTO.userDto)
+        val userResult = registerUser(teacherDTO.user)
         if (userResult == -1L)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        val teacherResult = teacherService.signUp(teacherDTO)
+        val teacherResult = teacherService.signUp(teacherDTO.apply { user.id = userResult })
         if (teacherResult == -1L)
             throw RegistrationFailedException("선생 회원가입에 실패하였습니다.")
 
         return teacherService.findTeacherByUserId(userResult)
     }
 
-    @Transactional
     fun registerTranslator(translatorDTO: TranslatorDTO) {
         val userDTO = translatorDTO.user
         registerUser(userDTO)
