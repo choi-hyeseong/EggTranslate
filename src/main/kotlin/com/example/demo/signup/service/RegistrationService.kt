@@ -31,7 +31,6 @@ class RegistrationService(
         return userService.signUp(userDTO)
     }
 
-
     fun registerParent(parentDTO: ParentDTO) : ParentDTO {
         val userResult = registerUser(parentDTO.user)
         if (userResult == -1L)
@@ -45,7 +44,7 @@ class RegistrationService(
     }
 
     fun registerTeacher(teacherDTO: TeacherDTO) : TeacherDTO {
-        val userResult = registerUser(teacherDTO.userDto)
+        val userResult = registerUser(teacherDTO.userDto) // 등록한 유저의 id
         if (userResult == -1L)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
@@ -57,12 +56,15 @@ class RegistrationService(
     }
 
     fun registerTranslator(translatorDTO: TranslatorDTO) {
-        val userDTO = translatorDTO.user
-        registerUser(userDTO)
+        val userResult = registerUser(translatorDTO.userDto)
+        if (userResult == -1L)
+            throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        // TranslatorDTO를 Translator 엔티티로 변환
-        val translator = translatorDTO.toEntity()
+        val translatorResult = translatorService.signUp(translatorDTO)
+        if (translatorResult == -1L)
+            throw RegistrationFailedException("선생 회원가입에 실패하였습니다.")
 
-        translatorRepository.save(translator)
+        return translatorService.findTranslatorByUserId(userResult)
+
     }
 }
