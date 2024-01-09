@@ -10,7 +10,7 @@ class TranslatorHeartDTO(
 ) {
 
     fun toEntity() : TranslatorHeart = TranslatorHeart(
-        user = user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType),
+        user = user.toEntity(),
         translator = translator.toEntity()
     )
 }

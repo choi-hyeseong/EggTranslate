@@ -37,7 +37,7 @@ class TranslatorTest {
     @Transactional
     @Test
     fun TEST_SAVE_TRANSLATOR() {
-        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val user = userRepository.save(user.toEntity())
         assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
             -1,
@@ -57,7 +57,7 @@ class TranslatorTest {
     @Test
     @Transactional
     fun TEST_LOAD_TRANSLATOR() {
-        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val user = userRepository.save(user.toEntity())
         assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
             -1,

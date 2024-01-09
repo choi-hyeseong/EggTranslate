@@ -39,7 +39,7 @@ class TranslateFileTest {
     @Test
     @Transactional
     fun TEST_SAVE_FILE() {
-        val saveUser = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val saveUser = userRepository.save(user.toEntity())
         val file1 = FileDTO(-1, "FILE1", "", UserDto(saveUser), "")
         val saveFile1 = fileRepository.save(file1.toEntity())
 
@@ -61,7 +61,7 @@ class TranslateFileTest {
     @Test
     @Transactional
     fun TEST_LOAD_FIlES() {
-        val saveUser = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val saveUser = userRepository.save(user.toEntity())
         val file1 = FileDTO(-1, "FILE1", "", UserDto(saveUser), "")
         val file2 = FileDTO(-1, "FILE2", "", UserDto(saveUser), "")
         val saveFile1 = fileRepository.save(file1.toEntity())

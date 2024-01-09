@@ -28,7 +28,7 @@ class AutoTranslateTest {
         email = null,
         languages = mutableListOf("한글", "영어"),
         userType = UserType.PARENT
-    ).toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType)
+    ).toEntity()
 
     @Test
     @Transactional

@@ -31,7 +31,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
     @Transactional
     @Test
     fun TEST_SAVE_PARENT() {
-        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val user = userRepository.save(user.toEntity())
 
         val children = mutableListOf(ChildRequestDto(
             -1,
@@ -64,7 +64,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
     @Transactional
     @Test
     fun TEST_LOAD_PARENT() {
-        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val user = userRepository.save(user.toEntity())
         val children = mutableListOf(ChildRequestDto(
             -1,
             "호식이",
@@ -104,7 +104,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
     @Transactional
     @Test
     fun TEST_LOAD_EMPTY_CHILD() {
-        val user = userRepository.save(user.toEntity(userDTO.id, userDTO.name, userDTO.password, userDTO.phone, userDTO.email, userDTO.languages, userDTO.userType))
+        val user = userRepository.save(user.toEntity())
         val children = mutableListOf<ChildRequestDto>()
         val dto = ParentDTO(
             children,
