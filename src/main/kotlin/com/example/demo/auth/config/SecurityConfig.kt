@@ -21,7 +21,11 @@ class SecurityConfig(private val loggingFilter: ServletWrappingFilter) {
             .formLogin { login -> login.disable() }
             .sessionManagement { session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { request ->
+                request.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                 request.requestMatchers(HttpMethod.POST, "/api/**").permitAll()
+                request.requestMatchers(HttpMethod.DELETE, "/api/**").permitAll()
+                request.requestMatchers(HttpMethod.PUT, "/api/**").permitAll()
+
             }
             .addFilterBefore(loggingFilter, BasicAuthenticationFilter::class.java)
             .build()
