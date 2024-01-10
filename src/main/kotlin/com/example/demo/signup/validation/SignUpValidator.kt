@@ -45,6 +45,6 @@ class SignUpValidator(private val userService: UserService) : ConstraintValidato
     }
 
     private fun isUsernameValid(username: String): Boolean {
-        return userService.existUser(username) // --> user에 존재하지 않는 아이디
+        return !userService.existUser(username) // --> user에 존재하지 않는 아이디
     }
 }
