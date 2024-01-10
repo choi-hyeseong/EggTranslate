@@ -3,15 +3,13 @@ package com.example.demo.login.controller
 import com.example.demo.login.dto.LoginRequestDTO
 import com.example.demo.login.dto.LoginResponseDTO
 import com.example.demo.login.service.AuthService
-import com.example.demo.user.basic.repository.UserRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
-        private val authService: AuthService,
-        private val userRepository: UserRepository
+        private val authService: AuthService
 ) {
 
     @PostMapping("/login")
