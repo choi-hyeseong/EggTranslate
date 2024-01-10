@@ -12,7 +12,7 @@ class UserService(private val userRepository: UserRepository) {
 
 
     @Transactional
-    fun signUp(@SignUpValid userDto: UserDto): Long {
+    fun signUp(userDto: UserDto): Long {
         return userRepository.save(userDto.toEntity()).id
     }
 

@@ -4,6 +4,7 @@ import com.example.demo.signup.dto.ParentSignUpDTO
 import com.example.demo.signup.dto.TeacherSignUpDTO
 import com.example.demo.signup.dto.TranslatorSignUpDTO
 import com.example.demo.signup.exception.RegistrationFailedException
+import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.dto.ParentDTO
