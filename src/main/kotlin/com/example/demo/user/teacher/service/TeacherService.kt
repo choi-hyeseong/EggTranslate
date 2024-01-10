@@ -1,7 +1,6 @@
 package com.example.demo.user.teacher.service
 
 import com.example.demo.profile.dto.TeacherEditDTO
-import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.repository.TeacherRepository
@@ -35,7 +34,7 @@ class TeacherService(private val teacherRepository: TeacherRepository) {
 
     @Transactional
     suspend fun updateProfile(id : Long, teacherEditDTO: TeacherEditDTO) {
-        val existingUser = teacherRepository.findById(id).orElseThrow{
+        val existingUser = teacherRepository.findByUserId(id).orElseThrow{
             UserNotFoundException(id, "일치하는 사용자가 없습니다")
         }
         existingUser.school = teacherEditDTO.school
