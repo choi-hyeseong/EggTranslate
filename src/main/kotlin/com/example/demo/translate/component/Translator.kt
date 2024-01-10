@@ -1,7 +1,5 @@
 package com.example.demo.translate.component
 
-import com.example.demo.translate.dto.AutoTranslateRequestDTO
-import com.example.demo.translate.dto.AutoTranslateResponseDTO
 import com.example.demo.translate.dto.TranslateRequestDTO
 import com.example.demo.translate.dto.TranslateResponseDTO
 

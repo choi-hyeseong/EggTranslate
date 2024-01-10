@@ -1,7 +1,7 @@
 package com.example.demo.translate.component.google
 
 import com.example.demo.translate.dto.GoogleResponseDTO
-import com.example.demo.translate.dto.AutoTranslateRequestDTO
+import com.example.demo.translate.dto.TranslateFileRequestDTO
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.reactive.function.BodyInserters
@@ -16,7 +16,7 @@ class GoogleWebClient {
     @Value("\${rapid.api-host}")
     private lateinit var apiHost: String
 
-    suspend fun request(requestDTO: AutoTranslateRequestDTO): GoogleResponseDTO? {
+    suspend fun request(requestDTO: TranslateFileRequestDTO): GoogleResponseDTO? {
         val client = WebClient.builder().baseUrl("https://google-translate113.p.rapidapi.com/api/v1/translator/text").build()
         val body = LinkedMultiValueMap<String, String>().apply {
             add("from", requestDTO.from)
