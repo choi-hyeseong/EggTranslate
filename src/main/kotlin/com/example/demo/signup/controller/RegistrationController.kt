@@ -47,4 +47,4 @@ class RegistrationController(private val registrationService: RegistrationServic
 //        } catch (e: Exception) {
 //            return ResponseEntity.status(500).body("Failed to register parent.")
 //        }
-//    }
+}
