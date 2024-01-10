@@ -2,12 +2,11 @@ package com.example.demo.translate.dto
 
 class NaverResponseDTO {
 
-    var fileId : Long = -1
     lateinit var message: Message
     lateinit var origin: String
 
-    fun toResponseDTO(): AutoTranslateResponseDTO {
-        return AutoTranslateResponseDTO(true, fileId, message.result.srcLangType, message.result.tarLangType, origin, message.result.translatedText) //전환되는 경우는 성공
+    fun toResponseDTO(): TranslateResponseDTO {
+        return TranslateResponseDTO(true, message.result.srcLangType, message.result.tarLangType, origin, message.result.translatedText) //전환되는 경우는 성공
     }
 
     class Message {

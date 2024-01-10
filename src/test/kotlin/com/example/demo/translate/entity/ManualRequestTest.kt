@@ -1,9 +1,9 @@
 package com.example.demo.translate.entity
 
 import com.example.demo.translate.dto.AutoTranslateDTO
-import com.example.demo.translate.dto.TranslationRequestDTO
+import com.example.demo.translate.dto.ManualRequestDTO
 import com.example.demo.translate.repository.AutoTranslateRepository
-import com.example.demo.translate.repository.TranslationRequestRepository
+import com.example.demo.translate.repository.ManualRequestRepository
 import com.example.demo.translate.type.TranslateState
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class TranslationRequestTest {
+class ManualRequestTest {
 
     @Autowired
     lateinit var userRepository : UserRepository
@@ -36,7 +36,7 @@ class TranslationRequestTest {
     lateinit var autoTranslateRepository: AutoTranslateRepository
 
     @Autowired
-    lateinit var translationRequestRepository: TranslationRequestRepository
+    lateinit var manualRequestRepository: ManualRequestRepository
 
     @Autowired
     lateinit var parentRepository: ParentRepository
@@ -80,11 +80,11 @@ class TranslationRequestTest {
         val translator = TranslatorDTO(-1, 3, TranslatorLevel.HIGH, UserDto(savedUser), mutableListOf("정보처리기사"), mutableListOf(TranslatorCategory.OTHER))
         val saveTranslator = translatorRepository.save(translator.toEntity())
 
-        val autoTrans = AutoTranslateDTO(-1, UserDto(savedUser), "ORIGIN", "TRANS", "FROM", "TO", mutableListOf())
+        val autoTrans = AutoTranslateDTO(-1, UserDto(savedUser), mutableListOf())
         val saveAuto = autoTranslateRepository.save(autoTrans.toEntity())
 
-        val request = TranslationRequestDTO(-1, UserDto(savedParentUser), TranslateState.REQUEST, TranslatorDTO(saveTranslator), AutoTranslateDTO(saveAuto), ChildRequestDto(savedParent.children[0]))
-        val savedRequest = assertDoesNotThrow { translationRequestRepository.save(request.toEntity()) }
+        val request = ManualRequestDTO(-1, UserDto(savedParentUser), TranslateState.REQUEST, TranslatorDTO(saveTranslator), AutoTranslateDTO(saveAuto), ChildRequestDto(savedParent.children[0]))
+        val savedRequest = assertDoesNotThrow { manualRequestRepository.save(request.toEntity()) }
         assertNotEquals(-1, savedRequest.id)
 
     }
@@ -106,13 +106,13 @@ class TranslationRequestTest {
         val translator = TranslatorDTO(-1, 3, TranslatorLevel.HIGH, UserDto(savedUser), mutableListOf("정보처리기사"), mutableListOf(TranslatorCategory.OTHER))
         val saveTranslator = translatorRepository.save(translator.toEntity())
 
-        val autoTrans = AutoTranslateDTO(-1, UserDto(savedUser), "ORIGIN", "TRANS", "FROM", "TO", mutableListOf())
+        val autoTrans = AutoTranslateDTO(-1, UserDto(savedUser), mutableListOf())
         val saveAuto = autoTranslateRepository.save(autoTrans.toEntity())
 
-        val request = TranslationRequestDTO(-1, UserDto(savedParentUser), TranslateState.REQUEST, TranslatorDTO(saveTranslator), AutoTranslateDTO(saveAuto), ChildRequestDto(savedParent.children[0]))
-        val response = translationRequestRepository.save(request.toEntity())
+        val request = ManualRequestDTO(-1, UserDto(savedParentUser), TranslateState.REQUEST, TranslatorDTO(saveTranslator), AutoTranslateDTO(saveAuto), ChildRequestDto(savedParent.children[0]))
+        val response = manualRequestRepository.save(request.toEntity())
 
-        val savedRequest = assertDoesNotThrow { translationRequestRepository.findById(response.id).get() }
+        val savedRequest = assertDoesNotThrow { manualRequestRepository.findById(response.id).get() }
 
         assertEquals("하늘", savedRequest.child?.name)
         assertEquals("정보처리기사", savedRequest.translator.certificates[0])
@@ -136,13 +136,13 @@ class TranslationRequestTest {
         val translator = TranslatorDTO(-1, 3, TranslatorLevel.HIGH, UserDto(savedUser), mutableListOf("정보처리기사"), mutableListOf(TranslatorCategory.OTHER))
         val saveTranslator = translatorRepository.save(translator.toEntity())
 
-        val autoTrans = AutoTranslateDTO(-1, UserDto(savedUser), "ORIGIN", "TRANS", "FROM", "TO", mutableListOf())
+        val autoTrans = AutoTranslateDTO(-1, UserDto(savedUser), mutableListOf())
         val saveAuto = autoTranslateRepository.save(autoTrans.toEntity())
 
-        val request = TranslationRequestDTO(-1, UserDto(savedParentUser), TranslateState.REQUEST, TranslatorDTO(saveTranslator), AutoTranslateDTO(saveAuto), null)
-        val response = translationRequestRepository.save(request.toEntity())
+        val request = ManualRequestDTO(-1, UserDto(savedParentUser), TranslateState.REQUEST, TranslatorDTO(saveTranslator), AutoTranslateDTO(saveAuto), null)
+        val response = manualRequestRepository.save(request.toEntity())
 
-        val savedRequest = assertDoesNotThrow { translationRequestRepository.findById(response.id).get() }
+        val savedRequest = assertDoesNotThrow { manualRequestRepository.findById(response.id).get() }
 
         assertNull(savedRequest.child)
         assertEquals("정보처리기사", savedRequest.translator.certificates[0])
@@ -166,17 +166,17 @@ class TranslationRequestTest {
         val translator = TranslatorDTO(-1, 3, TranslatorLevel.HIGH, UserDto(savedUser), mutableListOf("정보처리기사"), mutableListOf(TranslatorCategory.OTHER))
         val saveTranslator = translatorRepository.save(translator.toEntity())
 
-        val autoTrans = AutoTranslateDTO(-1, UserDto(savedUser), "ORIGIN", "TRANS", "FROM", "TO", mutableListOf())
+        val autoTrans = AutoTranslateDTO(-1, UserDto(savedUser), mutableListOf())
         val saveAuto = autoTranslateRepository.save(autoTrans.toEntity())
 
-        val request = TranslationRequestDTO(-1, UserDto(savedParentUser), TranslateState.REQUEST, TranslatorDTO(saveTranslator), AutoTranslateDTO(saveAuto), null)
-        val response = translationRequestRepository.save(request.toEntity())
+        val request = ManualRequestDTO(-1, UserDto(savedParentUser), TranslateState.REQUEST, TranslatorDTO(saveTranslator), AutoTranslateDTO(saveAuto), null)
+        val response = manualRequestRepository.save(request.toEntity())
 
-        val savedRequest = assertDoesNotThrow { translationRequestRepository.findById(response.id).get() }
+        val savedRequest = assertDoesNotThrow { manualRequestRepository.findById(response.id).get() }
         savedRequest.status = TranslateState.DONE
-        translationRequestRepository.save(savedRequest)
+        manualRequestRepository.save(savedRequest)
 
-        assertEquals(TranslateState.DONE, translationRequestRepository.findById(savedRequest.id).get().status)
+        assertEquals(TranslateState.DONE, manualRequestRepository.findById(savedRequest.id).get().status)
 
     }
 }

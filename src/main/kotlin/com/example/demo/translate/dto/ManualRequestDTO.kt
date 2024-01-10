@@ -1,13 +1,12 @@
 package com.example.demo.translate.dto
 
-import com.example.demo.translate.entity.TranslationRequest
+import com.example.demo.translate.entity.ManualRequest
 import com.example.demo.translate.type.TranslateState
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.child.dto.ChildRequestDto
 import com.example.demo.user.translator.dto.TranslatorDTO
 
-class TranslationRequestDTO(
+class ManualRequestDTO(
     val id: Long = -1,
     val user: UserDto,
     val status: TranslateState,
@@ -15,18 +14,18 @@ class TranslationRequestDTO(
     val autoTranslate: AutoTranslateDTO,
     val child: ChildRequestDto?
 ) {
-    constructor(translationRequest: TranslationRequest) : this(
-        translationRequest.id,
-        UserDto(translationRequest.user),
-        translationRequest.status,
-        TranslatorDTO(translationRequest.translator),
-        AutoTranslateDTO(translationRequest.autoTranslate),
-        translationRequest.child?.let {
+    constructor(manualRequest: ManualRequest) : this(
+        manualRequest.id,
+        UserDto(manualRequest.user),
+        manualRequest.status,
+        TranslatorDTO(manualRequest.translator),
+        AutoTranslateDTO(manualRequest.autoTranslate),
+        manualRequest.child?.let {
             ChildRequestDto(it)
         }
     )
 
-    fun toEntity(): TranslationRequest = TranslationRequest(
+    fun toEntity(): ManualRequest = ManualRequest(
         id,
         user.toEntity(),
         status,

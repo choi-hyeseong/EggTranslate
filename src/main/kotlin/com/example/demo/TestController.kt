@@ -1,13 +1,6 @@
 package com.example.demo
 
-import com.example.demo.common.response.Response
-import com.example.demo.translate.dto.AutoTranslateRequestDTO
-import com.example.demo.translate.dto.AutoTranslateResponseDTO
 import com.example.demo.translate.service.TranslateService
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
