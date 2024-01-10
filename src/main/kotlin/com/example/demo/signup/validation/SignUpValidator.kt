@@ -1,6 +1,5 @@
 package com.example.demo.signup.validation
 
-import com.example.demo.common.exception.ParameterNotValidException
 import com.example.demo.signup.exception.DuplicatedUsernameException
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
@@ -8,7 +7,6 @@ import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Component
-import org.springframework.web.multipart.MultipartFile
 
 @Component
 @RequiredArgsConstructor
