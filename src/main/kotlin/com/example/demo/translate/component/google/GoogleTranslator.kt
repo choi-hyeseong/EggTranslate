@@ -17,7 +17,7 @@ class GoogleTranslator(private val translate: Translate) : Translator {
             Translate.TranslateOption.targetLanguage(requestDTO.to),
             Translate.TranslateOption.format("text") //개행 문자 보존
         )
-        return AutoTranslateResponseDTO(true, requestDTO.from, requestDTO.to, requestDTO.content, result.translatedText)
+        return AutoTranslateResponseDTO(true, requestDTO.fileId, requestDTO.from, requestDTO.to, requestDTO.content, result.translatedText)
     }
 
 //    override suspend fun translate(requestDTO: TranslateRequestDTO): TranslateResponseDTO {

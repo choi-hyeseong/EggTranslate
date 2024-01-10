@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController
 class TestController(private val translateService: TranslateService) {
 
     //for test
-    @PostMapping("/")
-    suspend fun image(@RequestBody autoTranslateRequestDTO: AutoTranslateRequestDTO) : ResponseEntity<Response<AutoTranslateResponseDTO>> {
-        val result = translateService.translate(autoTranslateRequestDTO)
-        return if (result.isSuccess)
-            ResponseEntity(result, HttpStatus.OK)
-        else
-            ResponseEntity(result, HttpStatus.BAD_REQUEST)
-    }
+//    @PostMapping("/")
+//    suspend fun image(@RequestBody autoTranslateRequestDTO: AutoTranslateRequestDTO) : ResponseEntity<Response<AutoTranslateResponseDTO>> {
+//        val result = translateService.translate(autoTranslateRequestDTO)
+//        return if (result.isSuccess)
+//            ResponseEntity(result, HttpStatus.OK)
+//        else
+//            ResponseEntity(result, HttpStatus.BAD_REQUEST)
+//    }
 
 //    @PostMapping("/firebase")
 //    suspend fun notify(@RequestBody firebaseRequestDTO: List<FirebaseRequestDTO>) : Response<FirebaseResponseDTO> {
