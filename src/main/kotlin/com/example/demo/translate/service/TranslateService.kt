@@ -19,8 +19,13 @@ class TranslateService(
     suspend fun translate(userDto: UserDto, requestDTO: List<AutoTranslateRequestDTO>): AutoTranslateResultDTO {
 
         // TODO decouple translate (번역 이후 Transaction 되게)
-        val saveFiles = requestDTO
-            .map { translateContent(it) } //request를 번역하여 Response로 Mapping
+        val saveFiles = requestDTO //autoTranslate를
+            .map {
+                val request = TranslateRequestDTO(it.from, it.to, it.content)
+                val response = translateContent(request)
+                AutoTranslateResponseDTO(response.isSuccess, it.fileId, response.from, response.target, response.origin, response.result)
+
+            } //request를 번역하여 Response로 Mapping
             .map {//이 response를 File과 1대1 매핑되는 TranslateFile로 매핑
                 TranslateFileDTO(
                     -1,
@@ -48,11 +53,11 @@ class TranslateService(
 
     }
 
-    suspend fun translateContent(requestDTO: AutoTranslateRequestDTO): AutoTranslateResponseDTO {
+    suspend fun translateContent(requestDTO: TranslateRequestDTO): TranslateResponseDTO {
         return translator.translate(requestDTO)
     }
 
-    suspend fun translateContent(requestDTO: List<AutoTranslateRequestDTO>): List<AutoTranslateResponseDTO> {
+    suspend fun translateContent(requestDTO: List<TranslateRequestDTO>): List<TranslateResponseDTO> {
         return translator.translate(requestDTO)
     }
 }

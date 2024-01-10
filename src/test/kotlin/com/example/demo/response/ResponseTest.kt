@@ -3,6 +3,7 @@ package com.example.demo.response
 import com.example.demo.common.response.Response
 import com.example.demo.translate.component.Translator
 import com.example.demo.translate.dto.AutoTranslateRequestDTO
+import com.example.demo.translate.dto.TranslateRequestDTO
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -33,10 +34,10 @@ class ResponseTest {
     fun TEST_RETURN_RESULT() {
         val mockTrans = mockk<Translator>()
         val response = Response(true, null, mockTrans)
-        coEvery { mockTrans.translate(any<AutoTranslateRequestDTO>())} returns mockk()
+        coEvery { mockTrans.translate(any<TranslateRequestDTO>())} returns mockk()
         runBlocking {
-            response.data?.translate(AutoTranslateRequestDTO("", "", ""))
-            coVerify(atLeast = 1) { mockTrans.translate(any<AutoTranslateRequestDTO>()) }
+            response.data?.translate(TranslateRequestDTO("", "", ""))
+            coVerify(atLeast = 1) { mockTrans.translate(any<TranslateRequestDTO>()) }
         }
 
     }

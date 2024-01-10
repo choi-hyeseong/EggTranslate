@@ -2,9 +2,7 @@ package com.example.demo.component.translate
 
 import com.example.demo.translate.component.naver.NaverWebClient
 import com.example.demo.translate.component.naver.NaverTranslator
-import com.example.demo.translate.dto.NaverResponseDTO
-import com.example.demo.translate.dto.AutoTranslateRequestDTO
-import com.example.demo.translate.dto.AutoTranslateResponseDTO
+import com.example.demo.translate.dto.*
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -25,9 +23,9 @@ class NaverTranslatorTest {
         val translator = NaverTranslator(naverWebClient)
         val dto = mockk<NaverResponseDTO>()
         coEvery { naverWebClient.request(any()) } returns dto
-        every { dto.toResponseDTO() } returns AutoTranslateResponseDTO(true,"", target, "", converted)
+        every { dto.toResponseDTO() } returns TranslateResponseDTO(true,"", target, "", converted)
         runBlocking {
-            val response = translator.translate(AutoTranslateRequestDTO("ko", target, "asdf"))
+            val response = translator.translate(TranslateRequestDTO("ko", target, "asdf"))
             assertTrue(response.isSuccess)
             assertEquals(converted, response.result)
         }
@@ -41,7 +39,7 @@ class NaverTranslatorTest {
         val translator = NaverTranslator(naverWebClient)
         coEvery { naverWebClient.request(any()) } returns null
         runBlocking {
-            val response = translator.translate(AutoTranslateRequestDTO("ko", "ko", "asdf"))
+            val response = translator.translate(TranslateRequestDTO( "ko", "ko", "asdf"))
             assertFalse(response.isSuccess)
         }
     }
