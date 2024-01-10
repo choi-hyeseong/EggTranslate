@@ -1,5 +1,6 @@
 package com.example.demo.user.basic.service
 
+import com.example.demo.profile.dto.UserEditDTO
 import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.exception.UserNotFoundException
@@ -30,14 +31,14 @@ class UserService(private val userRepository: UserRepository) {
         )
     }
     @Transactional
-    suspend fun updateProfile(id : Long, userDto: UserDto) {
+    suspend fun updateProfile(id : Long, userEditDTO: UserEditDTO) {
         val existingUser = userRepository.findById(id).orElseThrow{
             UserNotFoundException(id, "일치하는 사용자가 없습니다")
         }
-        existingUser.name = userDto.name
-        existingUser.phone = userDto.phone
-        existingUser.email = userDto.email
-        existingUser.language = userDto.languages
+        existingUser.name = userEditDTO.name
+        existingUser.phone = userEditDTO.phone
+        existingUser.email = userEditDTO.email
+        existingUser.language = userEditDTO.languages
 
         userRepository.save(existingUser)
     }

@@ -1,5 +1,6 @@
 package com.example.demo.user.translator.service
 
+import com.example.demo.profile.dto.TranslatorEditDTO
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.translator.dto.TranslatorDTO
@@ -32,14 +33,14 @@ class TranslatorService(private val translatorRepository: TranslatorRepository) 
             )
 
     @Transactional
-    suspend fun updateProfile(id : Long, translatorDTO: TranslatorDTO) {
+    suspend fun updateProfile(id : Long, translatorEditDTO: TranslatorEditDTO) {
         val existingUser = translatorRepository.findById(id).orElseThrow{
             UserNotFoundException(id, "일치하는 사용자가 없습니다")
         }
-        existingUser.career = translatorDTO.career
-        existingUser.level = translatorDTO.level
-        existingUser.certificates = translatorDTO.certificates
-        existingUser.categories = translatorDTO.categories
+        existingUser.career = translatorEditDTO.career
+        existingUser.level = translatorEditDTO.level
+        existingUser.certificates = translatorEditDTO.certificates
+        existingUser.categories = translatorEditDTO.categories
 
         translatorRepository.save(existingUser)
     }

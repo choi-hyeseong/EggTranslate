@@ -4,7 +4,7 @@ import com.example.demo.signup.dto.ChildSignUpDTO
 import com.example.demo.signup.dto.UserSignUpDTO
 
 class ParentEditDTO(
-        var children : MutableList<ChildSignUpDTO>,
-        val user : UserSignUpDTO
+        var children : MutableList<ChildEditDTO>,
+        val user : UserEditDTO
 ) {
 }

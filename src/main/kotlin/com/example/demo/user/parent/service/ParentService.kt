@@ -1,5 +1,7 @@
 package com.example.demo.user.parent.service
 
+import com.example.demo.profile.dto.ChildEditDTO
+import com.example.demo.profile.dto.ParentEditDTO
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.parent.child.dto.ChildRequestDto
@@ -37,11 +39,11 @@ class ParentService(private val parentRepository: ParentRepository) {
         )
 
     @Transactional
-    suspend fun updateProfile(id : Long, parentDTO: ParentDTO) {
+    suspend fun updateProfile(id : Long, parentEditDTO: ParentEditDTO) {
         val existingUser = parentRepository.findById(id).orElseThrow{
             UserNotFoundException(id, "일치하는 사용자가 없습니다")
         }
-        existingUser.children = parentDTO.children.map(ChildRequestDto::toEntity).toMutableList()
+        existingUser.children = parentEditDTO.children.map(ChildEditDTO::toEntity).toMutableList()
         parentRepository.save(existingUser)
     }
 
