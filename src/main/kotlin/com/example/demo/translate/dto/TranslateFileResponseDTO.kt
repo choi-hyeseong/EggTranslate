@@ -1,6 +1,6 @@
 package com.example.demo.translate.dto
 
-data class TranslateFIleResponseDTO(
+data class TranslateFileResponseDTO(
     val isSuccess: Boolean,
     var fileId: Long,
     val from: String,
@@ -11,8 +11,8 @@ data class TranslateFIleResponseDTO(
 
 
     companion object {
-        fun empty(): TranslateFIleResponseDTO {
-            return TranslateFIleResponseDTO(false, -1, "", "", "", "")
+        fun empty(): TranslateFileResponseDTO {
+            return TranslateFileResponseDTO(false, -1, "", "", "", "")
         }
     }
 }

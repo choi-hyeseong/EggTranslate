@@ -1,6 +1,6 @@
 package com.example.demo.signup.dto
 
-import com.example.demo.user.parent.child.dto.ChildRequestDto
+import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.parent.child.type.Gender
 
 class ChildSignUpDTO(
@@ -11,5 +11,5 @@ class ChildSignUpDTO(
         val className: String,
         val gender: Gender
 ) {
-    fun toChildDTO() : ChildRequestDto = ChildRequestDto(-1, name, phone, school, grade, className, gender)
+    fun toChildDTO() : ChildDTO = ChildDTO(-1, name, phone, school, grade, className, gender)
 }

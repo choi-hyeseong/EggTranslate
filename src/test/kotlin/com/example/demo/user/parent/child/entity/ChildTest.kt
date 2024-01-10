@@ -3,7 +3,7 @@ package com.example.demo.user.parent.child.entity
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
-import com.example.demo.user.parent.child.dto.ChildRequestDto
+import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.parent.child.repository.ChildRepository
 import com.example.demo.user.parent.child.type.Gender
 import com.example.demo.user.parent.dto.ParentDTO
@@ -31,7 +31,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
     @Test
     fun TEST_ADD_CHILD() {
         val user = userRepository.save(user.toEntity())
-        val children = mutableListOf<ChildRequestDto>()
+        val children = mutableListOf<ChildDTO>()
         val dto = ParentDTO(
             -1,
             children,
@@ -40,7 +40,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val response = parentRepository.save(dto.toEntity())
         val load = parentRepository.findById(response.id).get()
         load.children.add(
-            ChildRequestDto(
+            ChildDTO(
                 -1,
             "호식이",
             "전화",
@@ -59,7 +59,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
     @Test
     fun TEST_REMOVE_CHILD() {
         val user = userRepository.save(user.toEntity())
-        val children = mutableListOf<ChildRequestDto>()
+        val children = mutableListOf<ChildDTO>()
         val dto = ParentDTO(
             -1,
             children,
@@ -68,7 +68,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val response = parentRepository.save(dto.toEntity())
         val load = parentRepository.findById(response.id).get()
         load.children.add(
-            ChildRequestDto(
+            ChildDTO(
                 -1,
             "호식이",
             "전화",
@@ -93,7 +93,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
     @Test
     fun TEST_EDIT_CHILD() {
         val user = userRepository.save(user.toEntity())
-        val children = mutableListOf<ChildRequestDto>()
+        val children = mutableListOf<ChildDTO>()
         val dto = ParentDTO(
             -1,
             children,
@@ -102,7 +102,7 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
         val response = parentRepository.save(dto.toEntity())
         val load = parentRepository.findById(response.id).get()
         load.children.add(
-            ChildRequestDto(
+            ChildDTO(
                 -1,
             "호식이",
             "전화",
