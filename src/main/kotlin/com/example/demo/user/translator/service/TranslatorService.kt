@@ -1,6 +1,7 @@
 package com.example.demo.user.translator.service
 
 import com.example.demo.user.basic.exception.UserNotFoundException
+import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
 import org.springframework.transaction.annotation.Transactional
@@ -29,4 +30,17 @@ class TranslatorService(private val translatorRepository: TranslatorRepository) 
                     .findById(id)
                     .orElseThrow { UserNotFoundException(id, "찾을 수 없는 번역가 id입니다.") }
             )
+
+    @Transactional
+    suspend fun updateProfile(id : Long, translatorDTO: TranslatorDTO) {
+        val existingUser = translatorRepository.findById(id).orElseThrow{
+            UserNotFoundException(id, "일치하는 사용자가 없습니다")
+        }
+        existingUser.career = translatorDTO.career
+        existingUser.level = translatorDTO.level
+        existingUser.certificates = translatorDTO.certificates
+        existingUser.categories = translatorDTO.categories
+
+        translatorRepository.save(existingUser)
+    }
 }
