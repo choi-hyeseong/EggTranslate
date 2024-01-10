@@ -27,7 +27,7 @@ class ProfileController(private val userRepository: UserRepository) {
     }
 
     @GetMapping("/{id}")
-    fun retrieveUser(@PathVariable id : Long) {
+    fun retrieveUser(@PathVariable id : Long) : User{
         return userRepository.findOne(id)
     }
 }
