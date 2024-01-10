@@ -6,6 +6,7 @@ import com.example.demo.logger
 import com.example.demo.ocr.service.OCRService
 import com.example.demo.translate.dto.AutoTranslateResponseDTO
 import com.example.demo.translate.service.TranslateService
+import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
 import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
@@ -22,22 +23,27 @@ class ImageService(
 
     private val log = logger()
 
-    suspend fun handleImage(id : Long, lang: String, image: List<MultipartFile>) : AutoTranslateResponseDTO {
+    suspend fun handleImage(id: Long, lang: String, image: List<MultipartFile>): AutoTranslateResponseDTO {
         //save image
         val user = userService.getUser(id)
+        //read parallel logic
+        val mapRequest = mapToFileDTO(lang, user, image)
+        // return translated string
+        val response = translateService.requestWebTranslate(mapRequest)
+        return translateService.translate(user, response)
+    }
+
+
+    private suspend fun mapToFileDTO(lang : String, userDto: UserDto, image: List<MultipartFile>): List<TranslateFileRequestDTO> {
         return coroutineScope {
-            //read parallel logic
             val requestList = image.map {
                 async {
-                    val response = fileService.saveEntity(fileService.saveImage(user, it))
+                    val response = fileService.saveEntity(fileService.saveImage(userDto, it))
                     TranslateFileRequestDTO(response, "ko", lang, ocrService.readImage(it))
                 }
             }.toList()
-            val ocrData = requestList.awaitAll().toList()
-            // return translated string
-            translateService.translate(user, ocrData)
+            requestList.awaitAll().toList()
         }
-
     }
 
 }

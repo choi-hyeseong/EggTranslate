@@ -8,6 +8,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TranslateService(
@@ -16,9 +17,9 @@ class TranslateService(
     private val webTranslateService: WebTranslateService
 ) {
 
-    suspend fun translate(userDto: UserDto, requestDTO: List<TranslateFileRequestDTO>): AutoTranslateResponseDTO {
-        val responseTranslate = requestWebTranslate(requestDTO)
-        val fileDtoList = responseTranslate.map { mapFileDTO(it.fileId, userDto, it) }.toMutableList()
+    @Transactional
+    suspend fun translate(userDto: UserDto, response: List<TranslateFIleResponseDTO>): AutoTranslateResponseDTO {
+        val fileDtoList = response.map { mapFileDTO(it.fileId, userDto, it) }.toMutableList()
 
         val saveResponse = autoTranslateService.saveAllTranslate(fileDtoList)
         if (saveResponse.any { it == -1L})
