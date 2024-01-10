@@ -21,20 +21,32 @@ class ProfileService(
         private val teacherService: TeacherService,
         private val translatorService: TranslatorService) {
 
-    fun updateUser(id : Long, userDto: UserDto) {
-
+    suspend fun updateUser(id : Long, userDto: UserDto) {
+        userService.updateProfile(id, userDto)
     }
 
-    fun updateParent(id : Long, parentDTO: ParentDTO) {
-        val parent =
+    suspend fun updateParent(id : Long, parentDTO: ParentDTO) {
+        //user 정보 업데이트
+        val dto = parentDTO.user
+        updateUser(id, dto)
+        //부모 단독 정보 업데이트
+        parentService.updateProfile(id, parentDTO)
     }
 
-    fun updateTeacher(id : Long, teacherDTO: TeacherDTO) {
-
+    suspend fun updateTeacher(id : Long, teacherDTO: TeacherDTO) {
+        //user 정보 업데이트
+        val dto = teacherDTO.user
+        updateUser(id, dto)
+        //선생 단독 정보 업데이트
+        teacherService.updateProfile(id, teacherDTO)
     }
 
-    fun updateTranslator (id : Long, translatorDTO: TranslatorDTO) {
-
+    suspend fun updateTranslator (id : Long, translatorDTO: TranslatorDTO) {
+        //user 정보 업데이트
+        val dto = translatorDTO.user
+        updateUser(id, dto)
+        //번역가 단독 정보 업데이트
+        translatorService.updateProfile(id, translatorDTO)
     }
 
 

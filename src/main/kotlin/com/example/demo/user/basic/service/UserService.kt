@@ -29,4 +29,29 @@ class UserService(private val userRepository: UserRepository) {
             .orElseThrow { UserNotFoundException(id, "해당하는 유저가 없습니다.") }
         )
     }
+    @Transactional
+    suspend fun updateProfile(id : Long, userDto: UserDto) {
+        val existingUser = userRepository.findById(id).orElseThrow{
+            UserNotFoundException(id, "일치하는 사용자가 없습니다")
+        }
+        existingUser.name = userDto.name
+        existingUser.phone = userDto.phone
+        existingUser.email = userDto.email
+        existingUser.language = userDto.languages
+
+        userRepository.save(existingUser)
+    }
 }
+
+//suspend fun updateUser(userId: Long, userDto: UserDto) {
+//    val existingUser = userRepository.findById(userId).orElseThrow { NotFoundException("User not found with id: $userId") }
+//
+//    // Update user-specific fields
+//    existingUser.userName = userDto.userName
+//    existingUser.password = userDto.password // Note: You might want to handle password updates more securely
+//
+//    // Update any other fields as needed
+//
+//    // Save the updated user
+//    userRepository.save(existingUser)
+//}

@@ -6,6 +6,7 @@ import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.teacher.dto.TeacherDTO
+import com.example.demo.user.translator.dto.TranslatorDTO
 import lombok.RequiredArgsConstructor
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -33,8 +34,9 @@ class ProfileController(private val userRepository: UserRepository, private val 
     }
 
     @PutMapping("/edit/translator/{id}")
-    suspend fun editTranslatorProfile(@RequestBody parentDTO: ParentDTO) : Long{
+    suspend fun editTranslatorProfile(@PathVariable id : Long, @RequestBody translatorDTO: TranslatorDTO) : Long{
         profileService.updateTranslator(id, translatorDTO)
+        return id
     }
 
     @DeleteMapping("/delete/{id}")
