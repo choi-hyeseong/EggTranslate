@@ -12,7 +12,7 @@ class TranslateResult(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id : Long = -1,
 
-        @OneToOne
+        @ManyToOne
         @JoinColumn(name = "user_id")
         var user : User,
 
@@ -29,8 +29,9 @@ class TranslateResult(
 ) {
 
         //처음 결과 생성시 null로 초기화 됨.
-        @OneToOne
-        @JoinColumn(name = "manualtranslate_id", nullable = true)
+        //순환 참조 문제로 단뱡향으로 설정. 단, id를 result에서 갖고 있어 cascade가 가능.
+        @OneToOne(cascade = [CascadeType.ALL])
+        @JoinColumn(name = "manualResult_id")
         var manualResult: ManualResult? = null
 
 }

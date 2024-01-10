@@ -3,8 +3,10 @@ package com.example.demo.translate.service
 import com.example.demo.file.service.FileService
 import com.example.demo.translate.dto.*
 import com.example.demo.translate.exception.TranslateException
+import com.example.demo.translate.type.TranslateState
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.parent.child.dto.ChildDTO
+import com.example.demo.user.translator.dto.TranslatorDTO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -38,7 +40,19 @@ class TranslateService(
         if (saveResult == -1L)
             throw TranslateException("번역 결과가 정상적으로 저장되지 않았습니다.")
 
-        return translateDataService.findTranslateResult(saveResult)
+        return translateDataService.findTranslateResult(saveResult).toResponseDTO()
+
+    }
+
+    @Transactional
+    suspend fun request(userDto: UserDto, translatorDTO: TranslatorDTO, resultId : Long) : TranslateResultResponseDTO {
+
+        val saveDTO = ManualResultDTO(-1, translatorDTO, TranslateState.REQUEST, mutableListOf())
+        val response = translateDataService.saveManualResult(resultId, saveDTO)
+        if (response == -1L)
+            throw TranslateException("번역 요청 도중 오류가 발생했습니다.")
+
+        return translateDataService.findTranslateResult(resultId).toResponseDTO()
 
     }
 

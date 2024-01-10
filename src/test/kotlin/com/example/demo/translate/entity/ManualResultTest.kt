@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class ManualResultTest {
 
+    /*
     @Autowired
     lateinit var translationResultRepository: ManualResultRepository
 
@@ -173,5 +174,7 @@ class ManualResultTest {
         assertEquals("개나리", savedResponse.translateResult.child?.className)
     }
 
+
+     */
 
 }

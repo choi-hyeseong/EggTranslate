@@ -1,34 +1,55 @@
 package com.example.demo.translate.controller
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.example.demo.common.response.Response
+import com.example.demo.translate.dto.ManualTranslateDTO
+import com.example.demo.translate.dto.TranslateFileDTO
+import com.example.demo.translate.dto.TranslateResultResponseDTO
+import com.example.demo.translate.service.TranslateDataService
+import com.example.demo.translate.service.TranslateService
+import com.example.demo.user.basic.service.UserService
+import com.example.demo.user.translator.service.TranslatorService
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/translate")
-class TranslateController {
+class TranslateController(
+    private val userService: UserService,
+    private val translatorService: TranslatorService,
+    private val translateService: TranslateService,
+    private val translateDataService: TranslateDataService
+) {
 
     @GetMapping("/{id}")
-    fun getRequest(@PathVariable id: Int) {
+    fun getResult(@PathVariable id: Int) {
 
     }
 
     @GetMapping("")
-    fun getAllRequest() {
-
+    suspend fun getAllResult(@RequestParam(value = "id") id: Long): Response<List<TranslateResultResponseDTO>> {
+        return Response.ofSuccess(null, translateDataService.findAllTranslateResultByUserId(id).map {
+            it.toResponseDTO()
+        })
     }
 
     @PostMapping("/{id}")
-    fun createRequest(@PathVariable id: Int) {
-
+    suspend fun createRequest(
+        @PathVariable id: Long,
+        @RequestParam translator: Long,
+        @RequestParam resultId: Long
+    ): Response<TranslateResultResponseDTO> {
+        return Response.ofSuccess(
+            null,
+            translateService.request(
+                userService.getUser(id),
+                translatorService.findTranslatorById(translator),
+                resultId
+            )
+        )
     }
 
 
     @PutMapping("/{id}")
-    fun updateRequest(@PathVariable id: Int) {
-
+    suspend fun updateRequest(@PathVariable id: Long, @RequestParam fileId : Long, @RequestParam content : String) {
+        translateDataService.update(id, fileId, content)
     }
 }

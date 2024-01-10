@@ -16,8 +16,11 @@ class ManualTranslate (
     @Column(nullable = false)
     var translateContent: String,
 
+    /*
     @ManyToOne
     @JoinColumn(name = "manualResult_id") //변수이름과 동일하게 (manualResult로 지었으니 그렇게 적어야함)
     var manualResult: ManualResult
+    역방향 참조할 필요 없음.
+     */
 
 )

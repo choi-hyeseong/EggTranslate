@@ -1,5 +1,7 @@
 package com.example.demo.translate.dto
 
+import com.example.demo.translate.entity.TranslateFile
+
 data class TranslateFileResponseDTO(
     val isSuccess: Boolean,
     var fileId: Long,
@@ -8,11 +10,5 @@ data class TranslateFileResponseDTO(
     val origin: String?,
     val result: String?
 ) {
-
-
-    companion object {
-        fun empty(): TranslateFileResponseDTO {
-            return TranslateFileResponseDTO(false, -1, "", "", "", "")
-        }
-    }
+    constructor(fileDTO: TranslateFile) : this(true, fileDTO.id, fileDTO.fromLang, fileDTO.toLang, fileDTO.origin, fileDTO.translate)
 }

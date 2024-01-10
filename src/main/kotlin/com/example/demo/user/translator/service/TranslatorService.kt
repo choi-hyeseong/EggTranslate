@@ -20,13 +20,13 @@ class TranslatorService(private val translatorRepository: TranslatorRepository) 
     fun findTranslatorByUserId(id: Long): TranslatorDTO =
             TranslatorDTO(translatorRepository
                     .findByUserId(id)
-                    .orElseThrow { UserNotFoundException(id, "할당되지 않은 유저 id입니다.") }
+                    .orElseThrow { UserNotFoundException(id, "해당 id로 번역가를 찾을 수 없습니다.") }
             )
 
     @Transactional(readOnly = true)
     fun findTranslatorById(id : Long) : TranslatorDTO =
             TranslatorDTO(translatorRepository
                     .findById(id)
-                    .orElseThrow { UserNotFoundException(id, "할당되지 않은 유저 id입니다.") }
+                    .orElseThrow { UserNotFoundException(id, "찾을 수 없는 번역가 id입니다.") }
             )
 }

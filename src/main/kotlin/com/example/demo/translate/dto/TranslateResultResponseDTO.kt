@@ -5,17 +5,19 @@ import com.example.demo.translate.entity.TranslateResult
 data class TranslateResultResponseDTO(
     val id: Long,
     val userId: Long,
-    val autoTranslate: AutoTranslateDTO,
+    val autoTranslate: AutoTranslateResponseDTO,
     val childId: Long?,
     val manualResult: ManualResultResponseDTO?
 ) {
     constructor(translateResult: TranslateResult) : this(
         translateResult.id,
         translateResult.user.id,
-        AutoTranslateDTO(translateResult.autoTranslate),
+        AutoTranslateResponseDTO(translateResult.autoTranslate),
         translateResult.child?.id,
         translateResult.manualResult?.let {
             ManualResultResponseDTO(it)
         }
     )
+
+
 }

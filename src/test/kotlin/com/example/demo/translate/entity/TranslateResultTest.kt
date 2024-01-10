@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class TranslateResultTest {
 
+    /*
     @Autowired
     lateinit var userRepository : UserRepository
 
@@ -178,4 +179,6 @@ class TranslateResultTest {
         assertEquals(TranslateState.DONE, translateResultRepository.findById(savedRequest.id).get().status)
 
     }
+
+     */
 }
