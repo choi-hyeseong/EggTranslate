@@ -40,10 +40,11 @@ class ParentService(private val parentRepository: ParentRepository) {
 
     @Transactional
     suspend fun updateProfile(id : Long, parentEditDTO: ParentEditDTO) {
-        val existingUser = parentRepository.findById(id).orElseThrow{
+        val existingUser = parentRepository.findByUserId(id).orElseThrow{
             UserNotFoundException(id, "일치하는 사용자가 없습니다")
         }
-        existingUser.children = parentEditDTO.children.map(ChildEditDTO::toEntity).toMutableList()
+        existingUser.children = parentEditDTO.children.map(ChildEditDTO::toChildDTO).map { it.toEntity() }.toMutableList()
+        existingUser
         parentRepository.save(existingUser)
     }
 

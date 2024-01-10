@@ -12,5 +12,5 @@ class ChildEditDTO(
         val className: String,
         val gender: Gender
 ) {
-    fun toEntity() : Child = Child(-1, name, phone, school, grade, className, gender)
+    fun toChildDTO() : ChildRequestDto = ChildRequestDto(-1, name, phone, school, grade, className, gender)
 }
