@@ -14,4 +14,5 @@ class UserSignUpDTO(
         val userType: UserType
 ) {
     fun toUserDTO(): UserDto = UserDto(-1, userName, password, name, phone, email, languages, userType)
+
 }
