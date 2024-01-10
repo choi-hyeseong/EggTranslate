@@ -8,7 +8,7 @@ import com.example.demo.user.translator.entity.Translator
 import jakarta.persistence.*
 
 @Entity
-class TranslationRequest(
+class ManualRequest(
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
