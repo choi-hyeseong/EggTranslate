@@ -6,9 +6,9 @@ import jakarta.validation.Payload
 
 @Target(AnnotationTarget.VALUE_PARAMETER)
 @Retention(AnnotationRetention.RUNTIME)
-@Constraint(validatedBy = [UsernameValidator::class])
-annotation class UsernameValid(
-        val message: String = "중복된 아이디가 있습니다.",
+@Constraint(validatedBy = [SignUpValidator::class])
+annotation class SignUpValid(
+        val message: String = "아이디 혹은 비밀번호가 적절하지 않습니다.",
         val groups: Array<KClass<*>> = [],
         val payload: Array<KClass<out Payload>> = [],
 )
