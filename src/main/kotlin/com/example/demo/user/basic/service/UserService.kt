@@ -20,7 +20,8 @@ class UserService(private val userRepository: UserRepository) {
     fun existUser(id : Long) = userRepository.existsById(id)
 
     @Transactional(readOnly = true)
-    fun existUser(userName : String) = userRepository.findByUsername(userName).isPresent
+    fun existUser(username : String) = userRepository.findByUsername(username).isPresent
+
     @Transactional(readOnly = true)
     fun getUser(id: Long): UserDto {
         return UserDto(userRepository
