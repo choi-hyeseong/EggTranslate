@@ -1,4 +1,10 @@
 package com.example.demo.profile.dto
 
-class ParentEditDTO {
+import com.example.demo.signup.dto.ChildSignUpDTO
+import com.example.demo.signup.dto.UserSignUpDTO
+
+class ParentEditDTO(
+        var children : MutableList<ChildSignUpDTO>,
+        val user : UserSignUpDTO
+) {
 }
