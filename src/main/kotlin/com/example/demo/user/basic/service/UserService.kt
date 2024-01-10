@@ -1,5 +1,6 @@
 package com.example.demo.user.basic.service
 
+import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.repository.UserRepository
