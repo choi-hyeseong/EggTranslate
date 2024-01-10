@@ -32,4 +32,4 @@ class AuthController(
         // 인증 실패 시 에러 응답
         return ResponseEntity.status(401).body("Authentication failed")
     }
-}}
+}
