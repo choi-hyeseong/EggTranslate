@@ -1,5 +1,8 @@
 package com.example.demo.profile.controller
 
+import com.example.demo.profile.dto.ParentEditDTO
+import com.example.demo.profile.dto.TeacherEditDTO
+import com.example.demo.profile.dto.TranslatorEditDTO
 import com.example.demo.profile.service.ProfileService
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.entity.User
@@ -22,20 +25,20 @@ class ProfileController(private val userRepository: UserRepository, private val 
     }
 
     @PutMapping("/edit/parent/{id}")
-    suspend fun editParentProfile(@PathVariable id : Long, @RequestBody parentDTO: ParentDTO) : Long{
-        profileService.updateParent(id, parentDTO)
+    suspend fun editParentProfile(@PathVariable id : Long, @RequestBody parentEditDTO: ParentEditDTO) : Long{
+        profileService.updateParent(id, parentEditDTO)
         return id
     }
 
     @PutMapping("/edit/teacher/{id}")
-    suspend fun editTeacherProfile(@PathVariable id : Long, @RequestBody teacherDTO: TeacherDTO) : Long{
-        profileService.updateTeacher(id, teacherDTO)
+    suspend fun editTeacherProfile(@PathVariable id : Long, @RequestBody teacherEditDTO: TeacherEditDTO) : Long{
+        profileService.updateTeacher(id, teacherEditDTO)
         return id
     }
 
     @PutMapping("/edit/translator/{id}")
-    suspend fun editTranslatorProfile(@PathVariable id : Long, @RequestBody translatorDTO: TranslatorDTO) : Long{
-        profileService.updateTranslator(id, translatorDTO)
+    suspend fun editTranslatorProfile(@PathVariable id : Long, @RequestBody translatorEditDTO: TranslatorEditDTO) : Long{
+        profileService.updateTranslator(id, translatorEditDTO)
         return id
     }
 

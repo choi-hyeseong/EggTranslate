@@ -8,6 +8,6 @@ class TeacherEditDTO(
         val className : String,
         val course : String?,
         val address : String?,
-        val user: UserSignUpDTO
+        val user: UserEditDTO
 ) {
 }

@@ -7,7 +7,7 @@ import com.example.demo.user.translator.type.TranslatorLevel
 class TranslatorEditDTO(
         val career : Int,
         val level : TranslatorLevel,
-        val user : UserSignUpDTO,
+        val user : UserEditDTO,
         val certificates : MutableList<String>,
         val categories : MutableList<TranslatorCategory>
 ) {
