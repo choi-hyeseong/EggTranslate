@@ -7,4 +7,5 @@ import java.util.Optional
 interface UserRepository : JpaRepository<User, Long> {
 
     fun findByUsername(userName : String) : Optional<User>
+    abstract fun findOne(id: Long)
 }
