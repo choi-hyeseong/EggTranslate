@@ -17,11 +17,11 @@ class TranslatorHeart(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id : Long = -1,
 
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST])
     @JoinColumn(name = "user_id")
-    var user : User,
+    var user : User?,
 
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST]) //persist만 있어도 되긴한데
     @JoinColumn(name = "translator_id")
-    var translator: Translator
+    var translator: Translator?
 )

@@ -39,6 +39,14 @@ class User(
 ) : BaseEntity() {
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "user")
-    var heartList : MutableList<TranslatorHeart> = mutableListOf()
+    var heartList: MutableList<TranslatorHeart> = mutableListOf()
 
+    fun addHeart(translatorHeart: TranslatorHeart) {
+        if (heartList.all { it.id != translatorHeart.id })
+            heartList.add(translatorHeart)
+    }
+
+    fun removeHeart(translatorHeart: TranslatorHeart) {
+        heartList.removeIf { it.id == translatorHeart.id }
+    }
 }

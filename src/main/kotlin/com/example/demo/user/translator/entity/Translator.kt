@@ -36,10 +36,18 @@ class Translator(
 ) {
 
 
+    @OneToMany(mappedBy = "translator")
+    var hearts: MutableList<TranslatorHeart> = mutableListOf()
 
-    @OneToMany( mappedBy = "translator")
-    var hearts : MutableList<TranslatorHeart> = mutableListOf()
 
+    fun addHeart(translatorHeart: TranslatorHeart) {
+        if (hearts.all { it.id != translatorHeart.id })
+            hearts.add(translatorHeart)
+    }
+
+    fun removeHeart(heart: TranslatorHeart) {
+        hearts.removeIf { it.id == heart.id }
+    }
 
 
 }
