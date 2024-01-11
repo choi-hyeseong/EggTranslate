@@ -25,17 +25,17 @@ class SignUpValidator(private val userService: UserService) : ConstraintValidato
         when (value) {
             is UserDto -> return isUsernameValid(value.userName)
             is TeacherSignUpDTO -> {
-                if(!isUsernameValid(value.user.userName))
+                if(isUsernameValid(value.user.userName))
                     throw DuplicatedUsernameException("이미 존재하는 아이디입니다.")
                 return true
             }
             is TranslatorSignUpDTO -> {
-                if(!isUsernameValid(value.user.userName))
+                if(isUsernameValid(value.user.userName))
                     throw DuplicatedUsernameException("이미 존재하는 아이디입니다.")
                 return true
             }
             is ParentSignUpDTO -> {
-                if(!isUsernameValid(value.user.userName))
+                if(isUsernameValid(value.user.userName))
                     throw DuplicatedUsernameException("이미 존재하는 아이디입니다.")
                 return true
             }
@@ -45,6 +45,6 @@ class SignUpValidator(private val userService: UserService) : ConstraintValidato
     }
 
     private fun isUsernameValid(username: String): Boolean {
-        return !userService.existUser(username) // --> user에 존재하지 않는 아이디
+        return userService.existUser(username) // --> user에 존재하는 아이디일 때 true
     }
 }
