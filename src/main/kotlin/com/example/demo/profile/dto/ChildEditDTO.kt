@@ -1,6 +1,5 @@
 package com.example.demo.profile.dto
 
-
 import com.example.demo.user.parent.child.entity.Child
 import com.example.demo.user.parent.child.type.Gender
 
@@ -12,6 +11,4 @@ class ChildEditDTO(
         val className: String,
         val gender: Gender
 ) {
-    //fun toChildDTO() : ChildRequestDto = ChildRequestDto(-1, name, phone, school, grade, className, gender)
 }
-

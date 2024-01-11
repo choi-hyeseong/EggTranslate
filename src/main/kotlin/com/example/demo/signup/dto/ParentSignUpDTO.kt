@@ -1,5 +1,6 @@
 package com.example.demo.signup.dto
 
+import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.dto.ParentDTO
 
 class ParentSignUpDTO(
@@ -7,6 +8,6 @@ class ParentSignUpDTO(
     val user : UserSignUpDTO
 
 ) {
-    fun toParentDTO() : ParentDTO = ParentDTO(-1, children.map { it.toChildDTO() }.toMutableList(), user.toUserDTO())
+    fun toParentDTO() : ParentDTO = ParentDTO(-1, children.map { it.toChildDTO() }.toMutableList(), user.toUserDTO(UserType.PARENT))
 
 }
