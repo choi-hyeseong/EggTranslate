@@ -1,6 +1,5 @@
 package com.example.demo.signup.dto
 
-import com.example.demo.user.parent.child.dto.ChildRequestDto
 import com.example.demo.user.parent.dto.ParentDTO
 
 class ParentSignUpDTO(

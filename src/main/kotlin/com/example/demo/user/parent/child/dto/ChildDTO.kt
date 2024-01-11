@@ -3,7 +3,7 @@ package com.example.demo.user.parent.child.dto
 import com.example.demo.user.parent.child.type.Gender
 import com.example.demo.user.parent.child.entity.Child
 
-class ChildRequestDto(
+class ChildDTO(
     val id : Long = -1,
     val name: String,
     val phone: String,

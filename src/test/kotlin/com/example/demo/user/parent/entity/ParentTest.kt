@@ -4,7 +4,7 @@ import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.child.type.Gender
-import com.example.demo.user.parent.child.dto.ChildRequestDto
+import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.parent.child.repository.ChildRepository
 import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.parent.repository.ParentRepository
@@ -33,7 +33,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
     fun TEST_SAVE_PARENT() {
         val user = userRepository.save(user.toEntity())
 
-        val children = mutableListOf(ChildRequestDto(
+        val children = mutableListOf(ChildDTO(
             -1,
             "호식이",
             "전화",
@@ -41,7 +41,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             2,
             "병아리",
             Gender.MAN,
-        ), ChildRequestDto(
+        ), ChildDTO(
             -1,
             "두마리",
             "전화",
@@ -66,7 +66,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
     @Test
     fun TEST_LOAD_PARENT() {
         val user = userRepository.save(user.toEntity())
-        val children = mutableListOf(ChildRequestDto(
+        val children = mutableListOf(ChildDTO(
             -1,
             "호식이",
             "전화",
@@ -74,7 +74,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             2,
             "병아리",
             Gender.MAN
-        ), ChildRequestDto(
+        ), ChildDTO(
             -1,
             "두마리",
             "전화",
@@ -107,7 +107,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
     @Test
     fun TEST_LOAD_EMPTY_CHILD() {
         val user = userRepository.save(user.toEntity())
-        val children = mutableListOf<ChildRequestDto>()
+        val children = mutableListOf<ChildDTO>()
         val dto = ParentDTO(
             -1,
             children,

@@ -3,18 +3,24 @@ package com.example.demo.translate.entity
 import jakarta.persistence.*
 
 @Entity
-class ManualTranslate(
+class ManualTranslate (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1,
+    val id : Long,
+
+    @OneToOne
+    @JoinColumn(name = "translatefile_id")
+    val translateFile: TranslateFile,
 
     @Column(nullable = false)
     var translateContent: String,
 
-    @OneToOne
-    @JoinColumn(name = "translaterequest_id")
-    var manualRequest: ManualRequest
-) {
+    /*
+    @ManyToOne
+    @JoinColumn(name = "manualResult_id") //변수이름과 동일하게 (manualResult로 지었으니 그렇게 적어야함)
+    var manualResult: ManualResult
+    역방향 참조할 필요 없음.
+     */
 
-}
+)
