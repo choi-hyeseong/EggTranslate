@@ -1,6 +1,6 @@
 package com.example.demo.file.entity
 
-import com.example.demo.translate.repository.TranslateFileRepository
+import com.example.demo.translate.auto.repository.TranslateFileRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

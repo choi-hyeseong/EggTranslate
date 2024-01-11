@@ -1,10 +1,12 @@
 package com.example.demo.translate.service
 
 import com.example.demo.file.service.FileService
+import com.example.demo.translate.auto.dto.*
 import com.example.demo.translate.dto.*
-import com.example.demo.translate.exception.ManualException
+import com.example.demo.translate.manual.exception.ManualException
 import com.example.demo.translate.exception.TranslateException
-import com.example.demo.translate.type.TranslateState
+import com.example.demo.translate.manual.dto.ManualResultDTO
+import com.example.demo.translate.manual.type.TranslateState
 import com.example.demo.translate.web.dto.TranslateRequestDTO
 import com.example.demo.translate.web.service.WebTranslateService
 import com.example.demo.user.basic.dto.UserDto

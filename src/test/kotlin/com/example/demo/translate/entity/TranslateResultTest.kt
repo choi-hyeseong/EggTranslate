@@ -2,12 +2,13 @@ package com.example.demo.translate.entity
 
 import com.example.demo.file.dto.FileDTO
 import com.example.demo.file.repository.FileRepository
-import com.example.demo.translate.dto.AutoTranslateDTO
-import com.example.demo.translate.dto.TranslateFileDTO
-import com.example.demo.translate.dto.TranslateResultSaveDTO
-import com.example.demo.translate.repository.AutoTranslateRepository
-import com.example.demo.translate.repository.TranslateFileRepository
-import com.example.demo.translate.type.TranslateState
+import com.example.demo.translate.auto.dto.AutoTranslateDTO
+import com.example.demo.translate.auto.dto.TranslateFileDTO
+import com.example.demo.translate.auto.dto.TranslateResultSaveDTO
+import com.example.demo.translate.auto.repository.AutoTranslateRepository
+import com.example.demo.translate.auto.repository.TranslateFileRepository
+import com.example.demo.translate.auto.repository.TranslateResultRepository
+import com.example.demo.translate.manual.type.TranslateState
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
@@ -34,7 +35,7 @@ class TranslateResultTest {
     lateinit var userRepository : UserRepository
 
     @Autowired
-    lateinit var translateResultRepository: com.example.demo.translate.repository.TranslateResultRepository
+    lateinit var translateResultRepository: TranslateResultRepository
 
     @Autowired
     lateinit var parentRepository: ParentRepository

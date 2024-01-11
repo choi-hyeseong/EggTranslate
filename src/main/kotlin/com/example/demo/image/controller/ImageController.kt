@@ -4,8 +4,8 @@ import com.example.demo.common.response.Response
 import com.example.demo.image.validation.ImageValid
 import com.example.demo.common.valid.lang.LangValid
 import com.example.demo.image.service.ImageService
-import com.example.demo.translate.dto.AutoTranslateResponseDTO
-import com.example.demo.translate.dto.TranslateResultResponseDTO
+import com.example.demo.translate.auto.dto.AutoTranslateResponseDTO
+import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam

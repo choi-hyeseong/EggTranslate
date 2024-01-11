@@ -1,7 +1,7 @@
 package com.example.demo.translate.web.component.google
 
 import com.example.demo.translate.web.dto.GoogleResponseDTO
-import com.example.demo.translate.dto.TranslateFileRequestDTO
+import com.example.demo.translate.auto.dto.TranslateFileRequestDTO
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.reactive.function.BodyInserters

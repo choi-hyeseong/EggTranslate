@@ -2,10 +2,11 @@ package com.example.demo.translate.entity
 
 import com.example.demo.file.dto.FileDTO
 import com.example.demo.file.repository.FileRepository
-import com.example.demo.translate.dto.ManualTranslateDTO
-import com.example.demo.translate.dto.TranslateFileDTO
-import com.example.demo.translate.repository.ManualTranslateRepository
-import com.example.demo.translate.repository.TranslateFileRepository
+import com.example.demo.translate.manual.dto.ManualTranslateDTO
+import com.example.demo.translate.auto.dto.TranslateFileDTO
+import com.example.demo.translate.manual.entity.ManualTranslate
+import com.example.demo.translate.manual.repository.ManualTranslateRepository
+import com.example.demo.translate.auto.repository.TranslateFileRepository
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType

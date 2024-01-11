@@ -1,11 +1,11 @@
 package com.example.demo.image.service
 
 import com.example.demo.file.service.FileService
-import com.example.demo.translate.dto.TranslateFileRequestDTO
+import com.example.demo.translate.auto.dto.TranslateFileRequestDTO
 import com.example.demo.logger
 import com.example.demo.ocr.service.OCRService
-import com.example.demo.translate.dto.AutoTranslateResponseDTO
-import com.example.demo.translate.dto.TranslateResultResponseDTO
+import com.example.demo.translate.auto.dto.AutoTranslateResponseDTO
+import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
