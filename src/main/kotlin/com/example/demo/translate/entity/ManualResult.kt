@@ -25,7 +25,8 @@ class ManualResult(
     @JoinColumn(name = "translator_id")
     var translator : Translator,
 
+    //Result 기준으로 join 해야함.
     @OneToMany(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "manualTranslate_id")
+    @JoinColumn(name = "manualResult_id")
     var manualTranslate: MutableList<ManualTranslate> = mutableListOf()
 )
