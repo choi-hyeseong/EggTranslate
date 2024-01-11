@@ -44,8 +44,9 @@ class ParentService(private val parentRepository: ParentRepository) {
             UserNotFoundException(id, "일치하는 사용자가 없습니다")
         }
         existingUser.children = parentEditDTO.children.map(ChildEditDTO::toChildDTO).map { it.toEntity() }.toMutableList()
-        existingUser
-        parentRepository.save(existingUser)
+        // 에러가 여기서 나는 것 같은데...
+        // 디버깅해보니까 updateProfile에 들어왔다가 다시 밖으로 나갔다가 다시 안으로 들어오는 것도 이상함. 뭐지 이건?
+        parentRepository.save(existingUser) // save 쪽에서 영속성이 깨져서 에러가 나는 것 같은데.. 확인해보니까 id가 잘못 들어가있음. 근데 코드 고치니까 아이디는 제대로 들어가있던데 ?
     }
 
 }
