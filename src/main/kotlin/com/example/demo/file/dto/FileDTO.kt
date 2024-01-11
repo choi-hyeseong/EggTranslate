@@ -4,7 +4,7 @@ import com.example.demo.file.entity.File
 import com.example.demo.user.basic.dto.UserDto
 
 class FileDTO(
-        val fileId : Long = -1,
+        val id : Long = -1,
         val originName : String,
         val saveName : String,
         val user : UserDto,
@@ -13,7 +13,7 @@ class FileDTO(
 ) {
         constructor(file: File) : this(file.id, file.originName, file.saveName, UserDto(file.user), file.savePath)
         fun toEntity() : File = File(
-                id = fileId,
+                id = id,
                 user = user.toEntity(),
                 originName = originName,
                 saveName = saveName,
