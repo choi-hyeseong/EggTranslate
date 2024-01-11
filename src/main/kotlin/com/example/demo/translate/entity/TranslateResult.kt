@@ -19,7 +19,7 @@ class TranslateResult(
         @Enumerated(EnumType.STRING)
         var userType : UserType,
 
-        @OneToOne
+        @OneToOne(cascade = [CascadeType.ALL])
         @JoinColumn(name = "autoTranslate_id")
         var autoTranslate: AutoTranslate,
 

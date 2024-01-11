@@ -23,19 +23,9 @@ class TranslateService(
     @Transactional
     suspend fun translate(userDto: UserDto, childDTO: ChildDTO?, response: List<TranslateFileResponseDTO>): TranslateResultResponseDTO {
         val fileDtoList = response.map { mapFileDTO(it.fileId, userDto, it) }.toMutableList()
+        val autoDTO = AutoTranslateDTO(-1, userDto, fileDtoList)
 
-        val saveResponse = translateDataService.saveAllTranslate(fileDtoList)
-        if (saveResponse.any { it == -1L})
-            throw TranslateException("번역 파일이 정상적으로 저장되지 않았습니다.")
-
-        val autoDTO = AutoTranslateDTO(-1, userDto, translateDataService.findAllTranslateFiles(saveResponse))
-        val responseId = translateDataService.saveAutoTranslate(autoDTO)
-
-        val result = translateDataService.findAutoTranslate(responseId)
-        if (result.id == -1L)
-            throw TranslateException("번역 데이터가 정상적으로 저장되지 않았습니다.")
-
-        val resultDTO = TranslateResultSaveDTO(-1, userDto, result, childDTO)
+        val resultDTO = TranslateResultSaveDTO(-1, userDto, autoDTO, childDTO)
         val saveResult = translateDataService.saveTranslateResult(resultDTO)
         if (saveResult == -1L)
             throw TranslateException("번역 결과가 정상적으로 저장되지 않았습니다.")
