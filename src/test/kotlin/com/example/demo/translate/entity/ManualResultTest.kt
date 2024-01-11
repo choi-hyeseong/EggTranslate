@@ -1,11 +1,12 @@
 package com.example.demo.translate.entity
 
-import com.example.demo.translate.dto.AutoTranslateDTO
-import com.example.demo.translate.dto.TranslateResultSaveDTO
-import com.example.demo.translate.dto.ManualResultResponseDTO
-import com.example.demo.translate.repository.AutoTranslateRepository
-import com.example.demo.translate.repository.ManualResultRepository
-import com.example.demo.translate.type.TranslateState
+import com.example.demo.translate.auto.dto.AutoTranslateDTO
+import com.example.demo.translate.manual.dto.ManualResultDTO
+import com.example.demo.translate.auto.dto.TranslateResultSaveDTO
+import com.example.demo.translate.auto.repository.AutoTranslateRepository
+import com.example.demo.translate.auto.repository.TranslateResultRepository
+import com.example.demo.translate.manual.repository.ManualResultRepository
+import com.example.demo.translate.manual.type.TranslateState
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
@@ -27,9 +28,8 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class ManualResultTest {
 
-    /*
     @Autowired
-    lateinit var translationResultRepository: ManualResultRepository
+    lateinit var manualResultRepository: ManualResultRepository
 
     @Autowired
     lateinit var userRepository: UserRepository
@@ -41,7 +41,7 @@ class ManualResultTest {
     lateinit var autoTranslateRepository: AutoTranslateRepository
 
     @Autowired
-    lateinit var translateResultRepository: com.example.demo.translate.repository.TranslateResultRepository
+    lateinit var translateResultRepository: TranslateResultRepository
 
     @Autowired
     lateinit var parentRepository: ParentRepository
@@ -95,30 +95,23 @@ class ManualResultTest {
                 TranslatorCategory.OTHER
             )
         )
-        val saveTranslator = translatorRepository.save(translator.toEntity())
+        val saveTranslator = TranslatorDTO(translatorRepository.save(translator.toEntity()))
 
         val autoTrans = AutoTranslateDTO(-1, UserDto(parentUser), mutableListOf())
-        val saveAuto = autoTranslateRepository.save(autoTrans.toEntity())
 
         val request = TranslateResultSaveDTO(
             -1,
             UserDto(parentUser),
-            TranslateState.REQUEST,
-            TranslatorDTO(saveTranslator),
-            AutoTranslateDTO(saveAuto),
+            autoTrans,
             ChildDTO(parent.children[0])
         )
         val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity()) }
 
-        val translateResponse = ManualResultResponseDTO(-1, "번역결과", TranslateResultSaveDTO(savedRequest))
-        val response = assertDoesNotThrow { translationResultRepository.save(translateResponse.toEntity()) }
-        assertDoesNotThrow {
-            translateResultRepository.save(response.translateResult.apply {
-                status = TranslateState.DONE
-            })
-        }
-        assertNotEquals(-1, response.id)
-        assertEquals(TranslateState.DONE, translateResultRepository.findById(savedRequest.id).get().status)
+        val manualResultDTO = ManualResultDTO(-1,  saveTranslator, TranslateState.REQUEST, mutableListOf())
+        savedRequest.manualResult = manualResultDTO.toEntity()
+        translateResultRepository.save(savedRequest)
+
+
 
     }
 
@@ -150,31 +143,36 @@ class ManualResultTest {
                 TranslatorCategory.OTHER
             )
         )
-        val saveTranslator = translatorRepository.save(translator.toEntity())
+        val saveTranslator = TranslatorDTO(translatorRepository.save(translator.toEntity()))
 
         val autoTrans = AutoTranslateDTO(-1, UserDto(parentUser), mutableListOf())
-        val saveAuto = autoTranslateRepository.save(autoTrans.toEntity())
 
         val request = TranslateResultSaveDTO(
             -1,
             UserDto(parentUser),
-            TranslateState.REQUEST,
-            TranslatorDTO(saveTranslator),
-            AutoTranslateDTO(saveAuto),
+            autoTrans,
             ChildDTO(parent.children[0])
         )
         val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity()) }
 
-        val translateResponse = ManualResultResponseDTO(-1, "번역결과", TranslateResultSaveDTO(savedRequest))
-        val response = translationResultRepository.save(translateResponse.toEntity())
+        val manualResultDTO = ManualResultDTO(-1,  saveTranslator, TranslateState.REQUEST, mutableListOf())
+        savedRequest.manualResult = manualResultDTO.toEntity()
+        translateResultRepository.save(savedRequest)
 
-        val savedResponse = translationResultRepository.findById(response.id).get()
-        assertEquals("번역결과", savedResponse.translateContent)
-        assertEquals("정보처리기사", savedResponse.translateResult.translator.certificates[0])
-        assertEquals("개나리", savedResponse.translateResult.child?.className)
+
+        val response = assertDoesNotThrow {
+            val result = translateResultRepository.findById(savedRequest.id).get()
+            result.manualResult?.status = TranslateState.DONE
+            translateResultRepository.save(result)
+        }
+        assertEquals("정보처리기사", response.manualResult!!.translator.certificates[0])
+        assertEquals("개나리", response.child?.className)
+        assertNotEquals(-1, response.id)
+        assertEquals(TranslateState.DONE, translateResultRepository.findById(savedRequest.id).get().manualResult?.status)
+        assertEquals(response.manualResult?.id, manualResultRepository.findById(response.manualResult!!.id).get().id)
     }
 
 
-     */
+
 
 }

@@ -12,4 +12,8 @@ interface TranslatorHeartRepository : JpaRepository<TranslatorHeart, Long> {
     fun findByTranslatorId(id: Long) : Optional<TranslatorHeart>
 
     fun findAllByTranslatorId(id : Long) : List<TranslatorHeart>
+
+    fun findByTranslatorIdAndUserId(translatorId : Long, userId : Long) : Optional<TranslatorHeart>
+
+    fun existsByTranslatorIdAndUserId(translatorId: Long, userId: Long) : Boolean
 }

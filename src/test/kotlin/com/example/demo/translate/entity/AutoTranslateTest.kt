@@ -1,8 +1,8 @@
 package com.example.demo.translate.entity
 
-import com.example.demo.translate.dto.AutoTranslateDTO
-import com.example.demo.translate.dto.TranslateFileDTO
-import com.example.demo.translate.repository.AutoTranslateRepository
+import com.example.demo.translate.auto.dto.AutoTranslateDTO
+import com.example.demo.translate.auto.dto.TranslateFileDTO
+import com.example.demo.translate.auto.repository.AutoTranslateRepository
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType

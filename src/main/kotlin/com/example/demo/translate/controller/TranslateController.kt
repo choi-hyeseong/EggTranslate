@@ -1,9 +1,8 @@
 package com.example.demo.translate.controller
 
 import com.example.demo.common.response.Response
-import com.example.demo.translate.dto.ManualTranslateDTO
-import com.example.demo.translate.dto.TranslateFileDTO
-import com.example.demo.translate.dto.TranslateResultResponseDTO
+import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
+import com.example.demo.translate.auto.dto.TranslateResultSimpleDTO
 import com.example.demo.translate.service.TranslateDataService
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.user.basic.service.UserService
@@ -20,16 +19,15 @@ class TranslateController(
 ) {
 
     @GetMapping("/{id}")
-    fun getResult(@PathVariable id: Int) {
-
-    }
+    suspend fun getResult(@PathVariable id: Long) = Response.ofSuccess(null, translateDataService.findTranslateResult(id).toResponseDTO())
 
     @GetMapping("")
-    suspend fun getAllResult(@RequestParam(value = "id") id: Long): Response<List<TranslateResultResponseDTO>> {
+    suspend fun getAllResult(@RequestParam(value = "id") id: Long): Response<List<TranslateResultSimpleDTO>> {
         return Response.ofSuccess(null, translateDataService.findAllTranslateResultByUserId(id).map {
-            it.toResponseDTO()
+            TranslateResultSimpleDTO(it)
         })
     }
+
 
     @PostMapping("/{id}")
     suspend fun createRequest(

@@ -1,8 +1,8 @@
 package com.example.demo.response
 
 import com.example.demo.common.response.Response
-import com.example.demo.translate.component.Translator
-import com.example.demo.translate.dto.TranslateRequestDTO
+import com.example.demo.translate.web.component.Translator
+import com.example.demo.translate.web.dto.TranslateRequestDTO
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

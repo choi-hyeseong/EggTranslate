@@ -3,7 +3,6 @@ package com.example.demo.user.heart.entity
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
-import com.example.demo.user.heart.dto.TranslatorHeartDTO
 import com.example.demo.user.heart.repository.TranslatorHeartRepository
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.repository.TranslatorRepository
@@ -69,13 +68,13 @@ class TranslatorHeartTest(
         val translator = translatorRepository.save(translatorDto.toEntity())
         assertNotEquals(-1, translator.id)
 
-        val dto = TranslatorHeartDTO(-1, UserDto(other), TranslatorDTO(translator))
-        val response = translatorHeartRepository.save(dto.toEntity()) //중간 테이블을 저장해야 전파됨..
-        other.heartList.add(response) //other 기준으로 해야됨..
-        translator.hearts.add(response) // 양쪽다 리스트 추가해야 작동함. M:N에선
+        val heart = TranslatorHeart(-1, other, translator)
+        val saveHeart = translatorHeartRepository.save(heart)
 
-        userRepository.save(other)
-        translatorRepository.save(translator)
+        other.heartList.add(saveHeart) //other 기준으로 해야됨..
+        translator.hearts.add(saveHeart) // 양쪽다 리스트 추가해야 작동함. M:N에선
+
+        val response = translatorHeartRepository.save(saveHeart) //중간 테이블을 저장해야 전파됨..
         assertNotEquals(-1, response.id)
         assertFalse(userRepository.findById(other.id).get().heartList.isEmpty())
         assertFalse(translatorRepository.findById(translator.id).get().hearts.isEmpty())
@@ -89,7 +88,7 @@ class TranslatorHeartTest(
         val user1 = assertDoesNotThrow { userRepository.findByUsername("테스트").get() }
         val teacherUser = assertDoesNotThrow { userRepository.findByUsername("테스트2").get() }
         assertTrue(teacherUser.heartList.isNotEmpty())
-        assertEquals(TranslatorLevel.HIGH, teacherUser.heartList[0].translator.level)
+        assertEquals(TranslatorLevel.HIGH, teacherUser.heartList[0].translator?.level)
         val translator = assertDoesNotThrow { translatorRepository.findByUser(user1)!! }
         assertTrue(translator.hearts.isNotEmpty())
         assertEquals(teacherUser.heartList[0].id, translator.hearts[0].id)
@@ -102,8 +101,8 @@ class TranslatorHeartTest(
         val saveUser3 = userRepository.save(user3.toEntity())
         val translator = translatorRepository.findByUser(userRepository.findByUsername("테스트").get())!!
 
-        val dto = TranslatorHeartDTO(-1, UserDto(saveUser3), TranslatorDTO(translator))
-        val response = translatorHeartRepository.save(dto.toEntity())
+        val heart = TranslatorHeart(-1, saveUser3, translator)
+        val response = translatorHeartRepository.save(heart)
 
         saveUser3.heartList.add(response)
         translator.hearts.add(response)
