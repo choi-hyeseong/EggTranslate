@@ -1,8 +1,8 @@
-package com.example.demo.translate.component.naver
+package com.example.demo.translate.web.component.naver
 
-import com.example.demo.translate.component.Translator
-import com.example.demo.translate.dto.TranslateRequestDTO
-import com.example.demo.translate.dto.TranslateResponseDTO
+import com.example.demo.translate.web.component.Translator
+import com.example.demo.translate.web.dto.TranslateRequestDTO
+import com.example.demo.translate.web.dto.TranslateResponseDTO
 
 class NaverTranslator(private val naverWebClient: NaverWebClient) : Translator {
     // 테스트 가능성을 위한 WebClient 분리

@@ -1,4 +1,4 @@
-package com.example.demo.translate.dto
+package com.example.demo.translate.web.dto
 
 class NaverResponseDTO {
 

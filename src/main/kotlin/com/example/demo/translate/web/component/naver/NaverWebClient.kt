@@ -1,7 +1,7 @@
-package com.example.demo.translate.component.naver
+package com.example.demo.translate.web.component.naver
 
-import com.example.demo.translate.dto.NaverResponseDTO
-import com.example.demo.translate.dto.TranslateRequestDTO
+import com.example.demo.translate.web.dto.NaverResponseDTO
+import com.example.demo.translate.web.dto.TranslateRequestDTO
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.reactive.function.client.WebClient
 import java.net.URLEncoder

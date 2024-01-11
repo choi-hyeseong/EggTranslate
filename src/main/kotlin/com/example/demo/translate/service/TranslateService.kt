@@ -5,6 +5,8 @@ import com.example.demo.translate.dto.*
 import com.example.demo.translate.exception.ManualException
 import com.example.demo.translate.exception.TranslateException
 import com.example.demo.translate.type.TranslateState
+import com.example.demo.translate.web.dto.TranslateRequestDTO
+import com.example.demo.translate.web.service.WebTranslateService
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.translator.dto.TranslatorDTO

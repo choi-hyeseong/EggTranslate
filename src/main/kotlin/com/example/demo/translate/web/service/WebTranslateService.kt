@@ -1,8 +1,8 @@
-package com.example.demo.translate.service
+package com.example.demo.translate.web.service
 
-import com.example.demo.translate.component.google.GoogleTranslator
-import com.example.demo.translate.dto.TranslateRequestDTO
-import com.example.demo.translate.dto.TranslateResponseDTO
+import com.example.demo.translate.web.component.google.GoogleTranslator
+import com.example.demo.translate.web.dto.TranslateRequestDTO
+import com.example.demo.translate.web.dto.TranslateResponseDTO
 import org.springframework.stereotype.Service
 
 @Service

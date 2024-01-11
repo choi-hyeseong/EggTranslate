@@ -1,7 +1,7 @@
-package com.example.demo.translate.component
+package com.example.demo.translate.web.component
 
-import com.example.demo.translate.dto.TranslateRequestDTO
-import com.example.demo.translate.dto.TranslateResponseDTO
+import com.example.demo.translate.web.dto.TranslateRequestDTO
+import com.example.demo.translate.web.dto.TranslateResponseDTO
 
 interface Translator {
 

@@ -1,8 +1,10 @@
 package com.example.demo.component.translate
 
-import com.example.demo.translate.component.naver.NaverWebClient
-import com.example.demo.translate.component.naver.NaverTranslator
-import com.example.demo.translate.dto.*
+import com.example.demo.translate.web.component.naver.NaverWebClient
+import com.example.demo.translate.web.component.naver.NaverTranslator
+import com.example.demo.translate.web.dto.NaverResponseDTO
+import com.example.demo.translate.web.dto.TranslateRequestDTO
+import com.example.demo.translate.web.dto.TranslateResponseDTO
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

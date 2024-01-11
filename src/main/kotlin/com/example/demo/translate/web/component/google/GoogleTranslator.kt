@@ -1,8 +1,8 @@
-package com.example.demo.translate.component.google
+package com.example.demo.translate.web.component.google
 
-import com.example.demo.translate.component.Translator
-import com.example.demo.translate.dto.TranslateRequestDTO
-import com.example.demo.translate.dto.TranslateResponseDTO
+import com.example.demo.translate.web.component.Translator
+import com.example.demo.translate.web.dto.TranslateRequestDTO
+import com.example.demo.translate.web.dto.TranslateResponseDTO
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.Translation
 import org.springframework.stereotype.Component

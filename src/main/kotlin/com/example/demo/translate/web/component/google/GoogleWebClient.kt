@@ -1,6 +1,6 @@
-package com.example.demo.translate.component.google
+package com.example.demo.translate.web.component.google
 
-import com.example.demo.translate.dto.GoogleResponseDTO
+import com.example.demo.translate.web.dto.GoogleResponseDTO
 import com.example.demo.translate.dto.TranslateFileRequestDTO
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.util.LinkedMultiValueMap

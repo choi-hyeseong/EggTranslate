@@ -1,4 +1,4 @@
-package com.example.demo.translate.component.google
+package com.example.demo.translate.web.component.google
 
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
