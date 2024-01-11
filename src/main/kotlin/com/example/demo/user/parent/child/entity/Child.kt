@@ -32,7 +32,8 @@ class Child(
 
 ) {
 
-
+    constructor(name: String, phone: String, school: String, grade: Int, className: String, gender: Gender)
+            : this(-1, name, phone, school, grade, className, gender)
 
 
 }
