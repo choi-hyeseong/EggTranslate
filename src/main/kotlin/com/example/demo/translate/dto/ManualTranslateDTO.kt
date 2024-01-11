@@ -13,4 +13,6 @@ data class ManualTranslateDTO(
     constructor(manualTranslate: ManualTranslate) : this(manualTranslate.id, TranslateFileDTO(manualTranslate.translateFile), manualTranslate.translateContent)
 
     fun toEntity() : ManualTranslate = ManualTranslate(id, translate.toEntity(), content)
+
+    fun toResponseDTO() : ManualTranslateResponseDTO = ManualTranslateResponseDTO(id, translate.id, content)
 }

@@ -64,7 +64,7 @@ class TranslateService(
     suspend fun requestWebTranslate(requestDTO: TranslateFileRequestDTO) : TranslateFileResponseDTO {
         val request = TranslateRequestDTO(requestDTO.from, requestDTO.to, requestDTO.content)
         val response = webTranslateService.translateContent(request)
-        return TranslateFileResponseDTO(response.isSuccess, requestDTO.fileId, response.from, response.target, response.origin, response.result)
+        return TranslateFileResponseDTO(-1, response.isSuccess, requestDTO.fileId, response.from, response.target, response.origin, response.result)
     }
 
     suspend fun requestWebTranslate(requestDTO: List<TranslateFileRequestDTO>) : List<TranslateFileResponseDTO> {

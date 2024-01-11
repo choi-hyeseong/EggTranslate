@@ -6,7 +6,7 @@ import com.example.demo.user.translator.dto.TranslatorDTO
 
 class ManualResultResponseDTO(
     val id: Long = -1,
-    val manualTranslates: MutableList<ManualTranslateDTO>,
+    val manualTranslates: MutableList<ManualTranslateResponseDTO>,
     val translatorId : Long,
     val state: TranslateState
 ) {
@@ -14,7 +14,7 @@ class ManualResultResponseDTO(
     constructor(manualResult: ManualResult) : this(manualResult.id, manualResult
         .manualTranslate
         .map {
-            ManualTranslateDTO(it)
+            ManualTranslateDTO(it).toResponseDTO()
         }.toMutableList(), manualResult.translator.id , manualResult.status
     )
 
