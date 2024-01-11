@@ -1,6 +1,7 @@
 package com.example.demo.signup.dto
 
 import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.type.TranslatorCategory
@@ -13,5 +14,5 @@ class TranslatorSignUpDTO(
         val certificates : MutableList<String>,
         val categories : MutableList<TranslatorCategory>
 ) {
-    fun toTranslatorDTO() : TranslatorDTO = TranslatorDTO(-1, career, level, user.toUserDTO(), certificates, categories)
+    fun toTranslatorDTO() : TranslatorDTO = TranslatorDTO(-1, career, level, user.toUserDTO(UserType.TRANSLATOR), certificates, categories)
 }

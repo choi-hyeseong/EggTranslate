@@ -6,9 +6,7 @@ import com.example.demo.profile.dto.TranslatorEditDTO
 import com.example.demo.profile.dto.UserEditDTO
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.service.ParentService
-import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.service.TeacherService
-import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -48,6 +46,4 @@ class ProfileService(
         //번역가 단독 정보 업데이트
         translatorService.updateProfile(id, translatorEditDTO)
     }
-
-
 }

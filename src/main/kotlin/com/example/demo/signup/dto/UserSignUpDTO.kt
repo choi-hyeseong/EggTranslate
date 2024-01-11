@@ -11,8 +11,8 @@ class UserSignUpDTO(
         val phone: String,
         val email: String?,
         val languages: MutableList<String>,
-        val userType: UserType
+//        val userType: UserType
 ) {
-    fun toUserDTO(): UserDto = UserDto(-1, userName, password, name, phone, email, languages, userType)
+    fun toUserDTO(userType: UserType): UserDto = UserDto(-1, userName, password, name, phone, email, languages, userType)
 
 }
