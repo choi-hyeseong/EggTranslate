@@ -1,8 +1,6 @@
 package com.example.demo.user.parent.service
 
-import com.example.demo.profile.dto.ChildEditDTO
 import com.example.demo.profile.dto.ParentEditDTO
-import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.parent.repository.ParentRepository
@@ -54,9 +52,6 @@ class ParentService(private val parentRepository: ParentRepository) {
                 child.gender = it.gender
             }
         }
-
         parentRepository.save(existingUser) // save 쪽에서 영속성이 깨져서 에러가 나는 것 같은데.. 확인해보니까 id가 잘못 들어가있음. 근데 코드 고치니까 아이디는 제대로 들어가있던데 ?
-
     }
-
 }

@@ -11,8 +11,10 @@ import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.TranslatorDTO
 import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class ProfileService(
         private val userService: UserService,
         private val parentService: ParentService,
