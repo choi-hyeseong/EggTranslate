@@ -28,7 +28,7 @@ class ProfileService(
         val dto = parentEditDTO.user
         updateUser(id, dto)
         //부모 단독 정보 업데이트
-        parentService.updateProfile(id, parentEditDTO)
+        //parentService.updateProfile(id, parentEditDTO)
     }
 
     suspend fun updateTeacher(id : Long, teacherEditDTO: TeacherEditDTO) {
