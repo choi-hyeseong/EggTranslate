@@ -2,11 +2,12 @@ package com.example.demo.user.basic.dto
 
 import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.type.UserType
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 class UserDto(
     var id : Long = -1,
-    val userName : String,
-    val password : String,
+    @JsonIgnore val userName : String,
+    @JsonIgnore val password : String,
     val name : String,
     val phone : String,
     val email : String?,
