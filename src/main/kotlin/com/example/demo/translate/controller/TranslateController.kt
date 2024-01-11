@@ -2,6 +2,7 @@ package com.example.demo.translate.controller
 
 import com.example.demo.common.response.Response
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
+import com.example.demo.translate.auto.dto.TranslateResultSimpleDTO
 import com.example.demo.translate.service.TranslateDataService
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.user.basic.service.UserService
@@ -23,9 +24,9 @@ class TranslateController(
     }
 
     @GetMapping("")
-    suspend fun getAllResult(@RequestParam(value = "id") id: Long): Response<List<TranslateResultResponseDTO>> {
+    suspend fun getAllResult(@RequestParam(value = "id") id: Long): Response<List<TranslateResultSimpleDTO>> {
         return Response.ofSuccess(null, translateDataService.findAllTranslateResultByUserId(id).map {
-            it.toResponseDTO()
+            TranslateResultSimpleDTO(it)
         })
     }
 
