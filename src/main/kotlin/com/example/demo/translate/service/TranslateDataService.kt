@@ -105,6 +105,10 @@ class TranslateDataService(
         //엔티티에 직접 접근하여 필드 수정한게 아니라 DTO로 접근하여서 안된듯
         translateResultRepository.save(response.toEntity())
     }
+    @Transactional(readOnly = true)
+    suspend fun manualResultExists(translateResultId : Long) : Boolean {
+        return findTranslateResult(translateResultId).manualResultDTO != null
+    }
 
     @Transactional(readOnly = true)
     suspend fun existManualTranslateByTranslateFileId(translateFileId: Long) : Boolean = manualTranslateRepository.existsByTranslateFileId(translateFileId)
