@@ -1,6 +1,7 @@
 package com.example.demo.image.service
 
 import com.example.demo.file.service.FileService
+import com.example.demo.image.dto.ImageDTO
 import com.example.demo.translate.auto.dto.TranslateFileRequestDTO
 import com.example.demo.logger
 import com.example.demo.ocr.service.OCRService
@@ -25,11 +26,11 @@ class ImageService(
 
     private val log = logger()
 
-    suspend fun handleImage(id: Long, childId : Long?, lang: String, image: List<MultipartFile>): TranslateResultResponseDTO {
+    suspend fun handleImage(imageDTO: ImageDTO): TranslateResultResponseDTO {
         //save image
-        val user = userService.getUser(id)
+        val user = userService.getUser(imageDTO.userId)
         //read parallel logic
-        val mapRequest = mapToFileDTO(lang, user, image)
+        val mapRequest = mapToFileDTO(imageDTO.lang, user, imageDTO.file)
         // return translated string
         val response = translateService.requestWebTranslate(mapRequest)
         return translateService.translate(user, null, response)
