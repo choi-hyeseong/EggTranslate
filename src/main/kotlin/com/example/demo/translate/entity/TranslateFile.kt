@@ -10,7 +10,7 @@ class TranslateFile(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = -1,
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "file_id")
     var file: File,
 
