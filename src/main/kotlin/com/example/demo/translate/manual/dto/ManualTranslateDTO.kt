@@ -13,5 +13,5 @@ data class ManualTranslateDTO(
 
     fun toEntity() : ManualTranslate = ManualTranslate(id, translate.toEntity(), content)
 
-    fun toResponseDTO() : ManualTranslateResponseDTO = ManualTranslateResponseDTO(id, translate.id, content)
+    fun toResponseDTO() : ManualTranslateResponseDTO = ManualTranslateResponseDTO(translate.id, content)
 }

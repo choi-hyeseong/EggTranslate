@@ -19,9 +19,7 @@ class TranslateController(
 ) {
 
     @GetMapping("/{id}")
-    fun getResult(@PathVariable id: Int) {
-
-    }
+    suspend fun getResult(@PathVariable id: Long) = Response.ofSuccess(null, translateDataService.findTranslateResult(id).toResponseDTO())
 
     @GetMapping("")
     suspend fun getAllResult(@RequestParam(value = "id") id: Long): Response<List<TranslateResultSimpleDTO>> {
@@ -29,6 +27,7 @@ class TranslateController(
             TranslateResultSimpleDTO(it)
         })
     }
+
 
     @PostMapping("/{id}")
     suspend fun createRequest(

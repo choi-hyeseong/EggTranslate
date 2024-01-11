@@ -4,13 +4,12 @@ import com.example.demo.translate.manual.entity.ManualResult
 import com.example.demo.translate.manual.type.TranslateState
 
 class ManualResultResponseDTO(
-    val id: Long = -1,
     val manualTranslates: MutableList<ManualTranslateResponseDTO>,
     val translatorId : Long,
     val state: TranslateState
 ) {
 
-    constructor(manualResult: ManualResult) : this(manualResult.id, manualResult
+    constructor(manualResult: ManualResult) : this(manualResult
         .manualTranslate
         .map {
             ManualTranslateDTO(it).toResponseDTO()
