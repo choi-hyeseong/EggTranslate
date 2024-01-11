@@ -7,14 +7,12 @@ import com.example.demo.translate.auto.dto.TranslateResultSaveDTO
 import com.example.demo.translate.auto.repository.AutoTranslateRepository
 import com.example.demo.translate.auto.repository.TranslateFileRepository
 import com.example.demo.translate.auto.repository.TranslateResultRepository
-import com.example.demo.translate.dto.*
 import com.example.demo.translate.manual.exception.ManualException
 import com.example.demo.translate.exception.TranslateException
 import com.example.demo.translate.manual.dto.ManualResultDTO
 import com.example.demo.translate.manual.dto.ManualTranslateDTO
 import com.example.demo.translate.manual.repository.ManualResultRepository
 import com.example.demo.translate.manual.repository.ManualTranslateRepository
-import com.example.demo.translate.repository.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -27,15 +25,6 @@ class TranslateDataService(
     private val manualTranslateRepository: ManualTranslateRepository
 ) {
 
-    @Transactional
-    fun saveTranslate(translateFileDTO: TranslateFileDTO): Long {
-        return translateFileRepository.save(translateFileDTO.toEntity()).id
-    }
-
-    @Transactional
-    suspend fun saveAllTranslate(translateFileDTO: List<TranslateFileDTO>): List<Long> {
-        return translateFileRepository.saveAll(translateFileDTO.map { it.toEntity() }).map { it.id }
-    }
 
     @Transactional(readOnly = true)
     fun findTranslateFile(translateFileId: Long): TranslateFileDTO {
@@ -49,12 +38,6 @@ class TranslateDataService(
         return translateFileRepository.findAllById(translateFileId).map {
             TranslateFileDTO(it)
         }.toMutableList()
-    }
-
-
-    @Transactional
-    suspend fun saveAutoTranslate(autoTranslateDTO: AutoTranslateDTO): Long {
-        return autoTranslateRepository.save(autoTranslateDTO.toEntity()).id
     }
 
 
@@ -76,6 +59,7 @@ class TranslateDataService(
             TranslateResultDTO(it)
         }.toMutableList()
     }
+
 
 
     @Transactional

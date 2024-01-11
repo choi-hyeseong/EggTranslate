@@ -2,7 +2,6 @@ package com.example.demo.translate.service
 
 import com.example.demo.file.service.FileService
 import com.example.demo.translate.auto.dto.*
-import com.example.demo.translate.dto.*
 import com.example.demo.translate.manual.exception.ManualException
 import com.example.demo.translate.exception.TranslateException
 import com.example.demo.translate.manual.dto.ManualResultDTO
@@ -41,7 +40,6 @@ class TranslateService(
 
     @Transactional
     suspend fun request(userDto: UserDto, translatorDTO: TranslatorDTO, resultId : Long) : TranslateResultResponseDTO {
-
         val saveDTO = ManualResultDTO(-1, translatorDTO, TranslateState.REQUEST, mutableListOf())
         if (translateDataService.manualResultExists(resultId))
             throw ManualException("이미 요청된 번역 결과입니다. 결과 ID : $resultId")
@@ -51,7 +49,6 @@ class TranslateService(
             throw TranslateException("번역 요청 도중 오류가 발생했습니다.")
 
         return translateDataService.findTranslateResult(resultId).toResponseDTO()
-
     }
 
     suspend fun mapFileDTO(fileId : Long, userDto: UserDto, responseDTO: TranslateFileResponseDTO) : TranslateFileDTO {
