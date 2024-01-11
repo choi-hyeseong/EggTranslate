@@ -11,5 +11,5 @@ data class TranslateFileResponseDTO(
     val origin: String?,
     val result: String?
 ) {
-    constructor(fileDTO: TranslateFile) : this(fileDTO.id,true, fileDTO.id, fileDTO.fromLang, fileDTO.toLang, fileDTO.origin, fileDTO.translate)
+    constructor(fileDTO: TranslateFile) : this(fileDTO.id,true, fileDTO.file.id, fileDTO.fromLang, fileDTO.toLang, fileDTO.origin, fileDTO.translate)
 }
