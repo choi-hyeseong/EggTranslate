@@ -44,7 +44,7 @@ class ProfileController(private val userRepository: UserRepository, private val 
 
     @DeleteMapping("/delete/{id}")
     suspend fun deleteProfile(@PathVariable id : Long) : Long{
-        userRepository.deleteById(id)
+        userRepository.deleteById(id) // cascade 완료 시 구현
         return id
     }
 
