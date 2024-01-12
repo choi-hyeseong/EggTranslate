@@ -26,6 +26,7 @@ class TranslatorTest {
     private lateinit var userRepository: UserRepository
 
     val user = UserDto(
+        null,
         userName = "테스트",
         password = "PASS",
         name = "테스트",
@@ -40,14 +41,14 @@ class TranslatorTest {
         val user = userRepository.save(user.toEntity())
         assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
-            -1,
+            null,
             3,
             TranslatorLevel.HIGH,
             UserDto(user),
             mutableListOf("정보처리기사", "ITQ"),
             mutableListOf(TranslatorCategory.CULTURE, TranslatorCategory.EDUCATION)
         )
-            val response = assertDoesNotThrow { translatorRepository.save(translator.toEntity()) }
+            val response = assertDoesNotThrow { translatorRepository.save(translator.toEntity(user)) }
             assertEquals(TranslatorLevel.HIGH, response.level)
             assertEquals(2, response.categories.size)
 
@@ -60,7 +61,7 @@ class TranslatorTest {
         val user = userRepository.save(user.toEntity())
         assertNotEquals(-1, user.id) //save 잘된지
         val translator = TranslatorDTO(
-            -1,
+            null,
             3,
             TranslatorLevel.HIGH,
             UserDto(user),
@@ -70,8 +71,8 @@ class TranslatorTest {
 
 
         runBlocking {
-            val response = assertDoesNotThrow { translatorRepository.save(translator.toEntity()) }
-            val load = translatorRepository.findById(response.id).get()
+            val response = assertDoesNotThrow { translatorRepository.save(translator.toEntity(user)) }
+            val load = translatorRepository.findById(response.id!!).get()
             assertNotNull(load) //response가 있는지
             load.let {
                 //기본 저장여부 측정

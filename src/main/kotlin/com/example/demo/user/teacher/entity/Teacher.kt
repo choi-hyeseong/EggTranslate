@@ -8,7 +8,7 @@ class Teacher(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1,
+    var id: Long?,
 
     @Column(nullable = false, unique = false, length = 25)
     var school : String,

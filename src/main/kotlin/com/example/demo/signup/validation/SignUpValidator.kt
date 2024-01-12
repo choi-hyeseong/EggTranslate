@@ -9,6 +9,7 @@ import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.service.UserService
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
+import kotlinx.coroutines.*
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Component
 
@@ -45,6 +46,6 @@ class SignUpValidator(private val userService: UserService) : ConstraintValidato
     }
 
     private fun isUsernameValid(username: String): Boolean {
-        return userService.existUser(username) // --> user에 존재하는 아이디일 때 true
+        return runBlocking {  userService.existUser(username) }// --> user에 존재하는 아이디일 때 true
     }
 }

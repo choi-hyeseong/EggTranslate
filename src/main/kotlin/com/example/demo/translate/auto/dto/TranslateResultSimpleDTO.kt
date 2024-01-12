@@ -4,9 +4,9 @@ import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.translate.manual.dto.ManualResultResponseDTO
 
 data class TranslateResultSimpleDTO(
-    val id: Long,
-    val userId: Long,
-    val autoTranslate: Long,
+    val id: Long?,
+    val userId: Long?,
+    val autoTranslate: Long?,
     val childId: Long?,
     val manualResult: Long?
 ) {

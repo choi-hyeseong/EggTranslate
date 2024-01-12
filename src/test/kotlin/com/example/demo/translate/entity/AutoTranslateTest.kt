@@ -22,6 +22,7 @@ class AutoTranslateTest {
     private lateinit var autoTranslateRepository: AutoTranslateRepository
 
     val user = UserDto(
+        null,
         userName = "테스트",
         password = "PASS",
         name = "테스트",
@@ -35,8 +36,8 @@ class AutoTranslateTest {
     @Transactional
     fun TEST_SAVE_AUTO_TRANSLATE() {
         val saveUser = userRepository.save(user)
-        val autoTranslateDTO = AutoTranslateDTO(-1, UserDto(saveUser), mutableListOf())
-        val response = org.junit.jupiter.api.assertDoesNotThrow { autoTranslateRepository.save(autoTranslateDTO.toEntity()) }
+        val autoTranslateDTO = AutoTranslateDTO(null, UserDto(saveUser), mutableListOf())
+        val response = org.junit.jupiter.api.assertDoesNotThrow { autoTranslateRepository.save(autoTranslateDTO.toEntity(saveUser, mutableListOf())) }
         assertNotEquals(-1, response.id)
     }
 
@@ -44,12 +45,14 @@ class AutoTranslateTest {
     @Transactional
     fun TEST_LOAD_AUTO_TRANSLATE() {
         val saveUser = userRepository.save(user)
-        val autoTranslateDTO = AutoTranslateDTO(-1, UserDto(saveUser),mutableListOf( ))
-        val response = autoTranslateRepository.save(autoTranslateDTO.toEntity())
+        val autoTranslateDTO = AutoTranslateDTO(null, UserDto(saveUser),mutableListOf( ))
+        val response = autoTranslateRepository.save(autoTranslateDTO.toEntity(saveUser, mutableListOf()))
 
-        assertEquals(response.id, autoTranslateRepository.findByUserId(saveUser.id).get().id)
+        assertEquals(response.id, autoTranslateRepository.findByUserId(saveUser.id!!).get().id)
 
     }
+
+
 
 
 }

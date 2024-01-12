@@ -20,7 +20,9 @@ class TranslatorHeartTest(
     @Autowired private val userRepository: UserRepository,
     @Autowired private val translatorRepository: TranslatorRepository,
 ) {
+
     val user = UserDto(
+        null,
         userName = "테스트",
         password = "PASS",
         name = "테스트",
@@ -31,6 +33,7 @@ class TranslatorHeartTest(
     )
 
     val user2 = UserDto(
+        null,
         userName = "테스트2",
         password = "PASS",
         name = "테스트",
@@ -41,6 +44,7 @@ class TranslatorHeartTest(
     )
 
     val user3 = UserDto(
+        null,
         userName = "테스트3",
         password = "PASS",
         name = "테스트",
@@ -58,17 +62,17 @@ class TranslatorHeartTest(
         val translatorUser = userRepository.save(user.toEntity())
         val other = userRepository.save(user2.toEntity())
         val translatorDto = TranslatorDTO(
-            -1,
+            null,
             3,
             TranslatorLevel.HIGH,
             UserDto(translatorUser),
             mutableListOf(),
             mutableListOf()
         )
-        val translator = translatorRepository.save(translatorDto.toEntity())
+        val translator = translatorRepository.save(translatorDto.toEntity(translatorUser))
         assertNotEquals(-1, translator.id)
 
-        val heart = TranslatorHeart(-1, other, translator)
+        val heart = TranslatorHeart(null, other, translator)
         val saveHeart = translatorHeartRepository.save(heart)
 
         other.heartList.add(saveHeart) //other 기준으로 해야됨..
@@ -76,8 +80,8 @@ class TranslatorHeartTest(
 
         val response = translatorHeartRepository.save(saveHeart) //중간 테이블을 저장해야 전파됨..
         assertNotEquals(-1, response.id)
-        assertFalse(userRepository.findById(other.id).get().heartList.isEmpty())
-        assertFalse(translatorRepository.findById(translator.id).get().hearts.isEmpty())
+        assertFalse(userRepository.findById(other.id!!).get().heartList.isEmpty())
+        assertFalse(translatorRepository.findById(translator.id!!).get().hearts.isEmpty())
     }
 
 
@@ -101,7 +105,7 @@ class TranslatorHeartTest(
         val saveUser3 = userRepository.save(user3.toEntity())
         val translator = translatorRepository.findByUser(userRepository.findByUsername("테스트").get())!!
 
-        val heart = TranslatorHeart(-1, saveUser3, translator)
+        val heart = TranslatorHeart(null, saveUser3, translator)
         val response = translatorHeartRepository.save(heart)
 
         saveUser3.heartList.add(response)
@@ -110,9 +114,11 @@ class TranslatorHeartTest(
         userRepository.save(saveUser3)
         translatorRepository.save(translator)
 
-        assertEquals(2, translatorHeartRepository.findAllByTranslatorId(translator.id).size)
+        assertEquals(2, translatorHeartRepository.findAllByTranslatorId(translator.id!!).size)
 
     }
+
+
 
 
 }

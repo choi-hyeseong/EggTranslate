@@ -10,7 +10,7 @@ class ManualResult(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1,
+    var id: Long?,
 
 //    @OneToOne(cascade = [CascadeType.ALL])
 //    @JoinColumn(name = "translateResult_id")

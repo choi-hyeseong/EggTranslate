@@ -3,6 +3,7 @@ package com.example.demo.user.basic.service
 import com.example.demo.profile.dto.UserEditDTO
 import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -13,28 +14,33 @@ class UserService(private val userRepository: UserRepository) {
 
 
     @Transactional
-    fun signUp(userDto: UserDto): Long {
+    suspend fun signUp(userDto: UserDto): Long? {
         return userRepository.save(userDto.toEntity()).id
     }
 
     @Transactional(readOnly = true)
-    fun existUser(id : Long) = userRepository.existsById(id)
+    suspend fun existUser(id: Long) = userRepository.existsById(id)
 
     @Transactional(readOnly = true)
-    fun existUser(username : String) = userRepository.findByUsername(username).isPresent
+    suspend fun existUser(username: String) = userRepository.findByUsername(username).isPresent
 
     @Transactional(readOnly = true)
-    fun getUser(id: Long): UserDto {
-        return UserDto(userRepository
+    suspend fun getUserEntity(id: Long): User {
+        return userRepository
             .findById(id)
-            .orElseThrow { UserNotFoundException(id, "해당하는 유저가 없습니다.") }
-        )
+            .orElseThrow {
+                UserNotFoundException(id, "해당하는 유저가 없습니다.")
+            }
     }
+
+    @Transactional(readOnly = true)
+    suspend fun getUser(id: Long): UserDto {
+        return UserDto(getUserEntity(id))
+    }
+
     @Transactional
-    suspend fun updateProfile(id : Long, userEditDTO: UserEditDTO) {
-        val existingUser = userRepository.findById(id).orElseThrow{
-            UserNotFoundException(id, "일치하는 사용자가 없습니다")
-        }
+    suspend fun updateProfile(id: Long, userEditDTO: UserEditDTO) {
+        val existingUser = getUserEntity(id)
         existingUser.name = userEditDTO.name
         existingUser.phone = userEditDTO.phone
         existingUser.email = userEditDTO.email

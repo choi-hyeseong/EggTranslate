@@ -7,7 +7,7 @@ import jakarta.persistence.*
 class File( // 괄호 안에는 기본 생성자들
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id : Long = -1,
+        var id : Long?,
 
         @ManyToOne
         @JoinColumn(name = "user_id")

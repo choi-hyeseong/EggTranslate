@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 data class TranslateResultResponseDTO(
-    val id: Long,
-    val userId: Long,
+    val id: Long?,
+    val userId: Long?,
     val autoTranslate: AutoTranslateResponseDTO,
     val childId: Long?,
     val manualResult: ManualResultResponseDTO?

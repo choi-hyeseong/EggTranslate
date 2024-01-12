@@ -11,5 +11,5 @@ class ChildSignUpDTO(
         val className: String,
         val gender: Gender
 ) {
-    fun toChildDTO() : ChildDTO = ChildDTO(-1, name, phone, school, grade, className, gender)
+    fun toChildDTO() : ChildDTO = ChildDTO(null, name, phone, school, grade, className, gender)
 }

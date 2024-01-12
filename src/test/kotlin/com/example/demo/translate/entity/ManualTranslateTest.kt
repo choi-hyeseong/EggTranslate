@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 class ManualTranslateTest {
 
+
     @Autowired
     lateinit var manualTranslateRepository: ManualTranslateRepository
 
@@ -34,6 +35,7 @@ class ManualTranslateTest {
     lateinit var userRepository: UserRepository
 
     val user = UserDto(
+        null,
         userName = "테스트",
         password = "PASS",
         name = "테스트",
@@ -42,20 +44,21 @@ class ManualTranslateTest {
         languages = mutableListOf("한글", "영어"),
         userType = UserType.TEACHER
     ).toEntity()
+    //save시 persist 되며 자동으로 user객체도 db랑 같이 매핑됨.
 
     @Test
     @Transactional
     fun TEST_SAVE_MANUAL() {
         val saveUser = UserDto(userRepository.save(user))
 
-        val fileDto = FileDTO(-1, "ORIGIN", "SAVE", saveUser, "PATH")
-        val saveFile = FileDTO(fileRepository.save(fileDto.toEntity()))
+        val fileDto = FileDTO(null, "ORIGIN", "SAVE", saveUser, "PATH")
+        val saveFile = fileRepository.save(fileDto.toEntity(user))
 
-        val translateFileDTO = TranslateFileDTO(-1, saveFile, "ORIGIN", "TRANSLATE", "FROM", "TO")
-        val saveTranslateFile = TranslateFileDTO(translateFileRepository.save(translateFileDTO.toEntity()))
+        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), "ORIGIN", "TRANSLATE", "FROM", "TO")
+        val saveTranslateFile = translateFileRepository.save(translateFileDTO.toEntity(saveFile))
 
-        val translateDTO = ManualTranslateDTO(-1, saveTranslateFile, "TRANSLATED_CONTENT")
-        val response : ManualTranslate = assertDoesNotThrow{ manualTranslateRepository.save(translateDTO.toEntity()) }
+        val translateDTO = ManualTranslateDTO(null, TranslateFileDTO(saveTranslateFile), "TRANSLATED_CONTENT")
+        val response : ManualTranslate = assertDoesNotThrow{ manualTranslateRepository.save(ManualTranslate(null, saveTranslateFile, translateDTO.content)) }
         assertNotEquals(-1, response.id)
 
     }
@@ -63,19 +66,19 @@ class ManualTranslateTest {
     @Test
     @Transactional
     fun TEST_LOAD_MANUAL() {
-        val saveUser = UserDto(userRepository.save(user))
+        val saveUser = userRepository.save(user)
 
-        val fileDto = FileDTO(-1, "ORIGIN", "SAVE", saveUser, "PATH")
-        val saveFile = FileDTO(fileRepository.save(fileDto.toEntity()))
+        val fileDto = FileDTO(null, "ORIGIN", "SAVE", UserDto(saveUser), "PATH")
+        val saveFile = fileRepository.save(fileDto.toEntity(user))
 
-        val translateFileDTO = TranslateFileDTO(-1, saveFile, "ORIGIN", "TRANSLATE", "FROM", "TO")
-        val saveTranslateFile = TranslateFileDTO(translateFileRepository.save(translateFileDTO.toEntity()))
+        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), "ORIGIN", "TRANSLATE", "FROM", "TO")
+        val saveTranslateFile = translateFileRepository.save(translateFileDTO.toEntity(saveFile))
 
-        val translateDTO = ManualTranslateDTO(-1, saveTranslateFile, "TRANSLATED_CONTENT")
-        val response : ManualTranslate = assertDoesNotThrow{ manualTranslateRepository.save(translateDTO.toEntity()) }
+        val translateDTO = ManualTranslateDTO(null, TranslateFileDTO(saveTranslateFile), "TRANSLATED_CONTENT")
+        val response : ManualTranslate = assertDoesNotThrow{ manualTranslateRepository.save(ManualTranslate(null, saveTranslateFile, translateDTO.content)) }
         assertNotEquals(-1, response.id)
 
-        val load = assertDoesNotThrow { manualTranslateRepository.findById(response.id).get() }
+        val load = assertDoesNotThrow { manualTranslateRepository.findById(response.id!!).get() }
         assertEquals("SAVE", load.translateFile.file.saveName)
         assertEquals("TRANSLATED_CONTENT", load.translateContent)
 

@@ -5,7 +5,7 @@ import com.example.demo.translate.manual.type.TranslateState
 
 class ManualResultResponseDTO(
     val manualTranslates: MutableList<ManualTranslateResponseDTO>,
-    val translatorId : Long,
+    val translatorId : Long?,
     val state: TranslateState
 ) {
 

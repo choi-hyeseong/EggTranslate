@@ -9,7 +9,7 @@ class Child(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long = -1,
+    var id : Long?,
 
     @Column(nullable = false, length = 50)
     var name : String,
@@ -33,7 +33,7 @@ class Child(
 ) {
 
     constructor(name: String, phone: String, school: String, grade: Int, className: String, gender: Gender)
-            : this(-1, name, phone, school, grade, className, gender)
+            : this(null, name, phone, school, grade, className, gender)
 
 
 }

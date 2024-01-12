@@ -1,13 +1,16 @@
 package com.example.demo.translate.auto.dto
 
+import com.example.demo.translate.auto.entity.AutoTranslate
 import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.translate.manual.dto.ManualResultDTO
 import com.example.demo.translate.manual.dto.ManualResultResponseDTO
+import com.example.demo.translate.manual.entity.ManualResult
 import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.user.basic.entity.User
 import com.example.demo.user.parent.child.dto.ChildDTO
 
 class TranslateResultDTO(
-    val id: Long = -1,
+    val id: Long?,
     val user: UserDto,
     val autoTranslate: AutoTranslateDTO,
     val child: ChildDTO?,
@@ -29,7 +32,7 @@ class TranslateResultDTO(
         TranslateResultResponseDTO(
             id,
             user.id,
-            AutoTranslateResponseDTO(autoTranslate.toEntity()),
+            autoTranslate.toResponseDTO(),
             child?.id,
             manualResultDTO?.let {
                 ManualResultResponseDTO(it.translateList.map { translate ->
@@ -37,15 +40,13 @@ class TranslateResultDTO(
                 }.toMutableList(), it.translatorDTO.id, it.status)
             })
 
-    fun toEntity(): TranslateResult = TranslateResult(
+    fun toEntity(user : User, autoTranslate: AutoTranslate, result: ManualResult?): TranslateResult = TranslateResult(
         id,
-        user.toEntity(),
+        user,
         user.userType,
-        autoTranslate.toEntity(),
+        autoTranslate,
         child?.toEntity()
     ).apply {
-        manualResultDTO?.let {
-            manualResult = it.toEntity()
-        }
+        manualResult = result
     }
 }

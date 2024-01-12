@@ -12,7 +12,7 @@ import jakarta.persistence.*
 class Translator(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1,
+    var id: Long?,
 
     @Column
     var career: Int,

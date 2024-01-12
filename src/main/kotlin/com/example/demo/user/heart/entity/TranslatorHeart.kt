@@ -15,7 +15,7 @@ class TranslatorHeart(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long = -1,
+    var id : Long?,
 
     @ManyToOne(cascade = [CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST])
     @JoinColumn(name = "user_id")

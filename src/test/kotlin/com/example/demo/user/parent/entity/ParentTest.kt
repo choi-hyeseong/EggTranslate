@@ -5,6 +5,7 @@ import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.child.type.Gender
 import com.example.demo.user.parent.child.dto.ChildDTO
+import com.example.demo.user.parent.child.entity.Child
 import com.example.demo.user.parent.child.repository.ChildRepository
 import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.parent.repository.ParentRepository
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class ParentTest(@Autowired private val parentRepository: ParentRepository, @Autowired private val childRepository: ChildRepository, @Autowired private val userRepository: UserRepository) {
 
     val user = UserDto(
+        null,
         userName = "테스트",
         password = "PASS",
         name = "테스트",
@@ -34,7 +36,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
         val user = userRepository.save(user.toEntity())
 
         val children = mutableListOf(ChildDTO(
-            -1,
+            null,
             "호식이",
             "전화",
             "학교",
@@ -42,7 +44,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             "병아리",
             Gender.MAN,
         ), ChildDTO(
-            -1,
+            null,
             "두마리",
             "전화",
             "학교",
@@ -51,12 +53,13 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             Gender.MAN,
         ))
         val dto = ParentDTO(
-            -1,
+            null,
             children,
             UserDto(user)
         )
 
-        val response = assertDoesNotThrow {  parentRepository.save(dto.toEntity()) }
+        val response = assertDoesNotThrow {  parentRepository.save(dto.toEntity(user, children.map {it.toEntity()
+        }.toMutableList())) }
         assertEquals(2, response.children.size)
         assertNotNull(response.user)
         assertDoesNotThrow { response.children }
@@ -67,7 +70,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
     fun TEST_LOAD_PARENT() {
         val user = userRepository.save(user.toEntity())
         val children = mutableListOf(ChildDTO(
-            -1,
+            null,
             "호식이",
             "전화",
             "학교",
@@ -75,7 +78,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             "병아리",
             Gender.MAN
         ), ChildDTO(
-            -1,
+            null,
             "두마리",
             "전화",
             "학교",
@@ -84,12 +87,12 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             Gender.MAN
         ))
         val dto = ParentDTO(
-            -1,
+            null,
             children,
             UserDto(user)
         )
-        val response = parentRepository.save(dto.toEntity())
-        val load = assertDoesNotThrow { parentRepository.findById(response.id).get() }
+        val response = parentRepository.save(dto.toEntity(user, children.map { it.toEntity() }.toMutableList()))
+        val load = assertDoesNotThrow { parentRepository.findById(response.id!!).get() }
         val firstId = load.children[0].id
         val secondId = load.children[1].id
         assertEquals(2, load.children.size)
@@ -99,25 +102,28 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
         assertEquals(UserType.PARENT, user.userType)
         parentRepository.delete(load)
         //cascade로 지워져야됨.
-        assertFalse(childRepository.existsById(firstId))
-        assertFalse(childRepository.existsById(secondId))
+        assertFalse(childRepository.existsById(firstId!!))
+        assertFalse(childRepository.existsById(secondId!!))
     }
 
     @Transactional
     @Test
     fun TEST_LOAD_EMPTY_CHILD() {
         val user = userRepository.save(user.toEntity())
-        val children = mutableListOf<ChildDTO>()
+        val children = mutableListOf<Child>()
         val dto = ParentDTO(
-            -1,
-            children,
+            null,
+            mutableListOf(),
             UserDto(user)
         )
-        val response = parentRepository.save(dto.toEntity())
-        val load = parentRepository.findById(response.id).get()
+        val response = parentRepository.save(dto.toEntity(user, children))
+        val load = parentRepository.findById(response.id!!).get()
         assertNotNull(load.children)
         assertEquals(0, load.children.size)
     }
+
+
+
 
 
 

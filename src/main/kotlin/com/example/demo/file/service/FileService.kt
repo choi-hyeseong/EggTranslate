@@ -1,6 +1,7 @@
 package com.example.demo.file.service
 
 import com.example.demo.file.dto.FileDTO
+import com.example.demo.file.entity.File
 import com.example.demo.file.exception.FileException
 import com.example.demo.file.repository.FileRepository
 import com.example.demo.file.util.FileUtil
@@ -24,14 +25,19 @@ class FileService(
     private val log = logger()
 
     @Transactional
-    fun findFileById(id: Long): FileDTO =
-        FileDTO(fileRepository
-            .findById(id)
-            .orElseThrow { FileException("존재하지 않는 파일입니다.") }
+    suspend fun findFileById(id: Long): FileDTO =
+        FileDTO(
+            findFileEntityById(id)
         )
 
     @Transactional
-    fun getFile(userId: Long, fileId: Long): FileDTO {
+    suspend fun findFileEntityById(id: Long): File = fileRepository
+        .findById(id)
+        .orElseThrow { FileException("존재하지 않는 파일입니다.") }
+
+
+    @Transactional
+    suspend fun getFile(userId: Long, fileId: Long): FileDTO {
         val isUserExists = userService.existUser(userId)
         val fileDto = findFileById(fileId)
 
@@ -43,13 +49,17 @@ class FileService(
     }
 
     @Transactional
-    fun saveEntity(fileDTO: FileDTO): Long {
-        return fileRepository.save(fileDTO.toEntity()).id
+    suspend fun saveEntity(fileDTO: FileDTO): Long? {
+        val user = userService.getUserEntity(fileDTO.user.id!!)
+        return fileRepository.save(fileDTO.toEntity(user)).id
     }
 
     @Transactional
     suspend fun saveAllEntity(fileDTO: List<FileDTO>) {
-        fileRepository.saveAll(fileDTO.map { it.toEntity() }.toList())
+        fileRepository.saveAll(fileDTO.map {
+            val user = userService.getUserEntity(it.user.id!!)
+            it.toEntity(user)
+        }.toList())
     }
 
     suspend fun saveImage(userDto: UserDto, image: List<MultipartFile>): List<FileDTO> {
@@ -72,7 +82,7 @@ class FileService(
                 val path = outPath.plus("\\$saveName") //value로 형식 부여받기?
                 FileUtil.saveFile(image.bytes, path)
                 log.info("image file saved to $path")
-                FileDTO(-1, image.name, saveName, userDto, path)
+                FileDTO(null, image.name, saveName, userDto, path)
             }.await()
         }
     }

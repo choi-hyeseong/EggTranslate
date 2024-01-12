@@ -5,7 +5,7 @@ import com.example.demo.user.basic.type.UserType
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 class UserDto(
-    var id : Long = -1,
+    var id : Long?,
     @JsonIgnore val userName : String,
     @JsonIgnore val password : String,
     val name : String,
