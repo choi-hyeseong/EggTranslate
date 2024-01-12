@@ -11,6 +11,7 @@ import com.example.demo.translate.auto.repository.AutoTranslateRepository
 import com.example.demo.translate.auto.repository.TranslateResultRepository
 import com.example.demo.translate.exception.TranslateException
 import com.example.demo.translate.manual.dto.ManualResultDTO
+import com.example.demo.translate.manual.dto.ManualTranslateRequestDTO
 import com.example.demo.translate.manual.entity.ManualTranslate
 import com.example.demo.translate.manual.exception.ManualException
 import com.example.demo.translate.manual.repository.ManualTranslateRepository
@@ -88,25 +89,27 @@ class AutoTranslateService(
     }
 
     @Transactional
-    suspend fun update(resultId: Long, translateFileId: Long, content: String) {
-        if (existManualTranslateByTranslateFileId(translateFileId))
-            throw ManualException("이미 번역된 내용입니다. 결과 ID : $resultId,  자동번역 ID : $translateFileId")
-
+    suspend fun update(resultId: Long, requestDTO: ManualTranslateRequestDTO) {
         val translateResult = findTranslateResultEntity(resultId)
         if (translateResult.manualResult == null)
             throw ManualException("생성되지 않은 번역 요청입니다. 결과 ID : $resultId")
 
-        val translateFiles = translateResult.autoTranslate.translateFiles
-        if (translateFiles.none { it.id == translateFileId })
-            throw ManualException("해당 번역 요청에 포함되지 않은 자동 번역 데이터입니다. 결과 ID : $resultId, 자동번역 ID : $translateFileId")
+        val manualTranslates = requestDTO.data.map {
+            val translateFileId = it.file
+            val content = it.content
+            if (existManualTranslateByTranslateFileId(translateFileId))
+                throw ManualException("이미 번역된 내용입니다. 결과 ID : $resultId,  자동번역 파일 ID : $translateFileId")
 
-        translateResult.manualResult!!.manualTranslate.add(
+            val translateFiles = translateResult.autoTranslate.translateFiles
+            if (translateFiles.none { it.id == translateFileId })
+                throw ManualException("해당 번역 요청에 포함되지 않은 자동 번역 데이터입니다. 결과 ID : $resultId, 자동번역 파일 ID : $translateFileId")
+
             ManualTranslate(null, translateFileService.findTranslateFileEntity(translateFileId), content)
-        )
+        }
 
+        translateResult.manualResult!!.manualTranslate.addAll(manualTranslates)
         // 없애도 될지 체크 -> 안됨
         translateResultRepository.save(translateResult)
-
 
     }
 

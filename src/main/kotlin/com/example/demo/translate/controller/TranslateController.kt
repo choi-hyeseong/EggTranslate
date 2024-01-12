@@ -5,6 +5,7 @@ import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.auto.dto.TranslateResultSimpleDTO
 import com.example.demo.translate.auto.service.AutoTranslateService
 import com.example.demo.translate.manual.dto.ManualTranslateDTO
+import com.example.demo.translate.manual.dto.ManualTranslateRequestDTO
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.translator.service.TranslatorService
@@ -48,7 +49,7 @@ class TranslateController(
 
 
     @PutMapping("/{id}")
-    suspend fun updateRequest(@PathVariable id: Long, @RequestParam fileId : Long, @RequestParam content : String) {
-        autoTranslateService.update(id, fileId, content)
+    suspend fun updateRequest(@PathVariable(value = "id") resultId : Long, @RequestBody manualTranslateRequestDTO: ManualTranslateRequestDTO) {
+        autoTranslateService.update(resultId, manualTranslateRequestDTO)
     }
 }
