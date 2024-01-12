@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 class UserServiceTest {
 
-    /*
     @Autowired
     lateinit var userService: UserService
 
@@ -21,7 +20,7 @@ class UserServiceTest {
     @Transactional
     fun TEST_SAVE_USER() {
         val dto = UserDto(
-            -1,
+            null,
             "테스트",
             "1234",
             "이름",
@@ -34,14 +33,14 @@ class UserServiceTest {
         val response = userService.signUp(dto)
 
         assertNotEquals(-1, response)
-        assertTrue(userService.existUser(response))
+        assertTrue(userService.existUser(response!!))
     }
 
     @Test
     @Transactional
     fun TEST_LOAD_USER() {
         val dto = UserDto(
-            -1,
+            null,
             "테스트",
             "1234",
             "이름",
@@ -51,7 +50,7 @@ class UserServiceTest {
             UserType.TEACHER
         )
 
-        val response = userService.signUp(dto)
+        val response = userService.signUp(dto)!!
 
         val load = org.junit.jupiter.api.assertDoesNotThrow { userService.getUser(response) }
         assertTrue(userService.existUser(response))
@@ -69,7 +68,7 @@ class UserServiceTest {
     @Transactional
     fun TEST_USER_DUPLICATE() {
         val dto = UserDto(
-            -1,
+            null,
             "테스트",
             "1234",
             "이름",
@@ -79,7 +78,7 @@ class UserServiceTest {
             UserType.TEACHER
         )
         val dto2 = UserDto(
-            -1,
+            null,
             "테스트",
             "1234",
             "이름",
@@ -93,5 +92,5 @@ class UserServiceTest {
         assertThrows(DataIntegrityViolationException::class.java) { userService.signUp(dto2) }
     }
 
-     */
+
 }

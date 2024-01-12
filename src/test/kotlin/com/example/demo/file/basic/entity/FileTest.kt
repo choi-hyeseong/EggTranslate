@@ -31,7 +31,7 @@ class FileTest(@Autowired private val userRepository: UserRepository, @Autowired
     @Transactional
     fun TEST_SAVE_FILE() {
         val user = userRepository.save(user)
-        val fileDto = FileDTO(-1, "ORIGIN", "SAVE", UserDto(user), "PATH")
+        val fileDto = FileDTO(null, "ORIGIN", "SAVE", UserDto(user), "PATH")
         val response = assertDoesNotThrow { fileRepository.save(fileDto.toEntity(user)) }
         assertNotEquals(-1, response.id)
 
@@ -41,7 +41,7 @@ class FileTest(@Autowired private val userRepository: UserRepository, @Autowired
     @Transactional
     fun TEST_LOAD_FILE() {
         val user = userRepository.save(user)
-        val fileDto = FileDTO(-1, "ORIGIN", "SAVE", UserDto(user), "PATH")
+        val fileDto = FileDTO(null, "ORIGIN", "SAVE", UserDto(user), "PATH")
         val response = assertDoesNotThrow { fileRepository.save(fileDto.toEntity(user)) }
         assertNotEquals(-1, response.id)
 
@@ -56,8 +56,8 @@ class FileTest(@Autowired private val userRepository: UserRepository, @Autowired
     @Transactional
     fun TEST_GET_ALL_FILES() {
         val user = userRepository.save(user)
-        val fileDto = FileDTO(-1, "ORIGIN", "SAVE", UserDto(user), "PATH")
-        val fileDto2 = FileDTO(-1, "ORIGIN2", "SAVE2", UserDto(user), "PATH")
+        val fileDto = FileDTO(null,"ORIGIN", "SAVE", UserDto(user), "PATH")
+        val fileDto2 = FileDTO(null, "ORIGIN2", "SAVE2", UserDto(user), "PATH")
         assertDoesNotThrow {
             fileRepository.save(fileDto.toEntity(user))
             fileRepository.save(fileDto2.toEntity(user))
@@ -75,8 +75,8 @@ class FileTest(@Autowired private val userRepository: UserRepository, @Autowired
     @Transactional
     fun TEST_DELETE_ALL_FILES() {
         val user = userRepository.save(user)
-        val fileDto = FileDTO(-1, "ORIGIN", "SAVE", UserDto(user), "PATH")
-        val fileDto2 = FileDTO(-1, "ORIGIN2", "SAVE2", UserDto(user), "PATH")
+        val fileDto = FileDTO(null, "ORIGIN", "SAVE", UserDto(user), "PATH")
+        val fileDto2 = FileDTO(null, "ORIGIN2", "SAVE2", UserDto(user), "PATH")
         assertDoesNotThrow {
             fileRepository.save(fileDto.toEntity(user))
             fileRepository.save(fileDto2.toEntity(user))

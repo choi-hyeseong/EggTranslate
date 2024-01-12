@@ -33,7 +33,7 @@ class TeacherTest(@Autowired private val teacherRepository: TeacherRepository, @
     fun TEST_SAVE_TEACHER() {
         val saved = userRepository.save(user)
         val teacher = TeacherDTO(
-            -1,
+            null,
             "대구학교",
             3,
             "병아리반",
@@ -51,7 +51,7 @@ class TeacherTest(@Autowired private val teacherRepository: TeacherRepository, @
     fun TEST_LOAD_TEACHER() {
         val saved = userRepository.save(user)
         val teacher = TeacherDTO(
-            -1,
+            null,
             "대구학교",
             3,
             "병아리반",
@@ -73,7 +73,7 @@ class TeacherTest(@Autowired private val teacherRepository: TeacherRepository, @
     fun TEST_NULL_FIELDS() {
         val saved = userRepository.save(user)
         val nullableTeacher = TeacherDTO(
-            -1,
+            null,
             "대구학교",
             3,
             "병아리반",

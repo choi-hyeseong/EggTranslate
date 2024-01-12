@@ -53,7 +53,7 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
             Gender.MAN,
         ))
         val dto = ParentDTO(
-            -1,
+            null,
             children,
             UserDto(user)
         )
