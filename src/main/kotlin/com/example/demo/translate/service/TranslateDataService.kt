@@ -56,14 +56,14 @@ class TranslateDataService(
 
 
     @Transactional
-    suspend fun saveTranslateResult(userId: Long, translateResultDTO: TranslateResultDTO): Long {
+    suspend fun saveTranslateResult(userId: Long, translateResultDTO: TranslateResultDTO): Long? {
         val user = userService.getUserEntity(userId)
         val translateFiles = translateResultDTO.autoTranslate.translateFile.map {
             val file = fileService.findFileEntityById(it.file.id!!)
             it.toEntity(file)
         }.toMutableList()
         val autoTranslate = translateResultDTO.autoTranslate.toEntity(user, translateFiles)
-        return translateResultRepository.save(translateResultDTO.toEntity(user, autoTranslate, null)).id!!
+        return translateResultRepository.save(translateResultDTO.toEntity(user, autoTranslate, null)).id
     }
 
     @Transactional
@@ -89,7 +89,7 @@ class TranslateDataService(
 
 
     @Transactional
-    suspend fun saveManualResult(resultId: Long, translatorId: Long, resultDTO: ManualResultDTO): Long {
+    suspend fun saveManualResult(resultId: Long, translatorId: Long, resultDTO: ManualResultDTO): Long? {
         val translateResultDTO = findTranslateResult(resultId)
 
         val user = userService.getUserEntity(translateResultDTO.user.id!!)
@@ -99,7 +99,7 @@ class TranslateDataService(
         val manualResult = resultDTO.toEntity(translator, mutableListOf()) //처음 저장시에는 내부 데이터는 비어있음.
 
         val translateResultEntity = translateResultDTO.toEntity(user, autoTranslate, manualResult)
-        return translateResultRepository.save(translateResultEntity).id!!
+        return translateResultRepository.save(translateResultEntity).id
     }
 
     @Transactional

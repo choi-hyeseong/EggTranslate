@@ -31,8 +31,7 @@ class TranslateService(
 
         val resultDTO = TranslateResultDTO(null, userDto, autoDTO, childDTO, null) //저장시 Manual Result (번역가 번역 요청은 없음)
         val saveResult = translateDataService.saveTranslateResult(userDto.id!!, resultDTO)
-        if (saveResult == -1L)
-            throw TranslateException("번역 결과가 정상적으로 저장되지 않았습니다.")
+            ?: throw TranslateException("번역 결과가 정상적으로 저장되지 않았습니다.")
 
         return translateDataService.findTranslateResult(saveResult).toResponseDTO()
 
@@ -45,21 +44,21 @@ class TranslateService(
             throw ManualException("이미 요청된 번역 결과입니다. 결과 ID : $resultId")
 
         val response = translateDataService.saveManualResult(resultId, translatorDTO.id!!, saveDTO)
-        if (response == -1L)
+        if (response == null)
             throw TranslateException("번역 요청 도중 오류가 발생했습니다.")
 
         return translateDataService.findTranslateResult(resultId).toResponseDTO()
     }
 
     suspend fun mapFileDTO(fileId : Long?, userDto: UserDto, responseDTO: TranslateFileResponseDTO) : TranslateFileDTO {
-        return TranslateFileDTO(-1, fileService.findFileById(fileId!!), responseDTO.origin ?: "", responseDTO.result ?: "", responseDTO.from, responseDTO.target)
+        return TranslateFileDTO(null, fileService.findFileById(fileId!!), responseDTO.origin ?: "", responseDTO.result ?: "", responseDTO.from, responseDTO.target)
     }
 
     //웹 요청이기 때문에 Transactional 필요 없음
     suspend fun requestWebTranslate(requestDTO: TranslateFileRequestDTO) : TranslateFileResponseDTO {
         val request = TranslateRequestDTO(requestDTO.from, requestDTO.to, requestDTO.content)
         val response = webTranslateService.translateContent(request)
-        return TranslateFileResponseDTO(-1, response.isSuccess, requestDTO.fileId, response.from, response.target, response.origin, response.result)
+        return TranslateFileResponseDTO(null, response.isSuccess, requestDTO.fileId, response.from, response.target, response.origin, response.result)
     }
 
     suspend fun requestWebTranslate(requestDTO: List<TranslateFileRequestDTO>) : List<TranslateFileResponseDTO> {

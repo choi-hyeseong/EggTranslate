@@ -37,7 +37,7 @@ class RegistrationService(
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
         val parentResult = parentService.signUp(dto.apply {user.id = userResult})
-        if (parentResult == -1L)
+        if (parentResult == null)
             throw RegistrationFailedException("부모 회원가입에 실패하였습니다.")
 
         return parentService.findByParentUserId(userResult)

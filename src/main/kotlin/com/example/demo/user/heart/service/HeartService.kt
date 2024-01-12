@@ -41,7 +41,7 @@ class HeartService(
         val user = userService.getUserEntity(userId)
         val translator = translatorService.findTranslatorEntityById(translatorId)
         val findHeart = heartRepository.findByTranslatorIdAndUserId(translatorId, userId)
-        val heart = if (findHeart.isPresent) findHeart.get() else heartRepository.save(TranslatorHeart(-1, user, translator))
+        val heart = if (findHeart.isPresent) findHeart.get() else heartRepository.save(TranslatorHeart(null, user, translator))
         user.addHeart(heart)
         translator.addHeart(heart)
         heartRepository.save(heart) //필요성 여부 체크
