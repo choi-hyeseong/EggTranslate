@@ -1,7 +1,7 @@
 package com.example.demo.translate.auto.dto
 
 class TranslateFileResultDTO(
-    val id : Long,
+    val id : Long?,
     val origin : String,
     val translate : String,
     val from : String,

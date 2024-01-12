@@ -8,7 +8,7 @@ class TranslateFile(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1,
+    var id: Long?,
 
     @ManyToOne
     @JoinColumn(name = "file_id")

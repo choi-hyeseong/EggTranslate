@@ -1,7 +1,9 @@
 package com.example.demo.translate.auto.dto
 
+import com.example.demo.translate.auto.entity.AutoTranslate
 import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.user.basic.entity.User
 import com.example.demo.user.parent.child.dto.ChildDTO
 
 class TranslateResultSaveDTO(
@@ -19,11 +21,11 @@ class TranslateResultSaveDTO(
         }
     )
 
-    fun toEntity(): TranslateResult = TranslateResult(
+    fun toEntity(user : User, autoTranslate: AutoTranslate): TranslateResult = TranslateResult(
         id,
-        user.toEntity(),
+        user,
         user.userType,
-        autoTranslate.toEntity(),
+        autoTranslate,
         child?.toEntity()
     )
 }

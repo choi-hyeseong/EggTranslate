@@ -8,7 +8,7 @@ class ManualTranslate (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id : Long,
+    val id : Long?,
 
     @OneToOne
     @JoinColumn(name = "translatefile_id")

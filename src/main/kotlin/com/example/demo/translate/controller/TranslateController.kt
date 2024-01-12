@@ -3,6 +3,7 @@ package com.example.demo.translate.controller
 import com.example.demo.common.response.Response
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.auto.dto.TranslateResultSimpleDTO
+import com.example.demo.translate.manual.dto.ManualTranslateDTO
 import com.example.demo.translate.service.TranslateDataService
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.user.basic.service.UserService

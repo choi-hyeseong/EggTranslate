@@ -43,13 +43,17 @@ class FileService(
     }
 
     @Transactional
-    fun saveEntity(fileDTO: FileDTO): Long {
-        return fileRepository.save(fileDTO.toEntity()).id
+    fun saveEntity(fileDTO: FileDTO): Long? {
+        val user = userService.getUserEntity(fileDTO.user.id!!)
+        return fileRepository.save(fileDTO.toEntity(user)).id
     }
 
     @Transactional
     suspend fun saveAllEntity(fileDTO: List<FileDTO>) {
-        fileRepository.saveAll(fileDTO.map { it.toEntity() }.toList())
+        fileRepository.saveAll(fileDTO.map {
+            val user = userService.getUserEntity(it.user.id!!)
+            it.toEntity(user)
+        }.toList())
     }
 
     suspend fun saveImage(userDto: UserDto, image: List<MultipartFile>): List<FileDTO> {
