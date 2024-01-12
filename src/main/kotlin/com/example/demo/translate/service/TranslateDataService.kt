@@ -1,14 +1,15 @@
 package com.example.demo.translate.service
 
+import com.example.demo.file.service.FileService
 import com.example.demo.translate.auto.dto.AutoTranslateDTO
 import com.example.demo.translate.auto.dto.TranslateFileDTO
 import com.example.demo.translate.auto.dto.TranslateResultDTO
-import com.example.demo.translate.auto.dto.TranslateResultSaveDTO
 import com.example.demo.translate.auto.entity.TranslateFile
 import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.translate.auto.repository.AutoTranslateRepository
 import com.example.demo.translate.auto.repository.TranslateFileRepository
 import com.example.demo.translate.auto.repository.TranslateResultRepository
+import com.example.demo.translate.auto.service.AutoTranslateService
 import com.example.demo.translate.manual.exception.ManualException
 import com.example.demo.translate.exception.TranslateException
 import com.example.demo.translate.manual.dto.ManualResultDTO
@@ -16,13 +17,18 @@ import com.example.demo.translate.manual.dto.ManualTranslateDTO
 import com.example.demo.translate.manual.entity.ManualTranslate
 import com.example.demo.translate.manual.repository.ManualResultRepository
 import com.example.demo.translate.manual.repository.ManualTranslateRepository
+import com.example.demo.user.basic.service.UserService
+import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TranslateDataService(
+    private val userService: UserService,
+    private val fileService: FileService,
+    private val translatorService: TranslatorService,
     private val translateFileRepository: TranslateFileRepository,
-    private val autoTranslateRepository: AutoTranslateRepository,
+    private val autoTranslateService: AutoTranslateService,
     private val translateResultRepository: TranslateResultRepository,
     private val manualResultRepository: ManualResultRepository,
     private val manualTranslateRepository: ManualTranslateRepository
@@ -50,8 +56,14 @@ class TranslateDataService(
 
 
     @Transactional
-    suspend fun saveTranslateResult(translateResultDTO: TranslateResultSaveDTO): Long {
-        return translateResultRepository.save(translateResultDTO.toEntity()).id
+    suspend fun saveTranslateResult(userId: Long, translateResultDTO: TranslateResultDTO): Long {
+        val user = userService.getUserEntity(userId)
+        val translateFiles = translateResultDTO.autoTranslate.translateFile.map {
+            val file = fileService.findFileEntityById(it.file.id!!)
+            it.toEntity(file)
+        }.toMutableList()
+        val autoTranslate = translateResultDTO.autoTranslate.toEntity(user, translateFiles)
+        return translateResultRepository.save(translateResultDTO.toEntity(user, autoTranslate, null)).id!!
     }
 
     @Transactional
@@ -73,26 +85,25 @@ class TranslateDataService(
     }
 
 
-    @Transactional
-    suspend fun findAutoTranslate(id: Long): AutoTranslateDTO {
-        return AutoTranslateDTO(
-            autoTranslateRepository.findById(id).orElseThrow { TranslateException("존재 하지 않는 번역 내용입니다.") }
-        )
-    }
+
 
 
     @Transactional
-    suspend fun saveManualResult(resultId: Long, resultDTO: ManualResultDTO): Long {
+    suspend fun saveManualResult(resultId: Long, translatorId: Long, resultDTO: ManualResultDTO): Long {
         val translateResultDTO = findTranslateResult(resultId)
-        val autoTranslate = autoTranslateRepository.findById(translateResultDTO.autoTranslate.id)
-            .orElseThrow { TranslateException("존재 하지 않는 번역 데이터 리스트 입니다.") }
-        val manualResult = resultDTO.toEntity(mutableListOf()) //처음 저장시에는 내부 데이터는 비어있음.
-        val translateResultEntity = translateResultDTO.toEntity(autoTranslate, manualResult)
-        return translateResultRepository.save(translateResultEntity).id
+
+        val user = userService.getUserEntity(translateResultDTO.user.id!!)
+        val translator = translatorService.findTranslatorEntityById(translatorId)
+
+        val autoTranslate = autoTranslateService.findAutoTranslateEntityById(translateResultDTO.autoTranslate.id!!)
+        val manualResult = resultDTO.toEntity(translator, mutableListOf()) //처음 저장시에는 내부 데이터는 비어있음.
+
+        val translateResultEntity = translateResultDTO.toEntity(user, autoTranslate, manualResult)
+        return translateResultRepository.save(translateResultEntity).id!!
     }
 
     @Transactional
-    suspend fun update(resultId: Long, translateFileId: Long, content : String) {
+    suspend fun update(resultId: Long, translateFileId: Long, content: String) {
         if (existManualTranslateByTranslateFileId(translateFileId))
             throw ManualException("이미 번역된 내용입니다. 결과 ID : $resultId,  자동번역 ID : $translateFileId")
 

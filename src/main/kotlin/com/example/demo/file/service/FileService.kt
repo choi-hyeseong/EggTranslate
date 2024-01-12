@@ -1,6 +1,7 @@
 package com.example.demo.file.service
 
 import com.example.demo.file.dto.FileDTO
+import com.example.demo.file.entity.File
 import com.example.demo.file.exception.FileException
 import com.example.demo.file.repository.FileRepository
 import com.example.demo.file.util.FileUtil
@@ -25,10 +26,15 @@ class FileService(
 
     @Transactional
     fun findFileById(id: Long): FileDTO =
-        FileDTO(fileRepository
-            .findById(id)
-            .orElseThrow { FileException("존재하지 않는 파일입니다.") }
+        FileDTO(
+            findFileEntityById(id)
         )
+
+    @Transactional
+    fun findFileEntityById(id: Long): File = fileRepository
+        .findById(id)
+        .orElseThrow { FileException("존재하지 않는 파일입니다.") }
+
 
     @Transactional
     fun getFile(userId: Long, fileId: Long): FileDTO {
@@ -76,7 +82,7 @@ class FileService(
                 val path = outPath.plus("\\$saveName") //value로 형식 부여받기?
                 FileUtil.saveFile(image.bytes, path)
                 log.info("image file saved to $path")
-                FileDTO(-1, image.name, saveName, userDto, path)
+                FileDTO(null, image.name, saveName, userDto, path)
             }.await()
         }
     }

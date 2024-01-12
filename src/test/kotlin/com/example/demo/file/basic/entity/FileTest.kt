@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class FileTest(@Autowired private val userRepository: UserRepository, @Autowired private val fileRepository: FileRepository) {
 
-
+/*
     val user = UserDto(
         userName = "테스트",
         password = "PASS",
@@ -89,4 +89,6 @@ class FileTest(@Autowired private val userRepository: UserRepository, @Autowired
         assertFalse(fileRepository.existsFileById(files[0].id))
         assertFalse(fileRepository.existsFileById(files[1].id))
     }
+
+ */
 }

@@ -8,7 +8,7 @@ import jakarta.persistence.*
 class Parent(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1,
+    var id: Long?,
 
     @JoinColumn(name = "parent_id")
     @OneToMany(cascade = [CascadeType.ALL] , orphanRemoval = true)

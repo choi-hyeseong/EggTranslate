@@ -8,6 +8,6 @@ class ParentSignUpDTO(
     val user : UserSignUpDTO
 
 ) {
-    fun toParentDTO() : ParentDTO = ParentDTO(-1, children.map { it.toChildDTO() }.toMutableList(), user.toUserDTO(UserType.PARENT))
+    fun toParentDTO() : ParentDTO = ParentDTO(null, children.map { it.toChildDTO() }.toMutableList(), user.toUserDTO(UserType.PARENT))
 
 }

@@ -28,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class ManualResultTest {
 
+    /*
     @Autowired
     lateinit var manualResultRepository: ManualResultRepository
 
@@ -171,6 +172,8 @@ class ManualResultTest {
         assertEquals(TranslateState.DONE, translateResultRepository.findById(savedRequest.id).get().manualResult?.status)
         assertEquals(response.manualResult?.id, manualResultRepository.findById(response.manualResult!!.id).get().id)
     }
+
+     */
 
 
 

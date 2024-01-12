@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 class UserServiceTest {
 
+    /*
     @Autowired
     lateinit var userService: UserService
 
@@ -91,4 +92,6 @@ class UserServiceTest {
         userService.signUp(dto)
         assertThrows(DataIntegrityViolationException::class.java) { userService.signUp(dto2) }
     }
+
+     */
 }

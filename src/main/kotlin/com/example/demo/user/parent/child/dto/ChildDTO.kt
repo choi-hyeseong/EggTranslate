@@ -4,7 +4,7 @@ import com.example.demo.user.parent.child.type.Gender
 import com.example.demo.user.parent.child.entity.Child
 
 class ChildDTO(
-    val id : Long = -1,
+    val id : Long?,
     val name: String,
     val phone: String,
     val school: String,

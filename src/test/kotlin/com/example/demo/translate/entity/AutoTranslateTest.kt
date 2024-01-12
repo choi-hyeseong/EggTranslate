@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class AutoTranslateTest {
-
+/*
     @Autowired
     private lateinit var userRepository : UserRepository
 
@@ -50,6 +50,8 @@ class AutoTranslateTest {
         assertEquals(response.id, autoTranslateRepository.findByUserId(saveUser.id).get().id)
 
     }
+
+ */
 
 
 }

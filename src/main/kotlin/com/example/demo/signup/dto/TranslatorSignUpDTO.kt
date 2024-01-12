@@ -14,5 +14,5 @@ class TranslatorSignUpDTO(
         val certificates : MutableList<String>,
         val categories : MutableList<TranslatorCategory>
 ) {
-    fun toTranslatorDTO() : TranslatorDTO = TranslatorDTO(-1, career, level, user.toUserDTO(UserType.TRANSLATOR), certificates, categories)
+    fun toTranslatorDTO() : TranslatorDTO = TranslatorDTO(null, career, level, user.toUserDTO(UserType.TRANSLATOR), certificates, categories)
 }

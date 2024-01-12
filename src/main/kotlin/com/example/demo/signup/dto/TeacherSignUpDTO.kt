@@ -11,5 +11,5 @@ class TeacherSignUpDTO (
         val address : String?,
         val user: UserSignUpDTO
 ) {
-    fun toTeacherDTO() : TeacherDTO = TeacherDTO(-1, school, grade, className, course, address, user.toUserDTO(UserType.TEACHER))
+    fun toTeacherDTO() : TeacherDTO = TeacherDTO(null, school, grade, className, course, address, user.toUserDTO(UserType.TEACHER))
 }

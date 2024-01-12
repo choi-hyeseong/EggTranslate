@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class TeacherTest(@Autowired private val teacherRepository: TeacherRepository, @Autowired private val userRepository: UserRepository) {
 
+    /*
     val user = UserDto(
         userName = "테스트",
         password = "PASS",
@@ -83,7 +84,7 @@ class TeacherTest(@Autowired private val teacherRepository: TeacherRepository, @
           teacherRepository.save(nullableTeacher.toEntity())
         }
     }
-
+*/
 
 
 

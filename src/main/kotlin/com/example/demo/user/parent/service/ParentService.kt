@@ -2,20 +2,26 @@ package com.example.demo.user.parent.service
 
 import com.example.demo.profile.dto.ParentEditDTO
 import com.example.demo.user.basic.exception.UserNotFoundException
+import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.parent.repository.ParentRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ParentService(private val parentRepository: ParentRepository) {
+class ParentService(
+    private val userService: UserService,
+    private val parentRepository: ParentRepository
+) {
 
     @Transactional
-    fun signUp(parentDTO: ParentDTO): Long {
-        return if (existParent(parentDTO.id))
-            -1
-        else
-            parentRepository.save(parentDTO.toEntity()).id
+    fun signUp(parentDTO: ParentDTO): Long? {
+        return if (existParent(parentDTO.id!!))
+            null
+        else {
+            val user = userService.getUserEntity(parentDTO.user.id!!)
+            parentRepository.save(parentDTO.toEntity(user, parentDTO.children.map { it.toEntity() }.toMutableList())).id
+        }
     }
 
     @Transactional(readOnly = true)
@@ -36,8 +42,8 @@ class ParentService(private val parentRepository: ParentRepository) {
         )
 
     @Transactional
-    suspend fun updateProfile(id : Long, parentEditDTO: ParentEditDTO) {
-        val existingUser = parentRepository.findByUserId(id).orElseThrow{
+    suspend fun updateProfile(id: Long, parentEditDTO: ParentEditDTO) {
+        val existingUser = parentRepository.findByUserId(id).orElseThrow {
             UserNotFoundException(id, "일치하는 사용자가 없습니다")
         }
 

@@ -4,6 +4,7 @@ import com.example.demo.translate.manual.entity.ManualResult
 import com.example.demo.translate.manual.entity.ManualTranslate
 import com.example.demo.translate.manual.type.TranslateState
 import com.example.demo.user.translator.dto.TranslatorDTO
+import com.example.demo.user.translator.entity.Translator
 
 class ManualResultDTO(
     var id: Long?,
@@ -22,6 +23,10 @@ class ManualResultDTO(
         }.toMutableList()
     )
 
-    fun toEntity(translateList: MutableList<ManualTranslate>): ManualResult =
-        ManualResult(id, status, translatorDTO.toEntity(), translateList)
+    fun toEntity(translator: Translator, translateList: MutableList<ManualTranslate>): ManualResult =
+        ManualResult(id, status, translator, translateList)
+
+    fun toResponseDTO() : ManualResultResponseDTO = ManualResultResponseDTO(
+        translateList.map { it.toResponseDTO() }.toMutableList(), translatorDTO.id, status
+    )
 }

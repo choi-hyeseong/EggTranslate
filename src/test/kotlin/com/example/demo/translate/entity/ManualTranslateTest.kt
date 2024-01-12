@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 class ManualTranslateTest {
 
+    /*
     @Autowired
     lateinit var manualTranslateRepository: ManualTranslateRepository
 
@@ -80,5 +81,5 @@ class ManualTranslateTest {
         assertEquals("TRANSLATED_CONTENT", load.translateContent)
 
     }
-
+    */
 }

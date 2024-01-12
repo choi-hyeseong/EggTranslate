@@ -27,10 +27,10 @@ class TranslateService(
     @Transactional
     suspend fun translate(userDto: UserDto, childDTO: ChildDTO?, response: List<TranslateFileResponseDTO>): TranslateResultResponseDTO {
         val fileDtoList = response.map { mapFileDTO(it.fileId, userDto, it) }.toMutableList()
-        val autoDTO = AutoTranslateDTO(-1, userDto, fileDtoList)
+        val autoDTO = AutoTranslateDTO(null, userDto, fileDtoList)
 
-        val resultDTO = TranslateResultSaveDTO(-1, userDto, autoDTO, childDTO)
-        val saveResult = translateDataService.saveTranslateResult(resultDTO)
+        val resultDTO = TranslateResultDTO(null, userDto, autoDTO, childDTO, null) //저장시 Manual Result (번역가 번역 요청은 없음)
+        val saveResult = translateDataService.saveTranslateResult(userDto.id!!, resultDTO)
         if (saveResult == -1L)
             throw TranslateException("번역 결과가 정상적으로 저장되지 않았습니다.")
 
@@ -40,19 +40,19 @@ class TranslateService(
 
     @Transactional
     suspend fun request(userDto: UserDto, translatorDTO: TranslatorDTO, resultId : Long) : TranslateResultResponseDTO {
-        val saveDTO = ManualResultDTO(-1, translatorDTO, TranslateState.REQUEST, mutableListOf())
+        val saveDTO = ManualResultDTO(null, translatorDTO, TranslateState.REQUEST, mutableListOf())
         if (translateDataService.manualResultExists(resultId))
             throw ManualException("이미 요청된 번역 결과입니다. 결과 ID : $resultId")
 
-        val response = translateDataService.saveManualResult(resultId, saveDTO)
+        val response = translateDataService.saveManualResult(resultId, translatorDTO.id!!, saveDTO)
         if (response == -1L)
             throw TranslateException("번역 요청 도중 오류가 발생했습니다.")
 
         return translateDataService.findTranslateResult(resultId).toResponseDTO()
     }
 
-    suspend fun mapFileDTO(fileId : Long, userDto: UserDto, responseDTO: TranslateFileResponseDTO) : TranslateFileDTO {
-        return TranslateFileDTO(-1, fileService.findFileById(fileId), responseDTO.origin ?: "", responseDTO.result ?: "", responseDTO.from, responseDTO.target)
+    suspend fun mapFileDTO(fileId : Long?, userDto: UserDto, responseDTO: TranslateFileResponseDTO) : TranslateFileDTO {
+        return TranslateFileDTO(-1, fileService.findFileById(fileId!!), responseDTO.origin ?: "", responseDTO.result ?: "", responseDTO.from, responseDTO.target)
     }
 
     //웹 요청이기 때문에 Transactional 필요 없음

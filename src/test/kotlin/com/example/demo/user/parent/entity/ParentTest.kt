@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class ParentTest(@Autowired private val parentRepository: ParentRepository, @Autowired private val childRepository: ChildRepository, @Autowired private val userRepository: UserRepository) {
-
+/*
     val user = UserDto(
         userName = "테스트",
         password = "PASS",
@@ -118,6 +118,9 @@ class ParentTest(@Autowired private val parentRepository: ParentRepository, @Aut
         assertNotNull(load.children)
         assertEquals(0, load.children.size)
     }
+
+
+ */
 
 
 

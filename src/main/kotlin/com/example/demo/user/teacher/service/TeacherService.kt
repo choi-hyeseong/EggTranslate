@@ -2,17 +2,20 @@ package com.example.demo.user.teacher.service
 
 import com.example.demo.profile.dto.TeacherEditDTO
 import com.example.demo.user.basic.exception.UserNotFoundException
+import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.repository.TeacherRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class TeacherService(private val teacherRepository: TeacherRepository) {
+class TeacherService(private val teacherRepository: TeacherRepository,
+    private val userService: UserService) {
 
     @Transactional
-    fun signUp(teacherDTO: TeacherDTO): Long {
-        return teacherRepository.save(teacherDTO.toEntity()).id
+    fun signUp(teacherDTO: TeacherDTO): Long? {
+        val user = userService.getUserEntity(teacherDTO.user.id!!)
+        return teacherRepository.save(teacherDTO.toEntity(user)).id
     }
 
     @Transactional(readOnly = true)

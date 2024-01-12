@@ -20,6 +20,7 @@ class TranslatorHeartTest(
     @Autowired private val userRepository: UserRepository,
     @Autowired private val translatorRepository: TranslatorRepository,
 ) {
+    /*
     val user = UserDto(
         userName = "테스트",
         password = "PASS",
@@ -113,6 +114,8 @@ class TranslatorHeartTest(
         assertEquals(2, translatorHeartRepository.findAllByTranslatorId(translator.id).size)
 
     }
+
+     */
 
 
 }

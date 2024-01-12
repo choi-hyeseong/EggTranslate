@@ -20,6 +20,7 @@ class UserTest {
     @Transactional
     fun TEST_SAVE_USER() {
         val user = UserDto(
+            null,
             userName = "테스트",
             password = "PASS",
             name = "테스트",
@@ -38,6 +39,7 @@ class UserTest {
     @Transactional
     fun TEST_LOAD_USER() {
         val user = UserDto(
+            null,
             userName = "테스트",
             password = "PASS",
             name = "테스트",
@@ -48,7 +50,7 @@ class UserTest {
         ).toEntity()
         val response =  assertDoesNotThrow { userRepository.save(user) }
         assertNotEquals(-1, response.id)
-        val findUser = assertDoesNotThrow { userRepository.findById(response.id).get() }
+        val findUser = assertDoesNotThrow { userRepository.findById(response.id!!).get() }
         assertEquals("테스트", findUser.name)
         assertEquals("010", findUser.phone)
         assertEquals("영어", findUser.language[1])

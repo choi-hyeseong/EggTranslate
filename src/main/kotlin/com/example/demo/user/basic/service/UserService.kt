@@ -14,8 +14,8 @@ class UserService(private val userRepository: UserRepository) {
 
 
     @Transactional
-    fun signUp(userDto: UserDto): Long {
-        return userRepository.save(userDto.toEntity()).id!!
+    fun signUp(userDto: UserDto): Long? {
+        return userRepository.save(userDto.toEntity()).id
     }
 
     @Transactional(readOnly = true)
@@ -40,9 +40,7 @@ class UserService(private val userRepository: UserRepository) {
 
 @Transactional
 suspend fun updateProfile(id: Long, userEditDTO: UserEditDTO) {
-    val existingUser = userRepository.findById(id).orElseThrow {
-        UserNotFoundException(id, "일치하는 사용자가 없습니다")
-    }
+    val existingUser = getUserEntity(id)
     existingUser.name = userEditDTO.name
     existingUser.phone = userEditDTO.phone
     existingUser.email = userEditDTO.email
