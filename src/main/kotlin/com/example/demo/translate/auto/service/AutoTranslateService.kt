@@ -104,7 +104,7 @@ class AutoTranslateService(
             ManualTranslate(null, translateFileService.findTranslateFileEntity(translateFileId), content)
         )
 
-        // TODO 없애도 될지 체크
+        // 없애도 될지 체크 -> 안됨
         translateResultRepository.save(translateResult)
 
 
