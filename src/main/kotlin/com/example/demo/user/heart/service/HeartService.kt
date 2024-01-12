@@ -41,10 +41,10 @@ class HeartService(
         val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId, "존재 하지 않는 유저입니다.") }
         val translator = translatorRepository.findById(translatorId).orElseThrow { UserNotFoundException(userId, "존재 하지 않는 번역가 id입니다.") }
         val findHeart = heartRepository.findByTranslatorIdAndUserId(translatorId, userId)
-        val heart = if (findHeart.isPresent) findHeart.get() else TranslatorHeart(-1, user, translator)
+        val heart = if (findHeart.isPresent) findHeart.get() else heartRepository.save(TranslatorHeart(-1, user, translator))
         user.addHeart(heart)
         translator.addHeart(heart)
-        heartRepository.save(heart)
+        heartRepository.save(heart) //필요성 여부 체크
     }
 
     @Transactional
