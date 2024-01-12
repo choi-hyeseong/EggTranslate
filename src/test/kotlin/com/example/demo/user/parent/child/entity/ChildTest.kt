@@ -17,8 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class ChildTest(@Autowired private val userRepository: UserRepository, @Autowired private val childRepository: ChildRepository, @Autowired private val parentRepository: ParentRepository) {
 
-    /*
+
     val user = UserDto(
+        null,
         userName = "테스트",
         password = "PASS",
         name = "테스트",
@@ -38,8 +39,8 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
             children,
             UserDto(user)
         )
-        val response = parentRepository.save(dto.toEntity())
-        val load = parentRepository.findById(response.id).get()
+        val response = parentRepository.save(dto.toEntity(user, mutableListOf()))
+        val load = parentRepository.findById(response.id!!).get()
         load.children.add(
             ChildDTO(
                 -1,
@@ -51,8 +52,8 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
             Gender.MAN
         ).toEntity())
         parentRepository.save(load)
-        val saved = parentRepository.findById(response.id).get()
-        assertTrue(childRepository.existsById(saved.children[0].id))
+        val saved = parentRepository.findById(response.id!!).get()
+        assertTrue(childRepository.existsById(saved.children[0].id!!))
         assertEquals(1, saved.children.size)
     }
 
@@ -66,8 +67,8 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
             children,
             UserDto(user)
         )
-        val response = parentRepository.save(dto.toEntity())
-        val load = parentRepository.findById(response.id).get()
+        val response = parentRepository.save(dto.toEntity(user, mutableListOf()))
+        val load = parentRepository.findById(response.id!!).get()
         load.children.add(
             ChildDTO(
                 -1,
@@ -79,10 +80,10 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
             Gender.MAN
         ).toEntity())
         parentRepository.save(load)
-        val saved = parentRepository.findById(response.id).get()
+        val saved = parentRepository.findById(response.id!!).get()
         val child = saved.children[0].id
 
-        assertTrue(childRepository.existsById(child))
+        assertTrue(childRepository.existsById(child!!))
 
         saved.children.removeLast()
         parentRepository.save(saved)
@@ -100,8 +101,8 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
             children,
             UserDto(user)
         )
-        val response = parentRepository.save(dto.toEntity())
-        val load = parentRepository.findById(response.id).get()
+        val response = parentRepository.save(dto.toEntity(user, mutableListOf()))
+        val load = parentRepository.findById(response.id!!).get()
         load.children.add(
             ChildDTO(
                 -1,
@@ -113,16 +114,16 @@ class ChildTest(@Autowired private val userRepository: UserRepository, @Autowire
             Gender.MAN
         ).toEntity())
         parentRepository.save(load)
-        val saved = parentRepository.findById(response.id).get()
+        val saved = parentRepository.findById(response.id!!).get()
         val child = saved.children[0].id
 
-        assertTrue(childRepository.existsById(child))
+        assertTrue(childRepository.existsById(child!!))
 
         saved.children[0].gender = Gender.WOMAN
         parentRepository.save(saved)
 
-        assertEquals(Gender.WOMAN, childRepository.findById(saved.children[0].id).get().gender)
+        assertEquals(Gender.WOMAN, childRepository.findById(saved.children[0].id!!).get().gender)
     }
-*/
+
 
 }
