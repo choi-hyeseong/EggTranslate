@@ -25,19 +25,19 @@ class FileService(
     private val log = logger()
 
     @Transactional
-    fun findFileById(id: Long): FileDTO =
+    suspend fun findFileById(id: Long): FileDTO =
         FileDTO(
             findFileEntityById(id)
         )
 
     @Transactional
-    fun findFileEntityById(id: Long): File = fileRepository
+    suspend fun findFileEntityById(id: Long): File = fileRepository
         .findById(id)
         .orElseThrow { FileException("존재하지 않는 파일입니다.") }
 
 
     @Transactional
-    fun getFile(userId: Long, fileId: Long): FileDTO {
+    suspend fun getFile(userId: Long, fileId: Long): FileDTO {
         val isUserExists = userService.existUser(userId)
         val fileDto = findFileById(fileId)
 
@@ -49,7 +49,7 @@ class FileService(
     }
 
     @Transactional
-    fun saveEntity(fileDTO: FileDTO): Long? {
+    suspend fun saveEntity(fileDTO: FileDTO): Long? {
         val user = userService.getUserEntity(fileDTO.user.id!!)
         return fileRepository.save(fileDTO.toEntity(user)).id
     }

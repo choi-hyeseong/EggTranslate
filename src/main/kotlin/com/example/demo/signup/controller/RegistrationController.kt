@@ -31,13 +31,13 @@ class RegistrationController(private val registrationService: RegistrationServic
     }
 
     @PostMapping("/teacher")
-    fun registerTeacher(@RequestBody @SignUpValid teacherSignUpDTO: TeacherSignUpDTO): Response<TeacherDTO> = Response.ofSuccess(null, registrationService.registerTeacher(teacherSignUpDTO))
+    suspend fun registerTeacher(@RequestBody @SignUpValid teacherSignUpDTO: TeacherSignUpDTO): Response<TeacherDTO> = Response.ofSuccess(null, registrationService.registerTeacher(teacherSignUpDTO))
 
     @PostMapping("/parent")
-    fun registerParent(@RequestBody @SignUpValid parentSignUpDTO: ParentSignUpDTO) : Response<ParentDTO> = Response.ofSuccess(null, registrationService.registerParent(parentSignUpDTO))
+    suspend fun registerParent(@RequestBody @SignUpValid parentSignUpDTO: ParentSignUpDTO) : Response<ParentDTO> = Response.ofSuccess(null, registrationService.registerParent(parentSignUpDTO))
 
     @PostMapping("/translator")
-    fun registerTranslator(@RequestBody @SignUpValid translatorSignUpDTO: TranslatorSignUpDTO) : Response<TranslatorDTO> = Response.ofSuccess(null, registrationService.registerTranslator(translatorSignUpDTO))
+    suspend fun registerTranslator(@RequestBody @SignUpValid translatorSignUpDTO: TranslatorSignUpDTO) : Response<TranslatorDTO> = Response.ofSuccess(null, registrationService.registerTranslator(translatorSignUpDTO))
 
 //    @PostMapping("/parent")
 //    fun registerParent(@RequestBody parentDTO: ParentSignUpDTO): ResponseEntity<String> {

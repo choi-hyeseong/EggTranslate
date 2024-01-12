@@ -26,11 +26,11 @@ class RegistrationService(
         private val translatorService: TranslatorService
 ) {
 
-    fun registerUser(userDTO: UserDto) : Long? {
+    suspend fun registerUser(userDTO: UserDto) : Long? {
         return userService.signUp(userDTO)
     }
 
-    fun registerParent(parentDTO: ParentSignUpDTO) : ParentDTO {
+    suspend fun registerParent(parentDTO: ParentSignUpDTO) : ParentDTO {
         val dto = parentDTO.toParentDTO() // ParentDTO 반환
         val userResult = registerUser(dto.user) // dto.user -> UserDTO
         if (userResult == null)
@@ -43,7 +43,7 @@ class RegistrationService(
         return parentService.findByParentUserId(userResult)
     }
 
-    fun registerTeacher(teacherDTO: TeacherSignUpDTO) : TeacherDTO {
+    suspend fun registerTeacher(teacherDTO: TeacherSignUpDTO) : TeacherDTO {
         val dto = teacherDTO.toTeacherDTO() // teacherDTO
         val userResult = registerUser(dto.user) // 등록한 유저의 id
         if (userResult == null)
@@ -56,7 +56,7 @@ class RegistrationService(
         return teacherService.findTeacherByUserId(userResult)
     }
 
-    fun registerTranslator(translatorDTO: TranslatorSignUpDTO) : TranslatorDTO {
+    suspend fun registerTranslator(translatorDTO: TranslatorSignUpDTO) : TranslatorDTO {
         val dto = translatorDTO.toTranslatorDTO() // translatorDTO 반환
         val userResult = registerUser(dto.user) // translator의 user (UserDTO타입)
         if (userResult == null)

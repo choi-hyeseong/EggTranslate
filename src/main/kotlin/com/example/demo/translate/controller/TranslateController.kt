@@ -3,8 +3,8 @@ package com.example.demo.translate.controller
 import com.example.demo.common.response.Response
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.auto.dto.TranslateResultSimpleDTO
+import com.example.demo.translate.auto.service.AutoTranslateService
 import com.example.demo.translate.manual.dto.ManualTranslateDTO
-import com.example.demo.translate.service.TranslateDataService
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.translator.service.TranslatorService
@@ -16,15 +16,15 @@ class TranslateController(
     private val userService: UserService,
     private val translatorService: TranslatorService,
     private val translateService: TranslateService,
-    private val translateDataService: TranslateDataService
+    private val autoTranslateService: AutoTranslateService
 ) {
 
     @GetMapping("/{id}")
-    suspend fun getResult(@PathVariable id: Long) = Response.ofSuccess(null, translateDataService.findTranslateResult(id).toResponseDTO())
+    suspend fun getResult(@PathVariable id: Long) = Response.ofSuccess(null, autoTranslateService.findTranslateResult(id).toResponseDTO())
 
     @GetMapping("")
     suspend fun getAllResult(@RequestParam(value = "id") id: Long): Response<List<TranslateResultSimpleDTO>> {
-        return Response.ofSuccess(null, translateDataService.findAllTranslateResultByUserId(id).map {
+        return Response.ofSuccess(null, autoTranslateService.findAllTranslateResultByUserId(id).map {
             TranslateResultSimpleDTO(it)
         })
     }
@@ -49,6 +49,6 @@ class TranslateController(
 
     @PutMapping("/{id}")
     suspend fun updateRequest(@PathVariable id: Long, @RequestParam fileId : Long, @RequestParam content : String) {
-        translateDataService.update(id, fileId, content)
+        autoTranslateService.update(id, fileId, content)
     }
 }

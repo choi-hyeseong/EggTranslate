@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 class FileController(private val fileService: FileService) {
 
     @PostMapping("")
-    fun getFile(@RequestBody requestDTO: FileRequestDTO): FileDTO {
+    suspend fun getFile(@RequestBody requestDTO: FileRequestDTO): FileDTO {
         return fileService.getFile(requestDTO.userId, requestDTO.fileId)
     }
 

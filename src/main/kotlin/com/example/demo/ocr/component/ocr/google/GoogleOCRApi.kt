@@ -25,7 +25,7 @@ class GoogleOCRApi(private val cloudVisionTemplate: CloudVisionTemplate, private
         return builder.toString()
     }
 
-    fun handleResponse(response: AnnotateImageResponse): String {
+    suspend fun handleResponse(response: AnnotateImageResponse): String {
         return blockFormatter.format(response)
     }
 

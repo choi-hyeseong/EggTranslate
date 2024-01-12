@@ -23,21 +23,21 @@ class HeartService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getAllHearts(translatorId : Long) : List<TranslatorHeartResponseDTO> {
+    suspend fun getAllHearts(translatorId : Long) : List<TranslatorHeartResponseDTO> {
         return heartRepository.findAllByTranslatorId(translatorId).map {
             TranslatorHeartResponseDTO(it)
         }
     }
 
     @Transactional(readOnly = true)
-    fun existHeart(translatorId: Long, userId: Long) : Boolean {
+    suspend fun existHeart(translatorId: Long, userId: Long) : Boolean {
         return heartRepository.existsByTranslatorIdAndUserId(translatorId, userId)
     }
 
 
     //N:M 연관관계라 entity 직접접근이 나움.
     @Transactional
-    fun addHeart(translatorId: Long, userId : Long) {
+    suspend fun addHeart(translatorId: Long, userId : Long) {
         val user = userService.getUserEntity(userId)
         val translator = translatorService.findTranslatorEntityById(translatorId)
         val findHeart = heartRepository.findByTranslatorIdAndUserId(translatorId, userId)
@@ -48,7 +48,7 @@ class HeartService(
     }
 
     @Transactional
-    fun removeHeart(translatorId: Long, userId: Long) {
+    suspend fun removeHeart(translatorId: Long, userId: Long) {
         val findHeart = heartRepository.findByTranslatorIdAndUserId(translatorId, userId).orElseThrow { HeartException("존재하지 않는 좋아요 정보입니다.") }
         findHeart.let {
             it.user?.removeHeart(it)
