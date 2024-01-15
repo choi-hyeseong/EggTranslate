@@ -40,6 +40,13 @@ class TranslatorService(private val userService: UserService,
         )
 
     @Transactional
+    suspend fun deleteByUserId(id : Long) {
+        val translator = findTranslatorByUserId(id)
+        translatorRepository.deleteById(translator.id!!)
+        // TODO delete시 갖고 있는 하트, 번역가 참조를 null로 하는 로직등 필요
+    }
+
+    @Transactional
     suspend fun updateProfile(id: Long, translatorEditDTO: TranslatorEditDTO) {
         val existingUser = translatorRepository.findByUserId(id).orElseThrow {
             UserNotFoundException(id, "일치하는 사용자가 없습니다")

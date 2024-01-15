@@ -48,6 +48,12 @@ class UserService(private val userRepository: UserRepository) {
 
         userRepository.save(existingUser)
     }
+
+    @Transactional
+    suspend fun deleteById(id : Long) {
+        // TODO 갖고 있는 모든 연관관계 제거
+        userRepository.deleteById(id)
+    }
 }
 
 //suspend fun updateUser(userId: Long, userDto: UserDto) {

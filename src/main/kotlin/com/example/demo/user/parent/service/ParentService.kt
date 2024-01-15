@@ -42,6 +42,13 @@ class ParentService(
         )
 
     @Transactional
+    suspend fun deleteByUserId(id : Long) {
+        val parent = findByParentUserId(id)
+        parentRepository.deleteById(parent.id!!)
+        // TODO child와 갖고 있는 모든 연관관계 제거 (TranslateResult의 child를 null로 하거나..)
+    }
+
+    @Transactional
     suspend fun updateProfile(id: Long, parentEditDTO: ParentEditDTO) {
         val existingUser = parentRepository.findByUserId(id).orElseThrow {
             UserNotFoundException(id, "일치하는 사용자가 없습니다")

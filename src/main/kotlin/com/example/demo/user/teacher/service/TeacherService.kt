@@ -48,4 +48,10 @@ class TeacherService(private val teacherRepository: TeacherRepository,
 
         teacherRepository.save(existingUser)
     }
+
+    @Transactional
+    suspend fun deleteByUserId(id : Long) {
+        val teacher = findTeacherByUserId(id)
+        teacherRepository.deleteById(teacher.id!!)
+    }
 }
