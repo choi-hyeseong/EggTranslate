@@ -36,14 +36,22 @@ class LoggingInterceptor(private val converter: JsonConverter) : HandlerIntercep
         return super.preHandle(request, response, handler)
     }
 
-    override fun afterCompletion(request: HttpServletRequest, response: HttpServletResponse, handler: Any, ex: Exception?) {
+    override fun afterCompletion(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+        ex: Exception?
+    ) {
         val wrapResponse = response as? ContentCachingResponseWrapper
-        wrapResponse?.let {
-            val body = converter.convert(it.contentAsByteArray)
-            log.info("<--- [RESPONSE] {} BODY\n{}", response.status, body)
-            super.afterCompletion(request, response, handler, ex)
+        if ("application/json" == response.contentType) {
+            wrapResponse?.let {
+                val body = converter.convert(it.contentAsByteArray)
+                log.info("<--- [RESPONSE] {} BODY\n{}", response.status, body)
+                super.afterCompletion(request, response, handler, ex)
+            }
         }
-
+        else
+            log.info("<--- [RESPONSE] {}", response.status)
 
     }
 
