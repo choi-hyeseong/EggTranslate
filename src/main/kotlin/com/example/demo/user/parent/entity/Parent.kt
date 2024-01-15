@@ -11,7 +11,7 @@ class Parent(
     var id: Long?,
 
     @JoinColumn(name = "parent_id")
-    @OneToMany(cascade = [CascadeType.ALL] , orphanRemoval = true)
+    @OneToMany(cascade = [CascadeType.ALL] , fetch = FetchType.EAGER, orphanRemoval = true)
     //mappedby는 양방향 관계 지정시.
     var children: MutableList<Child> = mutableListOf(),
 
