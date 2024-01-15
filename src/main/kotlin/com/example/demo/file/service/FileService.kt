@@ -77,7 +77,7 @@ class FileService(
                 val path = outPath.plus("\\$saveName") //value로 형식 부여받기?
                 FileUtil.saveFile(image.bytes, path)
                 log.info("image file saved to $path")
-                FileDTO(null, image.name, saveName, userDto, path)
+                FileDTO(null, image.originalFilename ?: image.name, saveName, userDto, path)
             }.await()
         }
     }
