@@ -18,7 +18,7 @@ class LoggingInterceptor(private val converter: JsonConverter) : HandlerIntercep
         // AsyncRequest의 경우 preHandle이 2번 호출됨.
         // https://godd.tistory.com/83 참조
         if (DispatcherType.REQUEST == request.dispatcherType) {
-            if (request.contentType.contains("application/json")) {
+            if (!request.contentType.isNullOrEmpty() && request.contentType.contains("application/json")) {
                 val wrapRequest = request as? MultiAccessRequestWrapper
                 wrapRequest?.let {
                     val body = converter.convert(it.getContents())
