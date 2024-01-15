@@ -17,4 +17,6 @@ class UserDto(
     constructor(user: User) : this(user.id, user.username, user.password, user.name, user.phone, user.email, user.language, user.userType)
     fun toEntity() : User = User(id, userName, password, name, phone, email, languages, userType)
 
+    fun toInfoDTO() : UserInfoDTO = UserInfoDTO(name, phone, email, languages)
+
 }
