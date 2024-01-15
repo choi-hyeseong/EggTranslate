@@ -23,13 +23,10 @@ import java.util.*
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
-class ProfileController(private val userRepository: UserRepository,
-                        private val userService: UserService,
-                        private val teacherService: TeacherService,
-                        private val translatorService: TranslatorService,
-                        private val parentService: ParentService,
-                        private val teacherRepository: TeacherRepository,
-                        private val profileService: ProfileService) {
+class ProfileController(
+    private val userRepository: UserRepository,
+    private val profileService: ProfileService
+) {
 
     @GetMapping("")
     fun retrieveAllUsers(): List<User> {
