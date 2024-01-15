@@ -1,5 +1,6 @@
 package com.example.demo.translate.auto.entity
 
+import com.example.demo.common.database.entity.BaseEntity
 import com.example.demo.translate.manual.entity.ManualResult
 import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.type.UserType
@@ -27,7 +28,7 @@ class TranslateResult(
         @OneToOne
         @JoinColumn(name = "child_id", nullable = true)
         var child : Child?,
-) {
+) : BaseEntity() {
 
         //처음 결과 생성시 null로 초기화 됨.
         //순환 참조 문제로 단뱡향으로 설정. 단, id를 result에서 갖고 있어 cascade가 가능.
