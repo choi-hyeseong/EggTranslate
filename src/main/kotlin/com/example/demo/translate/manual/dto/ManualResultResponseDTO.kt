@@ -13,7 +13,7 @@ class ManualResultResponseDTO(
         .manualTranslate
         .map {
             ManualTranslateDTO(it).toResponseDTO()
-        }.toMutableList(), manualResult.translator.id , manualResult.status
+        }.toMutableList(), manualResult.translator?.id , manualResult.status
     )
 
 

@@ -37,7 +37,7 @@ class TranslateResultDTO(
             manualResultDTO?.let {
                 ManualResultResponseDTO(it.translateList.map { translate ->
                     translate.toResponseDTO()
-                }.toMutableList(), it.translatorDTO.id, it.status)
+                }.toMutableList(), it.translatorDTO?.id, it.status)
             })
 
     fun toEntity(user : User, autoTranslate: AutoTranslate, result: ManualResult?): TranslateResult = TranslateResult(

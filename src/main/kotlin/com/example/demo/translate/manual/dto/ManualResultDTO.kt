@@ -9,14 +9,14 @@ import com.example.demo.user.translator.entity.Translator
 class ManualResultDTO(
     var id: Long?,
     //val translateResult: TranslateResult, // DTO로 하면 순환 참조 문제가 발생함.. 어떻게 해야하지
-    val translatorDTO: TranslatorDTO,
+    val translatorDTO: TranslatorDTO?,
     val status: TranslateState,
     val translateList: MutableList<ManualTranslateDTO>
 ) {
 
     constructor(manualResult: ManualResult) : this(
         manualResult.id,
-        TranslatorDTO(manualResult.translator),
+        if (manualResult.translator != null) TranslatorDTO(manualResult.translator!!) else null,
         manualResult.status,
         manualResult.manualTranslate.map {
             ManualTranslateDTO(it)
@@ -27,6 +27,6 @@ class ManualResultDTO(
         ManualResult(id, status, translator, translateList)
 
     fun toResponseDTO() : ManualResultResponseDTO = ManualResultResponseDTO(
-        translateList.map { it.toResponseDTO() }.toMutableList(), translatorDTO.id, status
+        translateList.map { it.toResponseDTO() }.toMutableList(), translatorDTO?.id, status
     )
 }

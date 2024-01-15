@@ -23,7 +23,7 @@ class ManualResult(
 
     @ManyToOne
     @JoinColumn(name = "translator_id")
-    var translator : Translator,
+    var translator : Translator?,
 
     //Result 기준으로 join 해야함.
     @OneToMany(cascade = [CascadeType.ALL])
