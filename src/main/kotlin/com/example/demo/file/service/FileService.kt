@@ -11,6 +11,7 @@ import com.example.demo.user.basic.service.UserService
 import jakarta.transaction.Transactional
 import kotlinx.coroutines.*
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 
@@ -37,15 +38,9 @@ class FileService(
 
 
     @Transactional
-    suspend fun getFile(userId: Long, fileId: Long): FileDTO {
-        val isUserExists = userService.existUser(userId)
+    suspend fun getFile(fileId: Long): Resource {
         val fileDto = findFileById(fileId)
-
-        // TODO user check (admin & translator)
-        if (isUserExists && fileDto.user.id == userId)
-            return fileDto
-        else
-            throw FileException("접근할 수 있는 권한이 없습니다.")
+        return FileUtil.convertFileToResource(fileDto)
     }
 
     @Transactional

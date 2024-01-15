@@ -1,9 +1,14 @@
 package com.example.demo.file.util
 
+import com.example.demo.file.dto.FileDTO
+import com.example.demo.file.exception.FileException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.springframework.core.io.InputStreamResource
+import org.springframework.core.io.Resource
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.jvm.Throws
 
 class FileUtil {
 
@@ -18,7 +23,7 @@ class FileUtil {
 
         }
 
-        suspend fun saveFile(file : File, path : String) {
+        suspend fun saveFile(file: File, path: String) {
             withContext(Dispatchers.IO) {
                 saveFile(file.readBytes(), path)
             }
@@ -30,6 +35,15 @@ class FileUtil {
                     it.write(byteArray)
                 }
             }
+        }
+
+        @Throws
+        suspend fun convertFileToResource(fileDTO: FileDTO): Resource {
+            val file = File(fileDTO.savePath)
+            if (file.exists())
+                return InputStreamResource(file.inputStream())
+            else
+                throw FileException("존재하지 않는 파일입니다.")
         }
     }
 }
