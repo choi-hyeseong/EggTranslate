@@ -40,7 +40,6 @@ class TranslateController(
         return Response.ofSuccess(
             null,
             translateService.request(
-                userService.getUser(id),
                 translatorService.findTranslatorById(translator),
                 resultId
             )

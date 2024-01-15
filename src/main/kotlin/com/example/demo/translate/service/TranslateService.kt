@@ -39,7 +39,7 @@ class TranslateService(
     }
 
     @Transactional
-    suspend fun request(userDto: UserDto, translatorDTO: TranslatorDTO, resultId : Long) : TranslateResultResponseDTO {
+    suspend fun request(translatorDTO: TranslatorDTO, resultId : Long) : TranslateResultResponseDTO {
         val saveDTO = ManualResultDTO(null, translatorDTO, TranslateState.REQUEST, mutableListOf())
         if (autoTranslateService.manualResultExists(resultId))
             throw ManualException("이미 요청된 번역 결과입니다. 결과 ID : $resultId")
