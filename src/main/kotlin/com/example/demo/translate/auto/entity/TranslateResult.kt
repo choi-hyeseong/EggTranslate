@@ -25,7 +25,7 @@ class TranslateResult(
         @JoinColumn(name = "autoTranslate_id")
         var autoTranslate: AutoTranslate,
 
-        @OneToOne
+        @ManyToOne
         @JoinColumn(name = "child_id", nullable = true)
         var child : Child?,
 ) : BaseEntity() {
