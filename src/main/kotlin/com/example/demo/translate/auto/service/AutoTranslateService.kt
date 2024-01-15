@@ -14,7 +14,9 @@ import com.example.demo.translate.manual.dto.ManualResultDTO
 import com.example.demo.translate.manual.dto.ManualTranslateRequestDTO
 import com.example.demo.translate.manual.entity.ManualTranslate
 import com.example.demo.translate.manual.exception.ManualException
+import com.example.demo.translate.manual.repository.ManualResultRepository
 import com.example.demo.translate.manual.repository.ManualTranslateRepository
+import com.example.demo.translate.manual.type.TranslateState
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
@@ -28,11 +30,12 @@ class AutoTranslateService(
     val translatorService: TranslatorService,
     val translateFileService: TranslateFileService,
     val translateResultRepository: TranslateResultRepository,
-    val manualTranslateRepository: ManualTranslateRepository
+    val manualTranslateRepository: ManualTranslateRepository,
+    val manualResultRepository: ManualResultRepository
 ) {
 
     @Transactional
-    fun findAutoTranslateEntityById(id: Long): AutoTranslate {
+    suspend fun findAutoTranslateEntityById(id: Long): AutoTranslate {
         return autoTranslateRepository.findById(id)
             .orElseThrow { TranslateException("존재 하지 않는 번역 데이터 리스트 입니다.") }
     }
@@ -108,6 +111,7 @@ class AutoTranslateService(
         }
 
         translateResult.manualResult!!.manualTranslate.addAll(manualTranslates)
+        translateResult.manualResult!!.status = TranslateState.DONE
         // 없애도 될지 체크 -> 안됨
         translateResultRepository.save(translateResult)
 
@@ -123,5 +127,26 @@ class AutoTranslateService(
     suspend fun existManualTranslateByTranslateFileId(translateFileId: Long): Boolean =
         manualTranslateRepository.existsByTranslateFileId(translateFileId)
 
+
+    @Transactional
+    suspend fun removeTranslatorHistory(translatorId: Long) {
+        translateResultRepository.findAll().filter {
+            //번역가 번역 요청이 이루어진 경우
+            it.manualResult != null && it.manualResult!!.translator?.id == translatorId
+        }.forEach { result ->
+            val manualResult = result.manualResult!!
+            //만약 요청이 완료된경우가 아니라면 요청을 제거
+            if (manualResult.status != TranslateState.DONE) {
+                manualResult.translator = null
+                result.manualResult = null
+                manualResultRepository.delete(manualResult)
+            }
+            else
+            //요청이 완료됐으면 번역가 데이터를 제거.
+                result.manualResult!!.translator = null
+        }
+        //map을 하게 되면 기존 객체를 쓰는게 아님. 따라서 기존 영속 obj가 가진 데이터가 저장됨.
+
+    }
 
 }

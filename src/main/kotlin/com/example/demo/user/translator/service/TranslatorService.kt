@@ -1,6 +1,7 @@
 package com.example.demo.user.translator.service
 
 import com.example.demo.profile.dto.TranslatorEditDTO
+import com.example.demo.translate.auto.service.AutoTranslateService
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.translator.dto.TranslatorDTO
@@ -10,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 
 @Service
-class TranslatorService(private val userService: UserService,
-                        private val translatorRepository: TranslatorRepository) {
+class TranslatorService(
+    private val userService: UserService,
+    private val translatorRepository: TranslatorRepository
+) {
     @Transactional
     suspend fun signUp(translatorDTO: TranslatorDTO): Long? {
         val user = userService.getUserEntity(translatorDTO.user.id!!)
@@ -40,10 +43,8 @@ class TranslatorService(private val userService: UserService,
         )
 
     @Transactional
-    suspend fun deleteByUserId(id : Long) {
-        val translator = findTranslatorByUserId(id)
-        translatorRepository.deleteById(translator.id!!)
-        // TODO delete시 갖고 있는 하트, 번역가 참조를 null로 하는 로직등 필요
+    suspend fun delete(id: Long) {
+        translatorRepository.deleteById(id)
     }
 
     @Transactional

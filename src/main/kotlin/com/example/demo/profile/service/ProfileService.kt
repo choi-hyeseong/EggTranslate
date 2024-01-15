@@ -4,7 +4,9 @@ import com.example.demo.profile.dto.ParentEditDTO
 import com.example.demo.profile.dto.TeacherEditDTO
 import com.example.demo.profile.dto.TranslatorEditDTO
 import com.example.demo.profile.dto.UserEditDTO
+import com.example.demo.translate.auto.service.AutoTranslateService
 import com.example.demo.user.basic.service.UserService
+import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.service.TranslatorService
@@ -17,7 +19,8 @@ class ProfileService(
         private val userService: UserService,
         private val parentService: ParentService,
         private val teacherService: TeacherService,
-        private val translatorService: TranslatorService) {
+        private val translatorService: TranslatorService,
+        private val autoTranslateService: AutoTranslateService) {
 
     suspend fun updateUser(id : Long, userEditDto: UserEditDTO) {
         userService.updateProfile(id, userEditDto)
@@ -45,5 +48,23 @@ class ProfileService(
         updateUser(id, dto)
         //번역가 단독 정보 업데이트
         translatorService.updateProfile(id, translatorEditDTO)
+    }
+
+    suspend fun deleteProfile(id : Long) {
+        val user = userService.getUser(id)
+        when(user.userType) {
+            //support (UserType)해서 깔끔하게 하는것도 좋을듯
+            UserType.TEACHER -> teacherService.deleteByUserId(id)
+            UserType.TRANSLATOR -> deleteTranslator(id)
+            UserType.PARENT -> parentService.deleteByUserId(id)
+        }
+        userService.deleteById(id)
+    }
+
+    @Transactional
+    suspend fun deleteTranslator(id : Long) {
+        val translator = translatorService.findTranslatorByUserId(id)
+        autoTranslateService.removeTranslatorHistory(translator.id!!)
+        translatorService.delete(translator.id)
     }
 }

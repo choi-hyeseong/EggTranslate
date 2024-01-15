@@ -32,7 +32,7 @@ class TranslateResult(
 
         //처음 결과 생성시 null로 초기화 됨.
         //순환 참조 문제로 단뱡향으로 설정. 단, id를 result에서 갖고 있어 cascade가 가능.
-        @OneToOne(cascade = [CascadeType.ALL])
+        @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn(name = "manualResult_id")
         var manualResult: ManualResult? = null
 

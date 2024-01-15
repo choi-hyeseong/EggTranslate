@@ -55,16 +55,8 @@ class ProfileController(private val userRepository: UserRepository,
     }
 
     @DeleteMapping("/delete/{id}")
-    suspend fun deleteProfile(@PathVariable id: Long): Long {
-        val user = userService.getUser(id)
-        when(user.userType) {
-            //support (UserType)해서 깔끔하게 하는것도 좋을듯
-            UserType.TEACHER -> teacherService.deleteByUserId(id)
-            UserType.TRANSLATOR -> translatorService.deleteByUserId(id)
-            UserType.PARENT -> parentService.deleteByUserId(id)
-        }
-        userService.deleteById(id)
-        return id
+    suspend fun deleteProfile(@PathVariable id: Long) {
+        profileService.deleteProfile(id)
     }
 
     @GetMapping("/{id}")
