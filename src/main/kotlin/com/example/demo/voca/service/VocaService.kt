@@ -3,6 +3,7 @@ package com.example.demo.voca.service
 import com.example.demo.logger
 import com.example.demo.voca.component.VocaLoader
 import com.example.demo.voca.dto.VocaDTO
+import com.example.demo.voca.dto.VocaResponseDTO
 import com.example.demo.voca.entity.Voca
 import com.example.demo.voca.exception.VocaException
 import com.example.demo.voca.repository.VocaRepository
@@ -36,5 +37,10 @@ class VocaService(
     suspend fun findWord(lang : String, word : String) : VocaDTO {
         val response = vocaRepository.findByLangAndOrigin(lang, word).orElseThrow { VocaException("Not exists word.") }
         return VocaDTO(response)
+    }
+
+    @Transactional
+    suspend fun findAll(lang : String) : List<VocaResponseDTO> {
+        return vocaRepository.findAllByLang(lang).map { VocaResponseDTO(it) }
     }
 }

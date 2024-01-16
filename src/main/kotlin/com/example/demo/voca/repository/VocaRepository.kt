@@ -7,4 +7,6 @@ import java.util.*
 interface VocaRepository : JpaRepository<Voca, Long> {
 
     fun findByLangAndOrigin(lang : String, origin : String) : Optional<Voca>
+
+    fun findAllByLang(lang : String) : List<Voca>
 }
