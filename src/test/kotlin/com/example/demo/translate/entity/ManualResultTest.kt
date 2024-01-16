@@ -173,7 +173,7 @@ class ManualResultTest {
             result.manualResult?.status = TranslateState.DONE
             translateResultRepository.save(result)
         }
-        assertEquals("정보처리기사", response.manualResult!!.translator.certificates[0])
+        assertEquals("정보처리기사", response.manualResult!!.translator!!.certificates[0])
         assertEquals("개나리", response.child?.className)
         assertNotEquals(-1, response.id)
         assertEquals(TranslateState.DONE, translateResultRepository.findById(savedRequest.id!!).get().manualResult?.status)

@@ -50,6 +50,7 @@ class ProfileService(
         translatorService.updateProfile(id, translatorEditDTO)
     }
 
+    @Transactional
     suspend fun deleteProfile(id : Long) {
         val user = userService.getUser(id)
         when(user.userType) {

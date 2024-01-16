@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 class VocaController(private val vocaService: VocaService) {
 
     //TODO 글자 깨짐
+    // TODO 중복된 row 있음. 확인하기
     @PostMapping("/load")
     suspend fun load() : Response<Nothing> {
         val response = vocaService.load()
