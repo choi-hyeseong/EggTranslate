@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.util.concurrent.ThreadLocalRandom
 
 @Service
 class FileService(
@@ -73,7 +74,7 @@ class FileService(
         return coroutineScope {
             async {
                 val ext = FileUtil.findExtension(image.originalFilename ?: image.name)
-                val saveName = "${System.currentTimeMillis()}.$ext"
+                val saveName = "${System.currentTimeMillis()}${ThreadLocalRandom.current().nextInt(1,10000)}.$ext"
                 val path = outPath.plus("\\$saveName") //value로 형식 부여받기?
                 FileUtil.saveFile(image.bytes, path)
                 log.info("image file saved to $path")
