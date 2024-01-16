@@ -21,9 +21,9 @@ class VocaController(private val vocaService: VocaService) {
     }
 
     @GetMapping("/search")
-    suspend fun search(@RequestParam lang : String, @RequestParam word : String) : Response<String> {
+    suspend fun search(@RequestParam lang : String, @RequestParam word : String) : Response<List<VocaResponseDTO>> {
         val response = vocaService.findWord(lang, word)
-        return Response.ofSuccess(null, response.translate)
+        return Response.ofSuccess(null, response)
     }
 
     @GetMapping("")
