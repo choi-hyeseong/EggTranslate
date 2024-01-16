@@ -4,6 +4,9 @@ import com.example.demo.common.response.Response
 import com.example.demo.voca.dto.VocaDTO
 import com.example.demo.voca.dto.VocaResponseDTO
 import com.example.demo.voca.service.VocaService
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.Size
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+@Validated
 @RequestMapping("/api/voca")
 class VocaController(private val vocaService: VocaService) {
 
@@ -21,7 +25,7 @@ class VocaController(private val vocaService: VocaService) {
     }
 
     @GetMapping("/search")
-    suspend fun search(@RequestParam lang : String, @RequestParam word : String) : Response<List<VocaResponseDTO>> {
+    suspend fun search(@RequestParam lang : String, @Size(min = 2, message = "단어는 2자 이상이어야 합니다.") @RequestParam word : String) : Response<List<VocaResponseDTO>> {
         val response = vocaService.findWord(lang, word)
         return Response.ofSuccess(null, response)
     }
