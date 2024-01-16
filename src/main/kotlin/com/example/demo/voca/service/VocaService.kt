@@ -35,7 +35,7 @@ class VocaService(
 
     @Transactional(readOnly = true)
     suspend fun findWord(lang : String, word : String) : VocaDTO {
-        val response = vocaRepository.findByLangAndOrigin(lang, word).orElseThrow { VocaException("Not exists word.") }
+        val response = vocaRepository.findByLangAndOrigin(lang, word).orElseThrow { VocaException("That word doesn't exist.") }
         return VocaDTO(response)
     }
 
