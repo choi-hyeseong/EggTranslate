@@ -15,7 +15,6 @@ import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.jvm.optionals.getOrNull
 
 @Service
 class FileService(
@@ -40,7 +39,7 @@ class FileService(
 
     @Transactional
     suspend fun findAllFileEntityByUserIdOrNull(id: Long): List<File> = fileRepository
-        .findAllByUserId(id)
+        .findAllByMemberId(id)
 
     @Transactional
     suspend fun getFile(fileId: Long): Resource {
@@ -87,7 +86,7 @@ class FileService(
         }
     }
 
-    suspend fun deleteFileByUserId(userId : Long) {
+    suspend fun deleteFileByMemberId(userId : Long) {
         val file = findAllFileEntityByUserIdOrNull(userId)
         file.forEach {
             FileUtil.deleteFile(it.savePath)

@@ -1,8 +1,6 @@
 package com.example.demo.user.translator.dto
 
-import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.dto.UserInfoDTO
-import com.example.demo.user.heart.dto.TranslatorHeartResponseDTO
 import com.example.demo.user.translator.entity.Translator
 import com.example.demo.user.translator.type.TranslatorCategory
 import com.example.demo.user.translator.type.TranslatorLevel
@@ -20,7 +18,7 @@ class TranslatorInfoDto(
     constructor(translator: Translator) : this(
         translator.id,
         translator.career,
-        UserInfoDTO(translator.user),
+        UserInfoDTO(translator.member),
         translator.level,
         translator.hearts.size,
         translator.certificates,

@@ -1,7 +1,7 @@
 package com.example.demo.user.translator.dto
 
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
+import com.example.demo.user.basic.entity.Member
 import com.example.demo.user.heart.dto.TranslatorHeartResponseDTO
 import com.example.demo.user.translator.entity.Translator
 import com.example.demo.user.translator.type.TranslatorCategory
@@ -22,7 +22,7 @@ class TranslatorDTO(
         translator.id,
         translator.career,
         translator.level,
-        UserDto(translator.user),
+        UserDto(translator.member),
         translator.certificates,
         translator.categories,
     ) {
@@ -31,7 +31,7 @@ class TranslatorDTO(
     }
 
     //heart는 엔티티에 포함되지 않음.
-    fun toEntity(user : User): Translator = Translator(id, career, user, level, certificates, categories)
+    fun toEntity(member : Member): Translator = Translator(id, career, member, level, certificates, categories)
 
     fun toInfoDTO() : TranslatorInfoDto = TranslatorInfoDto(id, career, user.toInfoDTO(), level, hearts?.size ?: 0, certificates, categories)
 

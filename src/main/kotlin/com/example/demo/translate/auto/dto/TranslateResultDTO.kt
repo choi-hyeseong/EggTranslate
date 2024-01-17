@@ -6,7 +6,7 @@ import com.example.demo.translate.manual.dto.ManualResultDTO
 import com.example.demo.translate.manual.dto.ManualResultResponseDTO
 import com.example.demo.translate.manual.entity.ManualResult
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
+import com.example.demo.user.basic.entity.Member
 import com.example.demo.user.parent.child.dto.ChildDTO
 
 class TranslateResultDTO(
@@ -18,7 +18,7 @@ class TranslateResultDTO(
 ) {
     constructor(translateResult: TranslateResult) : this(
         translateResult.id,
-        UserDto(translateResult.user),
+        UserDto(translateResult.member),
         AutoTranslateDTO(translateResult.autoTranslate),
         translateResult.child?.let {
             ChildDTO(it)
@@ -40,10 +40,10 @@ class TranslateResultDTO(
                 }.toMutableList(), it.translatorDTO?.id, it.status)
             })
 
-    fun toEntity(user : User, autoTranslate: AutoTranslate, result: ManualResult?): TranslateResult = TranslateResult(
+    fun toEntity(member : Member, autoTranslate: AutoTranslate, result: ManualResult?): TranslateResult = TranslateResult(
         id,
-        user,
-        user.userType,
+        member,
+        member.userType,
         autoTranslate,
         child?.toEntity()
     ).apply {

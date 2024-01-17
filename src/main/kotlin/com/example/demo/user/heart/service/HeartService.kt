@@ -1,16 +1,9 @@
 package com.example.demo.user.heart.service
 
-import com.example.demo.translate.service.TranslateService
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.exception.UserNotFoundException
-import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.heart.dto.TranslatorHeartResponseDTO
 import com.example.demo.user.heart.entity.TranslatorHeart
-import com.example.demo.user.heart.exception.HeartException
 import com.example.demo.user.heart.repository.TranslatorHeartRepository
-import com.example.demo.user.translator.dto.TranslatorDTO
-import com.example.demo.user.translator.repository.TranslatorRepository
 import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -32,7 +25,7 @@ class HeartService(
 
     @Transactional(readOnly = true)
     suspend fun existHeart(translatorId: Long, userId: Long) : Boolean {
-        return heartRepository.existsByTranslatorIdAndUserId(translatorId, userId)
+        return heartRepository.existsByTranslatorIdAndMemberId(translatorId, userId)
     }
 
 
@@ -41,7 +34,7 @@ class HeartService(
     suspend fun addHeart(translatorId: Long, userId : Long) {
         val user = userService.getUserEntity(userId)
         val translator = translatorService.findTranslatorEntityById(translatorId)
-        val findHeart = heartRepository.findByTranslatorIdAndUserId(translatorId, userId)
+        val findHeart = heartRepository.findByTranslatorIdAndMemberId(translatorId, userId)
         val heart = if (findHeart.isPresent) findHeart.get() else heartRepository.save(TranslatorHeart(null, user, translator))
         user.addHeart(heart)
         translator.addHeart(heart)
@@ -50,7 +43,7 @@ class HeartService(
 
     @Transactional
     suspend fun removeUserHeart(userId: Long) {
-        val findHeart = heartRepository.findByUserId(userId).getOrNull()
+        val findHeart = heartRepository.findByMemberId(userId).getOrNull()
         deleteHeart(findHeart)
     }
 
@@ -63,9 +56,9 @@ class HeartService(
     @Transactional
     fun deleteHeart(heart: TranslatorHeart?) {
         if (heart != null) {
-            heart.user?.removeHeart(heart)
+            heart.member?.removeHeart(heart)
             heart.translator?.removeHeart(heart)
-            heart.user = null
+            heart.member = null
             heart.translator = null
             heartRepository.delete(heart)
         }

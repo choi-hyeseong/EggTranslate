@@ -50,6 +50,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0-RC2")
+    runtimeOnly ("com.h2database:h2")
     testImplementation("io.mockk:mockk:1.13.8")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.2.1") //hibernate나 다른 의존성 추가 하면 작동안됨. 얘만

@@ -1,9 +1,8 @@
 package com.example.demo.user.basic.service
 
 import com.example.demo.profile.dto.UserEditDTO
-import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
+import com.example.demo.user.basic.entity.Member
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -25,7 +24,7 @@ class UserService(private val userRepository: UserRepository) {
     suspend fun existUser(username: String) = userRepository.findByUsername(username).isPresent
 
     @Transactional(readOnly = true)
-    suspend fun getUserEntity(id: Long): User {
+    suspend fun getUserEntity(id: Long): Member {
         return userRepository
             .findById(id)
             .orElseThrow {

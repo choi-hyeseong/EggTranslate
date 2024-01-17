@@ -32,14 +32,14 @@ class ParentService(
     @Transactional(readOnly = true)
     suspend fun findByParentUserId(id: Long): ParentDTO =
         ParentDTO(parentRepository
-            .findByUserId(id)
+            .findByMemberId(id)
             .orElseThrow { UserNotFoundException(id, "존재하지 않는 부모 id 입니다.") }
         )
 
     @Transactional(readOnly = true)
     suspend fun findByParentUserIdOrNull(id: Long): ParentDTO? {
         val parent = parentRepository
-            .findByUserId(id)
+            .findByMemberId(id)
             .getOrNull()
         return if (parent != null) ParentDTO(parent) else null
     }
@@ -67,7 +67,7 @@ class ParentService(
     }
     @Transactional
     suspend fun updateProfile(id: Long, parentEditDTO: ParentEditDTO) {
-        val existingUser = parentRepository.findByUserId(id).orElseThrow {
+        val existingUser = parentRepository.findByMemberId(id).orElseThrow {
             UserNotFoundException(id, "일치하는 사용자가 없습니다")
         }
 

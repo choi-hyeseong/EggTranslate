@@ -1,6 +1,6 @@
 package com.example.demo.user.heart.entity
 
-import com.example.demo.user.basic.entity.User
+import com.example.demo.user.basic.entity.Member
 import com.example.demo.user.translator.entity.Translator
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
@@ -19,7 +19,7 @@ class TranslatorHeart(
 
     @ManyToOne(cascade = [CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST])
     @JoinColumn(name = "user_id")
-    var user : User?,
+    var member : Member?,
 
     @ManyToOne(cascade = [CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST]) //persist만 있어도 되긴한데
     @JoinColumn(name = "translator_id")

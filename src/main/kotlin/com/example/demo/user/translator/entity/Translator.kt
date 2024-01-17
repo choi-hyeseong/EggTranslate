@@ -1,7 +1,7 @@
 package com.example.demo.user.translator.entity
 
 import com.example.demo.common.database.converter.StringFlatter
-import com.example.demo.user.basic.entity.User
+import com.example.demo.user.basic.entity.Member
 import com.example.demo.user.heart.entity.TranslatorHeart
 import com.example.demo.user.translator.converter.TranslatorCategoryFlatter
 import com.example.demo.user.translator.type.TranslatorCategory
@@ -19,7 +19,7 @@ class Translator(
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    var user: User,
+    var member: Member,
 
     @Column(length = 20)
     @Enumerated(EnumType.STRING) //enum값 그대로 string으로 저장

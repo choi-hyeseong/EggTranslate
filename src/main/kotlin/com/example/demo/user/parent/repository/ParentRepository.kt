@@ -6,5 +6,5 @@ import java.util.Optional
 
 interface ParentRepository : JpaRepository<Parent, Long> {
 
-    fun findByUserId(id : Long) : Optional<Parent>
+    fun findByMemberId(id : Long) : Optional<Parent>
 }

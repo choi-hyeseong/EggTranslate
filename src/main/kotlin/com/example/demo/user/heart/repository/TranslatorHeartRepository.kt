@@ -1,19 +1,18 @@
 package com.example.demo.user.heart.repository
 
 import com.example.demo.user.heart.entity.TranslatorHeart
-import com.example.demo.user.translator.entity.Translator
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Optional
 
 interface TranslatorHeartRepository : JpaRepository<TranslatorHeart, Long> {
 
-    fun findByUserId(id : Long) : Optional<TranslatorHeart>
+    fun findByMemberId(id : Long) : Optional<TranslatorHeart>
 
     fun findByTranslatorId(id: Long) : Optional<TranslatorHeart>
 
     fun findAllByTranslatorId(id : Long) : List<TranslatorHeart>
 
-    fun findByTranslatorIdAndUserId(translatorId : Long, userId : Long) : Optional<TranslatorHeart>
+    fun findByTranslatorIdAndMemberId(translatorId : Long, userId : Long) : Optional<TranslatorHeart>
 
-    fun existsByTranslatorIdAndUserId(translatorId: Long, userId: Long) : Boolean
+    fun existsByTranslatorIdAndMemberId(translatorId: Long, userId: Long) : Boolean
 }

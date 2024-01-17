@@ -1,7 +1,7 @@
 package com.example.demo.user.teacher.dto
 
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
+import com.example.demo.user.basic.entity.Member
 import com.example.demo.user.teacher.entity.Teacher
 
 class TeacherDTO(
@@ -15,6 +15,6 @@ class TeacherDTO(
 
 ) {
 
-    constructor(teacher: Teacher) : this(teacher.id, teacher.school, teacher.grade, teacher.className, teacher.course, teacher.address, UserDto(teacher.user))
-    fun toEntity(user : User) : Teacher = Teacher(id, school, grade, className, course, address, user)
+    constructor(teacher: Teacher) : this(teacher.id, teacher.school, teacher.grade, teacher.className, teacher.course, teacher.address, UserDto(teacher.member))
+    fun toEntity(member : Member) : Teacher = Teacher(id, school, grade, className, course, address, member)
 }

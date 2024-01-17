@@ -1,7 +1,6 @@
 package com.example.demo.user.translator.service
 
 import com.example.demo.profile.dto.TranslatorEditDTO
-import com.example.demo.translate.auto.service.AutoTranslateService
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.translator.dto.TranslatorDTO
@@ -22,7 +21,7 @@ class TranslatorService(
     }
 
     @Transactional(readOnly = true)
-    suspend fun existTranslatorByUserId(id: Long): Boolean = translatorRepository.existsByUserId(id)
+    suspend fun existTranslatorByUserId(id: Long): Boolean = translatorRepository.existsByMemberId(id)
 
 
     @Transactional
@@ -32,7 +31,7 @@ class TranslatorService(
     @Transactional(readOnly = true)
     suspend fun findTranslatorByUserId(id: Long): TranslatorDTO =
         TranslatorDTO(translatorRepository
-            .findByUserId(id)
+            .findByMemberId(id)
             .orElseThrow { UserNotFoundException(id, "해당 id로 번역가를 찾을 수 없습니다.") }
         )
 
@@ -49,7 +48,7 @@ class TranslatorService(
 
     @Transactional
     suspend fun updateProfile(id: Long, translatorEditDTO: TranslatorEditDTO) {
-        val existingUser = translatorRepository.findByUserId(id).orElseThrow {
+        val existingUser = translatorRepository.findByMemberId(id).orElseThrow {
             UserNotFoundException(id, "일치하는 사용자가 없습니다")
         }
         existingUser.career = translatorEditDTO.career

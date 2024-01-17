@@ -1,6 +1,6 @@
 package com.example.demo.user.basic.dto
 
-import com.example.demo.user.basic.entity.User
+import com.example.demo.user.basic.entity.Member
 import com.example.demo.user.basic.type.UserType
 import com.fasterxml.jackson.annotation.JsonIgnore
 
@@ -14,8 +14,8 @@ class UserDto(
     val languages : MutableList<String>,
     val userType: UserType
 ) {
-    constructor(user: User) : this(user.id, user.username, user.password, user.name, user.phone, user.email, user.language, user.userType)
-    fun toEntity() : User = User(id, userName, password, name, phone, email, languages, userType)
+    constructor(member: Member) : this(member.id, member.username, member.password, member.name, member.phone, member.email, member.language, member.userType)
+    fun toEntity() : Member = Member(id, userName, password, name, phone, email, languages, userType)
 
     fun toInfoDTO() : UserInfoDTO = UserInfoDTO(name, phone, email, languages)
 

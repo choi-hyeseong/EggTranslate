@@ -1,7 +1,6 @@
 package com.example.demo.signup.dto
 
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.type.UserType
 
 class UserSignUpDTO(

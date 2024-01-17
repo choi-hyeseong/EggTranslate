@@ -1,7 +1,6 @@
 package com.example.demo.translate.auto.dto
 
 import com.example.demo.translate.auto.entity.TranslateResult
-import com.example.demo.translate.manual.dto.ManualResultResponseDTO
 
 data class TranslateResultSimpleDTO(
     val id: Long?,
@@ -12,7 +11,7 @@ data class TranslateResultSimpleDTO(
 ) {
     constructor(translateResult: TranslateResult) : this(
         translateResult.id,
-        translateResult.user.id,
+        translateResult.member.id,
         translateResult.autoTranslate.id,
         translateResult.child?.id,
         translateResult.manualResult?.id

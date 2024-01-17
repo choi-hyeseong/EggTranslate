@@ -2,10 +2,8 @@ package com.example.demo.translate.auto.service
 
 import com.example.demo.file.service.FileService
 import com.example.demo.translate.auto.dto.AutoTranslateDTO
-import com.example.demo.translate.auto.dto.TranslateFileDTO
 import com.example.demo.translate.auto.dto.TranslateResultDTO
 import com.example.demo.translate.auto.entity.AutoTranslate
-import com.example.demo.translate.auto.entity.TranslateFile
 import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.translate.auto.repository.AutoTranslateRepository
 import com.example.demo.translate.auto.repository.TranslateResultRepository
@@ -78,7 +76,7 @@ class AutoTranslateService(
 
     @Transactional
     suspend fun findAllTranslateResultEntityByUserId(id: Long): List<TranslateResult> {
-        return translateResultRepository.findAllByUserId(id)
+        return translateResultRepository.findAllByMemberId(id)
     }
 
 

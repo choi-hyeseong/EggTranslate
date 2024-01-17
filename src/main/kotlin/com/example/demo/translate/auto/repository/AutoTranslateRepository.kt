@@ -6,5 +6,5 @@ import java.util.Optional
 
 interface AutoTranslateRepository : JpaRepository<AutoTranslate, Long> {
 
-    fun findByUserId(id : Long) : Optional<AutoTranslate>
+    fun findByMemberId(id : Long) : Optional<AutoTranslate>
 }

@@ -78,7 +78,7 @@ class ProfileService(
     suspend fun deleteUser(id : Long) {
         autoTranslateService.deleteUserResult(id)
         heartService.removeUserHeart(id)
-        fileService.deleteFileByUserId(id)
+        fileService.deleteFileByMemberId(id)
         userService.deleteById(id)
     }
 }

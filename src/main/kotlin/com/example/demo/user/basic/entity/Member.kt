@@ -8,7 +8,7 @@ import jakarta.persistence.*
 
 // TODO FCM TOKEN
 @Entity
-class User(
+class Member(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ class User(
 
 ) : BaseEntity() {
 
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "user")
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "member")
     var heartList: MutableList<TranslatorHeart> = mutableListOf()
 
     fun addHeart(translatorHeart: TranslatorHeart) {

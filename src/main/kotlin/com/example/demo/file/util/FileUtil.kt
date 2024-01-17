@@ -34,6 +34,7 @@ class FileUtil {
 
         suspend fun saveFile(byteArray: ByteArray, path: String) {
             withContext(Dispatchers.IO) {
+                File(path).parentFile.mkdir()
                 FileOutputStream(path).use {
                     it.write(byteArray)
                 }

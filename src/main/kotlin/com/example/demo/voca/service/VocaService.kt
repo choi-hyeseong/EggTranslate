@@ -7,10 +7,12 @@ import com.example.demo.voca.dto.VocaResponseDTO
 import com.example.demo.voca.entity.Voca
 import com.example.demo.voca.exception.VocaException
 import com.example.demo.voca.repository.VocaRepository
+import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.io.File
+import javax.annotation.PostConstruct
 
 @Service
 class VocaService(
@@ -19,6 +21,13 @@ class VocaService(
 ) {
 
     val log = logger()
+
+    @PostConstruct
+    fun postHandle() {
+        runBlocking {
+            load()
+        }
+    }
 
     @Transactional
     suspend fun load() : Int {

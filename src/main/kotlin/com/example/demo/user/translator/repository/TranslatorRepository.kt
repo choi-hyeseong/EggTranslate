@@ -1,10 +1,8 @@
 package com.example.demo.user.translator.repository
 
-import com.example.demo.user.basic.entity.User
-import com.example.demo.user.teacher.entity.Teacher
+import com.example.demo.user.basic.entity.Member
 import com.example.demo.user.translator.entity.Translator
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*
 
@@ -12,9 +10,9 @@ import java.util.*
 interface TranslatorRepository : JpaRepository<Translator, Long> {
     //CoroutineRepository 사용 위해선 싹다 Reactive로 바꿔야함
 
-    fun findByUser(user: User) : Translator?
+    fun findByMember(member: Member) : Translator?
 
-    fun findByUserId(id : Long) : Optional<Translator>
+    fun findByMemberId(id : Long) : Optional<Translator>
 
-    fun existsByUserId(id : Long) : Boolean
+    fun existsByMemberId(id : Long) : Boolean
 }

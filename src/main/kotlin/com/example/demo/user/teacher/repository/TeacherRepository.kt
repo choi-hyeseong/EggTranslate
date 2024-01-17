@@ -8,7 +8,7 @@ import java.util.Optional
 @Repository
 interface TeacherRepository : JpaRepository<Teacher, Long> {
 
-    fun findByUserId(id : Long) : Optional<Teacher>
+    fun findByMemberId(id : Long) : Optional<Teacher>
 
-    fun existsByUserId(id : Long) : Boolean
+    fun existsByMemberId(id : Long) : Boolean
 }

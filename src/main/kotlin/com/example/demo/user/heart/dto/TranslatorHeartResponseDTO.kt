@@ -8,7 +8,7 @@ class TranslatorHeartResponseDTO(
     val userId: Long?,
     val translatorId : Long?
 ) {
-    constructor(translatorHeart: TranslatorHeart) : this(translatorHeart.id, translatorHeart.user?.id,
+    constructor(translatorHeart: TranslatorHeart) : this(translatorHeart.id, translatorHeart.member?.id,
         translatorHeart.translator?.id
     )
 }

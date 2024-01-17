@@ -1,6 +1,6 @@
 package com.example.demo.user.teacher.entity
 
-import com.example.demo.user.basic.entity.User
+import com.example.demo.user.basic.entity.Member
 import jakarta.persistence.*
 
 @Entity
@@ -27,7 +27,7 @@ class Teacher(
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    var user: User
+    var member: Member
 
 ) {
 
