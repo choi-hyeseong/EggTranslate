@@ -71,9 +71,14 @@ class AutoTranslateService(
 
     @Transactional
     suspend fun findAllTranslateResultByUserId(id: Long): List<TranslateResultDTO> {
-        return translateResultRepository.findAllByUserId(id).map {
+        return findAllTranslateResultEntityByUserId(id).map {
             TranslateResultDTO(it)
         }.toMutableList()
+    }
+
+    @Transactional
+    suspend fun findAllTranslateResultEntityByUserId(id: Long): List<TranslateResult> {
+        return translateResultRepository.findAllByUserId(id)
     }
 
 
@@ -128,6 +133,10 @@ class AutoTranslateService(
         manualTranslateRepository.existsByTranslateFileId(translateFileId)
 
 
+    suspend fun deleteManualResultById(id : Long) {
+        manualResultRepository.deleteById(id)
+    }
+
     @Transactional
     suspend fun removeTranslatorHistory(translatorId: Long) {
         translateResultRepository.findAll().filter {
@@ -139,14 +148,32 @@ class AutoTranslateService(
             if (manualResult.status != TranslateState.DONE) {
                 manualResult.translator = null
                 result.manualResult = null
-                manualResultRepository.delete(manualResult)
+                deleteManualResultById(manualResult.id!!)
             }
             else
             //요청이 완료됐으면 번역가 데이터를 제거.
                 result.manualResult!!.translator = null
         }
         //map을 하게 되면 기존 객체를 쓰는게 아님. 따라서 기존 영속 obj가 가진 데이터가 저장됨.
+    }
 
+    @Transactional
+    suspend fun deleteUserResult(userId : Long) {
+        /** 참조 순서 (File <- TranslateFile <- AutoTranslate <- TranslateResult
+        *                             ⬆                          ⬋
+        *                         ManualTranslate <- ManualResult
+         */
+        //ManualResult 제거
+        val results = findAllTranslateResultEntityByUserId(userId)
+        results.forEach {
+            if (it.manualResult != null) {
+                val id = it.manualResult!!.id
+                it.manualResult = null
+                deleteManualResultById(id!!)
+            }
+        }
+        //TranslateResult 제거
+        translateResultRepository.deleteAll(results)
     }
 
 }

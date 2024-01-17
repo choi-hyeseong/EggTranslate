@@ -1,5 +1,6 @@
 package com.example.demo.profile.service
 
+import com.example.demo.file.service.FileService
 import com.example.demo.profile.dto.ParentEditDTO
 import com.example.demo.profile.dto.TeacherEditDTO
 import com.example.demo.profile.dto.TranslatorEditDTO
@@ -7,6 +8,7 @@ import com.example.demo.profile.dto.UserEditDTO
 import com.example.demo.translate.auto.service.AutoTranslateService
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.basic.type.UserType
+import com.example.demo.user.heart.service.HeartService
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.service.TranslatorService
@@ -20,7 +22,9 @@ class ProfileService(
         private val parentService: ParentService,
         private val teacherService: TeacherService,
         private val translatorService: TranslatorService,
-        private val autoTranslateService: AutoTranslateService) {
+        private val autoTranslateService: AutoTranslateService,
+    private val fileService: FileService,
+    private val heartService: HeartService) {
 
     suspend fun updateUser(id : Long, userEditDto: UserEditDTO) {
         userService.updateProfile(id, userEditDto)
@@ -59,13 +63,22 @@ class ProfileService(
             UserType.TRANSLATOR -> deleteTranslator(id)
             UserType.PARENT -> parentService.deleteByUserId(id)
         }
-        userService.deleteById(id)
+        deleteUser(user.id!!)
     }
 
     @Transactional
     suspend fun deleteTranslator(id : Long) {
         val translator = translatorService.findTranslatorByUserId(id)
         autoTranslateService.removeTranslatorHistory(translator.id!!)
+        heartService.removeTranslatorHeart(id)
         translatorService.delete(translator.id)
+    }
+
+    @Transactional
+    suspend fun deleteUser(id : Long) {
+        autoTranslateService.deleteUserResult(id)
+        heartService.removeUserHeart(id)
+        fileService.deleteFileByUserId(id)
+        userService.deleteById(id)
     }
 }

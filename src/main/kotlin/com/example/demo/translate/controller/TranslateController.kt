@@ -30,7 +30,7 @@ class TranslateController(
         })
     }
 
-
+    //id는 필요 없음.
     @PostMapping("/{id}")
     suspend fun createRequest(
         @PathVariable id: Long,

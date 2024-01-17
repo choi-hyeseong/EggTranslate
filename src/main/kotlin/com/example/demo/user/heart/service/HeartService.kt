@@ -14,6 +14,7 @@ import com.example.demo.user.translator.repository.TranslatorRepository
 import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class HeartService(
@@ -48,16 +49,27 @@ class HeartService(
     }
 
     @Transactional
-    suspend fun removeHeart(translatorId: Long, userId: Long) {
-        val findHeart = heartRepository.findByTranslatorIdAndUserId(translatorId, userId).orElseThrow { HeartException("존재하지 않는 좋아요 정보입니다.") }
-        findHeart.let {
-            it.user?.removeHeart(it)
-            it.translator?.removeHeart(it)
-            it.user = null
-            it.translator = null
+    suspend fun removeUserHeart(userId: Long) {
+        val findHeart = heartRepository.findByUserId(userId).getOrNull()
+        deleteHeart(findHeart)
+    }
+
+    @Transactional
+    suspend fun removeTranslatorHeart(translatorId: Long) {
+        val findHeart = heartRepository.findByTranslatorId(translatorId).getOrNull()
+        deleteHeart(findHeart)
+    }
+
+    @Transactional
+    fun deleteHeart(heart: TranslatorHeart?) {
+        if (heart != null) {
+            heart.user?.removeHeart(heart)
+            heart.translator?.removeHeart(heart)
+            heart.user = null
+            heart.translator = null
+            heartRepository.delete(heart)
         }
 
-        heartRepository.delete(findHeart)
     }
 
 }
