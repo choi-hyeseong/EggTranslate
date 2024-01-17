@@ -10,4 +10,5 @@ interface FileRepository : JpaRepository<File, Long> {
     fun existsFileById(id : Long) : Boolean
 
     fun deleteAllByUserId(id : Long)
+
 }

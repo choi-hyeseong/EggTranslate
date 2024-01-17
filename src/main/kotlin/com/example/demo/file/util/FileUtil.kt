@@ -2,6 +2,7 @@ package com.example.demo.file.util
 
 import com.example.demo.file.dto.FileDTO
 import com.example.demo.file.exception.FileException
+import com.example.demo.logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.core.io.InputStreamResource
@@ -13,6 +14,8 @@ import kotlin.jvm.Throws
 class FileUtil {
 
     companion object {
+
+        private val log = logger()
 
         fun findExtension(fileName: String): String {
             val i = fileName.lastIndexOf('.')
@@ -44,6 +47,16 @@ class FileUtil {
                 return InputStreamResource(file.inputStream())
             else
                 throw FileException("존재하지 않는 파일입니다.")
+        }
+
+        suspend fun deleteFile(path : String) {
+            withContext(Dispatchers.IO) {
+                val file = File(path)
+                if (file.exists())
+                    file.delete()
+                else
+                    log.warn("File ${path} doesn't exist. Skip it")
+            }
         }
     }
 }

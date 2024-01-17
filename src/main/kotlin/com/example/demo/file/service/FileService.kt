@@ -15,6 +15,7 @@ import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class FileService(
@@ -37,6 +38,9 @@ class FileService(
         .findById(id)
         .orElseThrow { FileException("존재하지 않는 파일입니다.") }
 
+    @Transactional
+    suspend fun findAllFileEntityByUserIdOrNull(id: Long): List<File> = fileRepository
+        .findAllByUserId(id)
 
     @Transactional
     suspend fun getFile(fileId: Long): Resource {
@@ -81,6 +85,15 @@ class FileService(
                 FileDTO(null, image.originalFilename ?: image.name, saveName, userDto, path)
             }.await()
         }
+    }
+
+    suspend fun deleteFileByUserId(userId : Long) {
+        val file = findAllFileEntityByUserIdOrNull(userId)
+        file.forEach {
+            FileUtil.deleteFile(it.savePath)
+        }
+        fileRepository.deleteAll(file)
+
     }
 
 }
