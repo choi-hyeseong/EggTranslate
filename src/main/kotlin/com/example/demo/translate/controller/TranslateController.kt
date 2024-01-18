@@ -52,6 +52,7 @@ class TranslateController(
 
     @PutMapping("/{id}")
     suspend fun updateRequest(@PathVariable(value = "id") resultId : Long, @RequestBody manualTranslateRequestDTO: ManualTranslateRequestDTO) {
+        // TODO Request Empty check.
         translateManageService.update(resultId, manualTranslateRequestDTO)
     }
 }
