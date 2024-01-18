@@ -1,7 +1,6 @@
 package com.example.demo.user.translator.service
 
 import com.example.demo.profile.dto.TranslatorEditDTO
-import com.example.demo.translate.auto.service.AutoTranslateService
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.translator.dto.TranslatorDTO
