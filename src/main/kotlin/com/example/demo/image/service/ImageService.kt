@@ -4,6 +4,7 @@ import com.example.demo.file.service.FileService
 import com.example.demo.image.dto.ImageDTO
 import com.example.demo.translate.auto.dto.TranslateFileRequestDTO
 import com.example.demo.logger
+import com.example.demo.ocr.component.process.OCRPostHandler
 import com.example.demo.ocr.service.OCRService
 import com.example.demo.translate.auto.dto.AutoTranslateResponseDTO
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
@@ -22,7 +23,8 @@ class ImageService(
     private val translateService: TranslateService,
     private val fileService: FileService,
     private val userService: UserService,
-    private val parentService: ParentService
+    private val parentService: ParentService,
+    private val ocrPostHandler: OCRPostHandler
 ) {
 
 
@@ -52,7 +54,9 @@ class ImageService(
             val requestList = image.map {
                 async {
                     val response = fileService.saveEntity(fileService.saveImage(userDto, it))
-                    TranslateFileRequestDTO(response, "ko", lang, ocrService.readImage(it))
+                    val ocrResponse = ocrService.readImage(it)
+                    val postHandleResponse = ocrPostHandler.handleText(ocrResponse)
+                    TranslateFileRequestDTO(response, "ko", lang, postHandleResponse)
                 }
             }.toList()
             requestList.awaitAll().toList()
