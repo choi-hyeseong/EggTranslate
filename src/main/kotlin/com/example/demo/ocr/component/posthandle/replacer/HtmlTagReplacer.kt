@@ -1,11 +1,11 @@
-package com.example.demo.ocr.component.posthandle
+package com.example.demo.ocr.component.posthandle.replacer
 
 import org.springframework.stereotype.Component
 
 @Component
-class HtmlTagReplacer : TextReplacer {
+class HtmlTagReplacer : OCRPostReplacer {
     // ocr로 읽힌 문자열중 selected 이런거 제거하기
-    override fun postHandle(input: String): String {
+    override fun replace(input: String): String {
         return input.replace(":selected:", "").replace(":unselected:", "")
     }
 }

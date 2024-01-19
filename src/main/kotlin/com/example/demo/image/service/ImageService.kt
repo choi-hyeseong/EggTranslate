@@ -5,7 +5,6 @@ import com.example.demo.image.dto.ImageDTO
 import com.example.demo.translate.auto.dto.TranslateFileRequestDTO
 import com.example.demo.logger
 import com.example.demo.ocr.component.posthandle.OCRPostHandler
-import com.example.demo.translate.web.prehandle.handler.VocaTextReplacer
 import com.example.demo.ocr.service.OCRService
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.service.TranslateService
