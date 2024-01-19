@@ -54,7 +54,7 @@ class AzureClient(private val documentAnalysis: DocumentAnalysisClient) {
     private fun parseParagraph(result: AnalyzeResult): List<String> {
         return result.paragraphs.map { paragraph -> paragraph.content }.filter {
             if (ignoreUnnecessaryData)
-                pattern.matcher(it).matches() || it.length >= 5 //5자 이상일경우 의미 있는 데이터
+                pattern.matcher(it).matches() || it.length >= 4 //4자 이상일경우 의미 있는 데이터
             else
                 true
         }.toList()
