@@ -79,7 +79,7 @@ class FileService(
             async {
                 val ext = FileUtil.findExtension(image.originalFilename ?: image.name)
                 val saveName = "${System.currentTimeMillis()}${ThreadLocalRandom.current().nextInt(1,10000)}.$ext"
-                val path = outPath.plus("\\$saveName") //value로 형식 부여받기?
+                val path = outPath.plus("/$saveName") //value로 형식 부여받기?
                 FileUtil.saveFile(image.bytes, path)
                 log.info("image file saved to $path")
                 FileDTO(null, image.originalFilename ?: image.name, saveName, userDto, path)
