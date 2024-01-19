@@ -4,14 +4,13 @@ import com.example.demo.file.service.FileService
 import com.example.demo.image.dto.ImageDTO
 import com.example.demo.translate.auto.dto.TranslateFileRequestDTO
 import com.example.demo.logger
-import com.example.demo.ocr.component.process.OCRPostHandler
+import com.example.demo.ocr.component.posthandle.OCRPostHandler
+import com.example.demo.translate.web.prehandle.handler.VocaTextReplacer
 import com.example.demo.ocr.service.OCRService
-import com.example.demo.translate.auto.dto.AutoTranslateResponseDTO
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
-import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.parent.service.ParentService
 import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
