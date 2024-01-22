@@ -30,7 +30,7 @@ class TranslateService(
 ) {
 
     @Transactional
-    suspend fun translate(userDto: UserDto, childDTO: ChildDTO?, response: List<TranslateFileResponseDTO>): TranslateResultResponseDTO {
+    suspend fun saveTranslate(userDto: UserDto, childDTO: ChildDTO?, response: List<TranslateFileResponseDTO>): TranslateResultResponseDTO {
         val fileDtoList = mapFileDTO(userDto, response)
         val autoDTO = AutoTranslateDTO(null, userDto, fileDtoList)
 

@@ -76,7 +76,10 @@ class ParentService(
     }
 
     @Transactional
-    suspend fun findByChildIdOrNull(userId : Long, childId : Long) : ChildDTO? {
+    suspend fun findByChildIdOrNull(userId : Long, childId : Long?) : ChildDTO? {
+        if (childId == null)
+            return null
+
         val parent = findByParentUserIdOrNull(userId)
         return parent?.children?.find { it.id == childId }
     }

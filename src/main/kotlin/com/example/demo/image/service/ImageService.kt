@@ -25,7 +25,6 @@ class ImageService(
     private val ocrPostHandler: OCRPostHandler
 ) {
 
-
     private val log = logger()
 
     suspend fun handleImage(imageDTO: ImageDTO): TranslateResultResponseDTO {
@@ -35,11 +34,8 @@ class ImageService(
         val mapRequest = mapToFileDTO(imageDTO.lang, user, imageDTO.file)
         // return translated string
         val response = translateService.requestWebTranslate(mapRequest)
-        val childDTO =
-            if (imageDTO.childId != null)
-                parentService.findByChildIdOrNull(imageDTO.userId, imageDTO.childId)
-            else null
-        return translateService.translate(user, childDTO, response)
+        val childDTO = parentService.findByChildIdOrNull(imageDTO.userId, imageDTO.childId)
+        return translateService.saveTranslate(user, childDTO, response)
     }
 
 
