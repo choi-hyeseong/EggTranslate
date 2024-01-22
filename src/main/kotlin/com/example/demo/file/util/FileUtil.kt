@@ -1,5 +1,6 @@
 package com.example.demo.file.util
 
+import com.example.demo.file.dto.AbstractFileDTO
 import com.example.demo.file.dto.FileDTO
 import com.example.demo.file.exception.FileException
 import com.example.demo.logger
@@ -41,7 +42,7 @@ class FileUtil {
         }
 
         @Throws
-        suspend fun convertFileToResource(fileDTO: FileDTO): Resource {
+        suspend fun convertFileToResource(fileDTO: AbstractFileDTO): Resource {
             val file = File(fileDTO.savePath)
             if (file.exists())
                 return InputStreamResource(file.inputStream())

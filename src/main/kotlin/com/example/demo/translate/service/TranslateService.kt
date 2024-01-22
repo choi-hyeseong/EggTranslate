@@ -10,6 +10,7 @@ import com.example.demo.translate.exception.TranslateException
 import com.example.demo.translate.manual.dto.ManualResultDTO
 import com.example.demo.translate.manual.type.TranslateState
 import com.example.demo.translate.web.dto.TranslateRequestDTO
+import com.example.demo.translate.web.dto.TranslateResponseDTO
 import com.example.demo.translate.web.service.WebTranslateService
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.parent.child.dto.ChildDTO
@@ -57,18 +58,17 @@ class TranslateService(
 
     suspend fun mapFileDTO(userDto: UserDto, responseDTO: List<TranslateFileResponseDTO>) : MutableList<TranslateFileDTO> {
         return responseDTO.map {
-            TranslateFileDTO(null, fileService.findFileById(it.fileId!!), it.origin ?: "", it.result ?: "", it.from, it.target)
+            TranslateFileDTO(null, fileService.findFileById(it.fileId!!), it.convert, it.origin ?: "", it.result ?: "", it.from, it.target)
         }.toMutableList()
     }
 
     //웹 요청이기 때문에 Transactional 필요 없음
-    suspend fun requestWebTranslate(requestDTO: TranslateFileRequestDTO) : TranslateFileResponseDTO {
+    suspend fun requestWebTranslate(requestDTO: TranslateRequestDTO) : TranslateResponseDTO {
         val request = TranslateRequestDTO(requestDTO.from, requestDTO.to, requestDTO.content)
-        val response = webTranslateService.translateContent(request)
-        return TranslateFileResponseDTO(null, response.isSuccess, requestDTO.fileId, response.from, response.target, response.origin, response.result)
+        return  webTranslateService.translateContent(request)
     }
 
-    suspend fun requestWebTranslate(requestDTO: List<TranslateFileRequestDTO>) : List<TranslateFileResponseDTO> {
+    suspend fun requestWebTranslate(requestDTO: List<TranslateRequestDTO>) : List<TranslateResponseDTO> {
         return coroutineScope {
             requestDTO.map {
                 async {

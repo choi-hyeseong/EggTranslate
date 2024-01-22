@@ -1,13 +1,16 @@
 package com.example.demo.image.service
 
 import com.example.demo.file.service.FileService
+import com.example.demo.image.dto.ConvertFileDTO
 import com.example.demo.image.dto.ImageDTO
 import com.example.demo.translate.auto.dto.TranslateFileRequestDTO
 import com.example.demo.logger
 import com.example.demo.ocr.component.posthandle.OCRPostHandler
 import com.example.demo.ocr.service.OCRService
+import com.example.demo.translate.auto.dto.TranslateFileResponseDTO
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.service.TranslateService
+import com.example.demo.translate.web.dto.TranslateRequestDTO
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.service.ParentService
@@ -22,6 +25,7 @@ class ImageService(
     private val fileService: FileService,
     private val userService: UserService,
     private val parentService: ParentService,
+    private val convertService: ConvertService,
     private val ocrPostHandler: OCRPostHandler
 ) {
 
@@ -31,26 +35,46 @@ class ImageService(
         //save image
         val user = userService.getUser(imageDTO.userId)
         //read parallel logic
-        val mapRequest = mapToFileDTO(imageDTO.lang, user, imageDTO.file)
+        val response = requestImage(imageDTO.image ?: false, imageDTO.lang, user, imageDTO.file)
         // return translated string
-        val response = translateService.requestWebTranslate(mapRequest)
         val childDTO = parentService.findByChildIdOrNull(imageDTO.userId, imageDTO.childId)
         return translateService.saveTranslate(user, childDTO, response)
     }
 
 
-    private suspend fun mapToFileDTO(
+    private suspend fun requestImage(
+        isConvert: Boolean,
         lang: String,
         userDto: UserDto,
         image: List<MultipartFile>
-    ): List<TranslateFileRequestDTO> {
+    ): List<TranslateFileResponseDTO> {
         return coroutineScope {
             val requestList = image.map {
                 async {
-                    val response = fileService.saveEntity(fileService.saveImage(userDto, it))
-                    val ocrResponse = ocrService.readImage(it)
-                    val postHandleResponse = ocrPostHandler.handleText(ocrResponse)
-                    TranslateFileRequestDTO(response, "ko", lang, postHandleResponse)
+                    val file = fileService.saveEntity(fileService.saveImage(userDto, it))
+                    val ocrResponse = ocrService.readAll(it)
+                    val paragraph = ocrResponse.paragraphs
+                    //번역을 위한 flatten
+                    val stringBuilder = StringBuilder()
+                    for (i in paragraph.indices) {
+                        val p = paragraph[i]
+                        if (i == paragraph.size - 1)
+                            stringBuilder.append(p.content)
+                        else
+                            stringBuilder.append("${p.content}\n")
+                    }
+                    val paragraphResponse = ocrPostHandler.handleText(stringBuilder.toString())
+                    val postHandleResponse = ocrPostHandler.handleText(ocrResponse.content)
+
+                    val response = translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, postHandleResponse))
+                    val paraResponse = translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, paragraphResponse))
+                     paraResponse.result?.split("\n")?.forEachIndexed {index, content ->
+                        paragraph[index].content = content
+                    }
+                    var convertImage : ConvertFileDTO? = null
+                    if (isConvert)
+                        convertImage = convertService.convertFile(it, paragraph)
+                    TranslateFileResponseDTO(null, response.isSuccess, file, convertImage, response.from, response.target, response.origin, response.result)
                 }
             }.toList()
             requestList.awaitAll().toList()

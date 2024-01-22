@@ -13,7 +13,7 @@ class TranslateFileResultDTO(
 ) {
     constructor(translateFile: TranslateFile) : this(
         translateFile.id,
-        translateFile.convertFile.id,
+        translateFile.convertFile?.id,
         translateFile.file.id,
         translateFile.origin,
         translateFile.translate,

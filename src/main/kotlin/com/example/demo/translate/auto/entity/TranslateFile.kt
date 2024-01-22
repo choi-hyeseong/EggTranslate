@@ -11,9 +11,9 @@ class TranslateFile(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long?,
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "convertFile_id")
-    var convertFile : ConvertFile,
+    var convertFile : ConvertFile?,
 
     @ManyToOne
     @JoinColumn(name = "file_id")

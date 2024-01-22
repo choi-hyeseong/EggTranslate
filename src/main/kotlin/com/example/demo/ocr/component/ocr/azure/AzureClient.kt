@@ -3,10 +3,14 @@ package com.example.demo.ocr.component.ocr.azure
 import com.azure.ai.formrecognizer.documentanalysis.DocumentAnalysisClient
 import com.azure.ai.formrecognizer.documentanalysis.models.AnalyzeResult
 import com.azure.ai.formrecognizer.documentanalysis.models.OperationResult
+import com.azure.ai.formrecognizer.documentanalysis.models.Point
 import com.azure.core.util.BinaryData
 import com.azure.core.util.polling.LongRunningOperationStatus
 import com.azure.core.util.polling.PollResponse
 import com.azure.core.util.polling.SyncPoller
+import com.example.demo.ocr.component.ocr.azure.dto.AzureResponseDTO
+import com.example.demo.ocr.component.ocr.model.Area
+import com.example.demo.ocr.component.ocr.model.Paragraph
 import com.example.demo.ocr.exception.AzureRequestException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
@@ -25,7 +29,7 @@ class AzureClient(private val documentAnalysis: DocumentAnalysisClient) {
     private val pattern: Pattern = Pattern.compile(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")
 
     @Throws
-    suspend fun requestImage(file: MultipartFile): String {
+    suspend fun requestImage(file: MultipartFile): AzureResponseDTO {
         val documentData = BinaryData.fromBytes(file.bytes)
         //stream이 아닌 byte array로 받아와서 여러군데서 써도 문제 없음
         try {
@@ -34,12 +38,14 @@ class AzureClient(private val documentAnalysis: DocumentAnalysisClient) {
             val response: PollResponse<OperationResult> =
                 request.waitForCompletion(Duration.ofSeconds(timeout)) // 30초 대기
             val status: LongRunningOperationStatus = response.status
+            val result = request.finalResult
+
             if (status == LongRunningOperationStatus.FAILED)
                 throw AzureRequestException(HttpStatus.INTERNAL_SERVER_ERROR, "failed to request.")
-            else if (request.finalResult.paragraphs.isNullOrEmpty())
+            else if (result.paragraphs.isNullOrEmpty())
                 throw AzureRequestException(HttpStatus.BAD_REQUEST, "인식된 텍스트가 없습니다.")
             else
-                return parseParagraph(request.finalResult).joinToString(separator = "\n")
+                return AzureResponseDTO(result.content, parseParagraph(result))
         } catch (e: Exception) {
             //왜 TimeoutException이 안걸리는지 의문. -> RuntimeException 내에 Timeout except가 호출됨.
             //try문 내에서 throw한게 다 잡힘. -> Timeout만 잡게 수정
@@ -51,12 +57,13 @@ class AzureClient(private val documentAnalysis: DocumentAnalysisClient) {
 
     }
 
-    private fun parseParagraph(result: AnalyzeResult): List<String> {
-        return result.paragraphs.map { paragraph -> paragraph.content }.filter {
-            if (ignoreUnnecessaryData)
-                pattern.matcher(it).matches() || it.length >= 4 //4자 이상일경우 의미 있는 데이터
-            else
-                true
-        }.toList()
+    private fun parseParagraph(result: AnalyzeResult): List<Paragraph> {
+        val paragraphList : MutableList<Paragraph> = mutableListOf()
+        result.paragraphs.forEach {
+            val polygons = it.boundingRegions[0].boundingPolygon
+            polygons.sortWith {p1 : Point, p2 : Point -> (p1.x + p1.y).compareTo((p2.x + p2.y)) }
+            paragraphList.add(Paragraph(it.content, Area(polygons[0], polygons[3])))
+        }
+        return paragraphList
     }
 }
