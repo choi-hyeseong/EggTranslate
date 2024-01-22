@@ -4,6 +4,7 @@ import com.example.demo.translate.auto.entity.TranslateFile
 
 class TranslateFileResultDTO(
     val id : Long?,
+    val convertFile : Long?,
     val fileId : Long?,
     val origin : String,
     val translate : String,
@@ -12,6 +13,7 @@ class TranslateFileResultDTO(
 ) {
     constructor(translateFile: TranslateFile) : this(
         translateFile.id,
+        translateFile.convertFile.id,
         translateFile.file.id,
         translateFile.origin,
         translateFile.translate,
