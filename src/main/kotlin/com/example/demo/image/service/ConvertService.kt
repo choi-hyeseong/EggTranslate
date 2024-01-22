@@ -30,6 +30,8 @@ class ConvertService(
     val convertFileRepository: ConvertFileRepository
 ) {
 
+    //https://wlsufld.tistory.com/112 참조
+    // TODO 마무리 하기.
     @Transactional
     suspend fun getFile(fileId: Long): Resource {
         val fileDto = ConvertFileDTO(convertFileRepository.findById(fileId).orElseThrow {FileException("존재 하지 않는 변환된 이미지 파일입니다.")})
@@ -38,7 +40,6 @@ class ConvertService(
 
     suspend fun convertFile(file: MultipartFile, paragraph: List<Paragraph>): ConvertFileDTO {
         return withContext(Dispatchers.IO) {
-            println(paragraph)
             val image = ImageIO.read(ByteArrayInputStream(file.bytes))
             val cloneImage = BufferedImage(image.width, image.height, java.awt.Image.SCALE_FAST)
             val graphic = cloneImage.graphics
@@ -50,6 +51,8 @@ class ConvertService(
                     para.area.min.x.toInt(), para.area.min.y.toInt(),
                     para.area.width.toInt(), para.area.height.toInt()
                 )
+            }
+            for (para in paragraph) {
                 graphic.color = Color.lightGray
                 graphic.drawRect(
                     para.area.min.x.toInt(), para.area.min.y.toInt(),
@@ -60,8 +63,8 @@ class ConvertService(
             }
 
             graphic.dispose()
-            val saveName = "/${System.currentTimeMillis()}"
-            val resultFile = File(path.plus("/convert").plus("/$saveName.png"))
+            val saveName = "${System.currentTimeMillis()}.png"
+            val resultFile = File(path.plus("/convert").plus(saveName))
             if (!resultFile.parentFile.exists())
                 resultFile.parentFile.mkdir()
 
