@@ -1,9 +1,8 @@
 package com.example.demo.image.service
 
 import com.example.demo.file.service.FileService
-import com.example.demo.image.dto.ConvertFileDTO
+import com.example.demo.file.dto.ConvertFileDTO
 import com.example.demo.image.dto.ImageDTO
-import com.example.demo.translate.auto.dto.TranslateFileRequestDTO
 import com.example.demo.logger
 import com.example.demo.ocr.component.posthandle.OCRPostHandler
 import com.example.demo.ocr.service.OCRService

@@ -1,7 +1,11 @@
 package com.example.demo.file.entity
 
+import com.example.demo.file.util.FileUtil
 import com.example.demo.user.basic.entity.User
 import jakarta.persistence.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Entity
 class ConvertFile( // 괄호 안에는 기본 생성자들
@@ -14,4 +18,12 @@ class ConvertFile( // 괄호 안에는 기본 생성자들
 
     var savePath : String,
 
-    )
+    ) {
+
+    @PreRemove
+    fun deleteFile() {
+        CoroutineScope(Dispatchers.IO).launch {
+            FileUtil.deleteFile(savePath)
+        }
+    }
+}

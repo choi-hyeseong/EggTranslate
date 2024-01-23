@@ -3,10 +3,9 @@ package com.example.demo.image.service
 import com.example.demo.file.exception.FileException
 import com.example.demo.file.repository.ConvertFileRepository
 import com.example.demo.file.util.FileUtil
-import com.example.demo.image.dto.ConvertFileDTO
+import com.example.demo.file.dto.ConvertFileDTO
 import com.example.demo.ocr.component.ocr.model.Area
 import com.example.demo.ocr.component.ocr.model.Paragraph
-import com.google.cloud.vision.v1p4beta1.Image
 import jakarta.transaction.Transactional
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,7 +18,6 @@ import java.awt.Font
 import java.awt.Graphics
 import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
-import java.io.ByteArrayInputStream
 import java.io.File
 import javax.imageio.ImageIO
 

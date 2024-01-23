@@ -2,7 +2,7 @@ package com.example.demo.translate.auto.dto
 
 import com.example.demo.file.dto.FileDTO
 import com.example.demo.file.entity.File
-import com.example.demo.image.dto.ConvertFileDTO
+import com.example.demo.file.dto.ConvertFileDTO
 import com.example.demo.translate.auto.entity.TranslateFile
 
 class TranslateFileDTO(

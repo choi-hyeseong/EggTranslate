@@ -1,4 +1,4 @@
-package com.example.demo.image.dto
+package com.example.demo.file.dto
 
 import com.example.demo.file.dto.AbstractFileDTO
 import com.example.demo.file.entity.ConvertFile
