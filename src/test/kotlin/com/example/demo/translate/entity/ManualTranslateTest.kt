@@ -54,7 +54,7 @@ class ManualTranslateTest {
         val fileDto = FileDTO(null, "ORIGIN", "SAVE", saveUser, "PATH")
         val saveFile = fileRepository.save(fileDto.toEntity(user))
 
-        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), "ORIGIN", "TRANSLATE", "FROM", "TO")
+        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), null, "ORIGIN", "TRANSLATE", "FROM", "TO")
         val saveTranslateFile = translateFileRepository.save(translateFileDTO.toEntity(saveFile))
 
         val translateDTO = ManualTranslateDTO(null, TranslateFileDTO(saveTranslateFile), "TRANSLATED_CONTENT")
@@ -71,7 +71,7 @@ class ManualTranslateTest {
         val fileDto = FileDTO(null, "ORIGIN", "SAVE", UserDto(saveUser), "PATH")
         val saveFile = fileRepository.save(fileDto.toEntity(user))
 
-        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), "ORIGIN", "TRANSLATE", "FROM", "TO")
+        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), null, "ORIGIN", "TRANSLATE", "FROM", "TO")
         val saveTranslateFile = translateFileRepository.save(translateFileDTO.toEntity(saveFile))
 
         val translateDTO = ManualTranslateDTO(null, TranslateFileDTO(saveTranslateFile), "TRANSLATED_CONTENT")

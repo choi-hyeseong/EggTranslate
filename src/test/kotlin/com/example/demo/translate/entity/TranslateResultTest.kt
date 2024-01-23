@@ -110,7 +110,7 @@ class TranslateResultTest {
         val fileDto = FileDTO(null, "ORIGIN_NAME", "SAVE", parent.user, "PATH")
         val saveFile = FileDTO(fileRepository.save(fileDto.toEntity(savedParentUser)))
 
-        val translateFileDTO = TranslateFileDTO(null, saveFile, "ORIGIN", "TRANSLATE", "FROM", "TO")
+        val translateFileDTO = TranslateFileDTO(null, saveFile, null, "ORIGIN", "TRANSLATE", "FROM", "TO")
         val autoTrans = AutoTranslateDTO(null, UserDto(savedUser), mutableListOf(translateFileDTO))
 
         val request = TranslateResultDTO(null, UserDto(savedParentUser), autoTrans, ChildDTO(savedParent.children[0]), null)
