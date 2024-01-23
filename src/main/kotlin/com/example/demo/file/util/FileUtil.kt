@@ -50,7 +50,7 @@ class FileUtil {
 
         suspend fun readImageNonRotate(file: MultipartFile): BufferedImage {
             val byteStream = ByteArrayInputStream(file.bytes)
-            val originImage = ImageIO.read(ByteArrayInputStream(file.bytes)) //위에 스트림을 다 읽어놓고 또 읽니
+            val originImage = ImageIO.read(ByteArrayInputStream(file.bytes)) //byteStream 변수 사용하면 안됨. 여기서 다 읽으면 메타데이터를 못읽음.
             try {
                 val metadata = ImageMetadataReader.readMetadata(byteStream, file.size)
                 val directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory::class.java)
