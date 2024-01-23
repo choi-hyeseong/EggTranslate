@@ -55,6 +55,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation:3.2.1") //hibernate나 다른 의존성 추가 하면 작동안됨. 얘만
     implementation("com.google.firebase:firebase-admin:9.2.0")
     implementation("com.azure:azure-ai-formrecognizer:4.1.0")
+    implementation("com.drewnoakes:metadata-extractor:2.19.0")
 }
 
 tasks.withType<KotlinCompile> {

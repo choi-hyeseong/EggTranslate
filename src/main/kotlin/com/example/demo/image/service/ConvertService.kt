@@ -40,7 +40,7 @@ class ConvertService(
 
     suspend fun convertFile(file: MultipartFile, paragraph: List<Paragraph>): ConvertFileDTO {
         return withContext(Dispatchers.IO) {
-            val image = ImageIO.read(ByteArrayInputStream(file.bytes))
+            val image = FileUtil.readImageNonRotate(file)
             val cloneImage = BufferedImage(image.width, image.height, java.awt.Image.SCALE_FAST)
             val graphic = cloneImage.graphics
 
@@ -64,7 +64,7 @@ class ConvertService(
 
             graphic.dispose()
             val saveName = "${System.currentTimeMillis()}.png"
-            val resultFile = File(path.plus("/convert").plus(saveName))
+            val resultFile = File(path.plus("/convert").plus("/$saveName"))
             if (!resultFile.parentFile.exists())
                 resultFile.parentFile.mkdir()
 
