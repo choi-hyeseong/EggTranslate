@@ -16,6 +16,7 @@ import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.nio.Buffer
 import javax.imageio.ImageIO
 import kotlin.jvm.Throws
 
@@ -48,7 +49,27 @@ class FileUtil {
             }
         }
 
-        suspend fun readImageNonRotate(file: MultipartFile): BufferedImage {
+        suspend fun saveImage(image: BufferedImage, path: String) {
+            withContext(Dispatchers.IO) {
+                val file = File(path)
+                val parentDirectory = file.parentFile
+
+                if (!parentDirectory.exists()) //디렉토리가 없을경우 생성
+                    parentDirectory.mkdir()
+                ImageIO.write(image, "png", file)
+
+            }
+        }
+
+        suspend fun cloneImage(file: MultipartFile) : BufferedImage {
+            val image = readImageNonRotate(file)
+            val cloneImage = BufferedImage(image.width, image.height, java.awt.Image.SCALE_FAST)
+            val graphic = cloneImage.graphics
+            graphic.drawImage(image, 0, 0, null) //이미지 그리기 (복붙)
+            return cloneImage
+        }
+
+        private suspend fun readImageNonRotate(file: MultipartFile): BufferedImage {
             val byteStream = ByteArrayInputStream(file.bytes)
             val originImage = ImageIO.read(ByteArrayInputStream(file.bytes)) //byteStream 변수 사용하면 안됨. 여기서 다 읽으면 메타데이터를 못읽음.
             try {

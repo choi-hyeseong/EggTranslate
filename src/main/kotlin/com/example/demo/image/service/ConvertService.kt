@@ -17,9 +17,7 @@ import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
 import java.awt.geom.Rectangle2D
-import java.awt.image.BufferedImage
-import java.io.File
-import javax.imageio.ImageIO
+import kotlin.math.min
 
 @Service
 class ConvertService(
@@ -37,41 +35,44 @@ class ConvertService(
 
     suspend fun convertFile(file: MultipartFile, paragraph: List<Paragraph>): ConvertFileDTO {
         return withContext(Dispatchers.IO) {
-            val image = FileUtil.readImageNonRotate(file)
-            val cloneImage = BufferedImage(image.width, image.height, java.awt.Image.SCALE_FAST)
-            val graphic = cloneImage.graphics
+            val image = FileUtil.cloneImage(file) //이미지 복제 (새로운 이미지 파일)
+            val graphic = image.graphics
 
-            graphic.drawImage(image, 0, 0, null) //이미지 그리기 (복붙)
-            for (para in paragraph) {
-                graphic.color = Color.white
-                graphic.fillRect(
-                    para.area.min.x.toInt(), para.area.min.y.toInt(),
-                    para.area.width.toInt(), para.area.height.toInt()
-                )
-            }
-            for (para in paragraph) {
-                graphic.color = Color.lightGray
-                graphic.drawRect(
-                    para.area.min.x.toInt(), para.area.min.y.toInt(),
-                    para.area.width.toInt(), para.area.height.toInt()
-                )
-                val font = findFont(graphic, para.area, para.content)
-                writeText(graphic, font, para.content, para.area)
-            }
+            paragraph.forEach { markingContent(graphic, it) } //기존 내용 제거
+            paragraph.forEach { writeContent(graphic, it) } //다 지운후 내용 작성하기.
 
             graphic.dispose()
             val saveName = "${System.currentTimeMillis()}.png"
-            val resultFile = File(path.plus("/convert").plus("/$saveName"))
-            if (!resultFile.parentFile.exists())
-                resultFile.parentFile.mkdir()
+            val savePath = path.plus("/convert").plus("/$saveName")
+            FileUtil.saveImage(image, savePath)
 
-            ImageIO.write(cloneImage, "png", resultFile)
-
-            ConvertFileDTO(null, saveName, resultFile.path)
+            ConvertFileDTO(null, saveName, savePath)
         }
     }
 
-    fun findFont(graphics: Graphics, area: Area, content: String): FontData {
+    private suspend fun writeContent(graphic: Graphics, paragraph: Paragraph) {
+        val x = paragraph.area.min.x.toInt()
+        val y = paragraph.area.min.y.toInt()
+        val width = paragraph.area.width.toInt()
+        val height = paragraph.area.height.toInt()
+        val font = findSuggestedFontInArea(graphic, paragraph.area, paragraph.content)
+
+        graphic.color = Color.lightGray //테두리 그리기
+        graphic.drawRect(x, y, width, height)
+        //글씨 작성하기
+        writeText(graphic, font, paragraph.content, paragraph.area)
+    }
+
+    private suspend fun markingContent(graphic: Graphics, paragraph: Paragraph) {
+        val x = paragraph.area.min.x.toInt()
+        val y = paragraph.area.min.y.toInt()
+        val width = paragraph.area.width.toInt()
+        val height = paragraph.area.height.toInt()
+        graphic.color = Color.white //지우기
+        graphic.fillRect(x, y, width, height)
+    }
+
+    fun findSuggestedFontInArea(graphics: Graphics, area: Area, content: String): FontData {
         val width = area.width.toInt()
         val height = area.height.toInt()
         var font = Font("Arial", Font.PLAIN, 50)
@@ -115,40 +116,37 @@ class ConvertService(
         if (g.font.size < 9)
             g.font = Font(g.font.name, Font.BOLD, 9)
 
-        startY += g.fontMetrics.ascent //꼭짓점에서 폰트의 중간 좌표로 이동.
-        for (i in 0..10000) {
-            if (index >= content.length)
-                break
-            var nextChar = fontData.maxCharPerLine
-            if (g.font.size == 9)
-                nextChar = findFontData(
-                    g,
-                    g.font,
-                    area.width.toInt(),
-                    area.height.toInt(),
-                    content
-                ).maxCharPerLine
+        val charPerLine = if (g.font.size == 9) //폰트사이즈가 9면 9에 맞는 줄바꿈 데이터 불러오기..
+            findFontData(g, g.font, area.width.toInt(), area.height.toInt(), content).maxCharPerLine
+        else
+            fontData.maxCharPerLine
 
-            val next =
-                if (index + nextChar > content.length)
-                    content.length.toLong()
-                else index + nextChar
-            val isLastLine = startY + fontData.charHeight > area.max.y
-            val drawString = content.substring(index, next.toInt())
-            if (isLastLine)
+        startY += g.fontMetrics.ascent //꼭짓점에서 폰트의 중간 좌표로 이동.
+
+        for (i in 0..10000) {
+            if (index >= content.length) //작성할 string이 없으면 break
+                break
+
+            val next = min(index + charPerLine, content.length)
+
+            val drawString = content.substring(index, next)
+            if ( startY + fontData.charHeight > area.max.y) {
                 g.drawString("$drawString.", startX, startY)
+                break
+            }
             else
                 g.drawString(drawString, startX, startY)
 
-
-            if (isLastLine) {
-                //다음줄이 해당 영역을 벗어날경우 중단
-                break
-            }
             startY += fontData.charHeight //다음 줄로 이동
-            index = next.toInt()
+            index = next
         }
     }
 }
 
-data class FontData(val font: Font, val maxCharPerLine: Int, val maxLine: Int, val charWidth: Int, val charHeight: Int)
+data class FontData(
+    val font: Font,
+    val maxCharPerLine: Int,
+    val maxLine: Int,
+    val charWidth: Int,
+    val charHeight: Int
+)
