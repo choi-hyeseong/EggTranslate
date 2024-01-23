@@ -26,15 +26,14 @@ import javax.imageio.ImageIO
 @Service
 class ConvertService(
     @Value("\${image-path}")
-    val path : String,
+    val path: String,
     val convertFileRepository: ConvertFileRepository
 ) {
 
-    //https://wlsufld.tistory.com/112 참조
-    // TODO 마무리 하기.
     @Transactional
     suspend fun getFile(fileId: Long): Resource {
-        val fileDto = ConvertFileDTO(convertFileRepository.findById(fileId).orElseThrow {FileException("존재 하지 않는 변환된 이미지 파일입니다.")})
+        val fileDto = ConvertFileDTO(
+            convertFileRepository.findById(fileId).orElseThrow { FileException("존재 하지 않는 변환된 이미지 파일입니다.") })
         return FileUtil.convertFileToResource(fileDto)
     }
 
@@ -44,7 +43,7 @@ class ConvertService(
             val cloneImage = BufferedImage(image.width, image.height, java.awt.Image.SCALE_FAST)
             val graphic = cloneImage.graphics
 
-            graphic.drawImage(image, 0,0, null) //이미지 그리기 (복붙)
+            graphic.drawImage(image, 0, 0, null) //이미지 그리기 (복붙)
             for (para in paragraph) {
                 graphic.color = Color.white
                 graphic.fillRect(
@@ -75,38 +74,37 @@ class ConvertService(
     }
 
     fun findFont(graphics: Graphics, area: Area, content: String): FontData {
-        var maxWidth: Int = 1
-        var fontWidth: Int = 1
-        var fontHeight: Int = 1
         val width = area.width.toInt()
-        val height = area.height
+        val height = area.height.toInt()
         var font = Font("Arial", Font.PLAIN, 50)
-
+        var data = findFontData(graphics, font, width, height, content)
         for (i in 0..50000) {
-            val metrics = graphics.getFontMetrics(font)
-            val bounds: Rectangle2D = metrics.getStringBounds(content, graphics)
-            val copyHeight = height - metrics.ascent
-
-            fontWidth = (bounds.width.toInt() / content.length)
-            fontHeight = bounds.height.toInt()
-            maxWidth = width / (fontWidth) //최대 들어갈 수 있는 char의 수
-            if (maxWidth == 0)
-                maxWidth = 1
-
-            val contentLine = content.length / maxWidth
-            if (contentLine * fontHeight <= copyHeight || font.size == 1)
+            data = findFontData(graphics, font, width, height, content)
+            val ascentHeight = height - graphics.getFontMetrics(font).ascent
+            if (data.maxLine * data.charHeight <= ascentHeight || font.size == 1)
                 break
 
             font = Font(graphics.font.name, graphics.font.style, font.size - 1)
         }
-        return FontData(font, maxWidth, fontWidth, fontHeight)
+        return data
     }
 
-    fun findCharPerLine(g: Graphics, font: Font, width: Int, content: String): Int {
+    fun findFontData(g: Graphics, font: Font, width: Int, height: Int, content: String): FontData {
         val metrics = g.getFontMetrics(font)
         val bounds: Rectangle2D = metrics.getStringBounds(content, g)
-        val fontWidth = (bounds.width / content.length).toLong()
-        return (width / (fontWidth)).toInt() //최대 들어갈 수 있는 char의 수
+        // 10보다 작을경우 너비를 좀 늘려서 줄바꿈을 생기게 함
+        val fontWidth =
+            if (font.size <= 10)
+                ((bounds.width.toInt() / content.length) * 1.3).toInt()
+            else
+                bounds.width.toInt() / content.length
+        val fontHeight = bounds.height.toInt()
+        var maxWidth = width / (fontWidth) //최대 들어갈 수 있는 char의 수
+        if (maxWidth == 0)
+            maxWidth = 1
+
+        val contentLine = content.length / maxWidth
+        return FontData(font, maxWidth, contentLine, fontWidth, fontHeight)
     }
 
 
@@ -123,22 +121,36 @@ class ConvertService(
         for (i in 0..10000) {
             if (index >= content.length)
                 break
-            var nextChar = fontData.maxChar
-            if (g.font.size == 7)
-                nextChar = findCharPerLine(g, g.font, area.width.toInt(), content) - 2 //적당한 줄바꿈 위한 - 2
+            var nextChar = fontData.maxCharPerLine
+            if (g.font.size == 9)
+                nextChar = findFontData(
+                    g,
+                    g.font,
+                    area.width.toInt(),
+                    area.height.toInt(),
+                    content
+                ).maxCharPerLine
 
             val next =
                 if (index + nextChar > content.length)
                     content.length.toLong()
                 else index + nextChar
-
+            val isLastLine = startY + fontData.charHeight > area.max.y
             val drawString = content.substring(index, next.toInt())
-            g.drawString(drawString, startX, startY)
+            if (isLastLine)
+                g.drawString("$drawString.", startX, startY)
+            else
+                g.drawString(drawString, startX, startY)
 
+
+            if (isLastLine) {
+                //다음줄이 해당 영역을 벗어날경우 중단
+                break
+            }
             startY += fontData.charHeight //다음 줄로 이동
             index = next.toInt()
         }
     }
 }
 
-data class FontData(val font: Font, val maxChar: Int, val charWidth: Int, val charHeight: Int)
+data class FontData(val font: Font, val maxCharPerLine: Int, val maxLine: Int, val charWidth: Int, val charHeight: Int)
