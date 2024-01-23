@@ -4,6 +4,7 @@ import com.example.demo.file.service.FileService
 import com.example.demo.file.dto.ConvertFileDTO
 import com.example.demo.image.dto.ImageDTO
 import com.example.demo.logger
+import com.example.demo.ocr.component.ocr.model.Paragraph
 import com.example.demo.ocr.component.posthandle.OCRPostHandler
 import com.example.demo.ocr.service.OCRService
 import com.example.demo.translate.auto.dto.TranslateFileResponseDTO
@@ -54,30 +55,48 @@ class ImageService(
                     val ocrResponse = ocrService.readAll(it)
                     val paragraph = ocrResponse.paragraphs
                     //번역을 위한 flatten
-                    val stringBuilder = StringBuilder()
-                    for (i in paragraph.indices) {
-                        val p = paragraph[i]
-                        if (i == paragraph.size - 1)
-                            stringBuilder.append(p.content)
-                        else
-                            stringBuilder.append("${p.content}\n")
-                    }
-                    val paragraphResponse = ocrPostHandler.handleText(stringBuilder.toString())
                     val postHandleResponse = ocrPostHandler.handleText(ocrResponse.content)
-
-                    val response = translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, postHandleResponse))
-                    val paraResponse = translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, paragraphResponse))
-                     paraResponse.result?.split("\n")?.forEachIndexed {index, content ->
-                        paragraph[index].content = content
-                    }
-                    var convertImage : ConvertFileDTO? = null
-                    if (isConvert)
-                        convertImage = convertService.convertFile(it, paragraph)
-                    TranslateFileResponseDTO(null, response.isSuccess, file, convertImage, response.from, response.target, response.origin, response.result)
+                    val response =
+                        translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, postHandleResponse))
+                    TranslateFileResponseDTO(
+                        null,
+                        response.isSuccess,
+                        file,
+                        getConvertImage(isConvert, lang, it, paragraph),
+                        response.from,
+                        response.target,
+                        response.origin,
+                        response.result
+                    )
                 }
             }.toList()
             requestList.awaitAll().toList()
         }
+    }
+
+    //image 요청이 false면 null을 리턴
+    private suspend fun getConvertImage(isRequested: Boolean, lang : String, file : MultipartFile, paragraphs: List<Paragraph>): ConvertFileDTO? {
+        if (!isRequested)
+            return null
+        val paragraphResponse = ocrPostHandler.handleText(getFlattenParagraphContent(paragraphs))
+        val paraResponse =
+            translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, paragraphResponse))
+        paraResponse.result?.split("\n")?.forEachIndexed { index, content ->
+            paragraphs[index].content = content
+        }
+        return convertService.convertFile(file, paragraphs)
+    }
+
+    private fun getFlattenParagraphContent(paragraphs: List<Paragraph>): String {
+        val stringBuilder = StringBuilder()
+        for (i in paragraphs.indices) {
+            val p = paragraphs[i]
+            if (i == paragraphs.size - 1)
+                stringBuilder.append(p.content)
+            else
+                stringBuilder.append("${p.content}\n")
+        }
+        return stringBuilder.toString()
     }
 
 }
