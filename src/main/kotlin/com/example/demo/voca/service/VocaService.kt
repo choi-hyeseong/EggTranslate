@@ -8,6 +8,7 @@ import com.example.demo.voca.entity.Voca
 import com.example.demo.voca.exception.VocaException
 import com.example.demo.voca.repository.VocaRepository
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.jpa.domain.JpaSort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.io.File
@@ -44,5 +45,19 @@ class VocaService(
     @Transactional
     suspend fun findAll(lang : String) : List<VocaResponseDTO> {
         return vocaRepository.findAllByLang(lang).map { VocaResponseDTO(it) }
+    }
+
+    @Transactional(readOnly = true)
+    suspend fun findAllContainingVoca(lang : String, content : String) : List<VocaResponseDTO> {
+        var copyContent = content
+        val voca = findAll(lang).sortedByDescending { it.origin.length }
+        return voca.filter {
+            if (copyContent.contains(it.origin)) {
+                copyContent = copyContent.replace(it.origin, it.translate)
+                true
+            }
+            else
+                false
+        }
     }
 }

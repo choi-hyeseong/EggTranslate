@@ -14,6 +14,7 @@ import com.example.demo.translate.web.dto.TranslateRequestDTO
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.service.ParentService
+import com.example.demo.voca.service.VocaService
 import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -26,6 +27,7 @@ class ImageService(
     private val userService: UserService,
     private val parentService: ParentService,
     private val convertService: ConvertService,
+    private val vocaService: VocaService,
     private val ocrPostHandler: OCRPostHandler
 ) {
 
@@ -56,6 +58,8 @@ class ImageService(
                     val paragraph = ocrResponse.paragraphs
                     //번역을 위한 flatten
                     val postHandleResponse = ocrPostHandler.handleText(ocrResponse.content)
+                    val allVocaDesc = vocaService.findAllContainingVoca(lang, postHandleResponse) //여기서 찾으면 2번 호출하는데.. (Translate Pre Handler)
+                    log.warn("$allVocaDesc")
                     val response =
                         translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, postHandleResponse))
                     TranslateFileResponseDTO(
