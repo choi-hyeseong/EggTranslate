@@ -58,7 +58,7 @@ class TranslateService(
 
     suspend fun mapFileDTO(userDto: UserDto, responseDTO: List<TranslateFileResponseDTO>) : MutableList<TranslateFileDTO> {
         return responseDTO.map {
-            TranslateFileDTO(null, fileService.findFileById(it.fileId!!), it.convert, it.origin ?: "", it.result ?: "", it.from, it.target)
+            TranslateFileDTO(null, fileService.findFileById(it.fileId!!), it.convert, it.voca, it.origin ?: "", it.result ?: "", it.from, it.target)
         }.toMutableList()
     }
 

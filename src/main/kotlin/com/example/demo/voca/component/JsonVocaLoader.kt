@@ -25,6 +25,7 @@ class JsonVocaLoader(
             val response = file.inputStream().use {
                 mapper.readValue(it, object : TypeReference<List<VocaDTO>>() {})
             }
+            println(response)
             return response
         } else
             throw VocaException("단어장 파일이 존재하지 않습니다.")

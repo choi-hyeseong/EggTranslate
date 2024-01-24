@@ -47,8 +47,15 @@ class VocaService(
         return vocaRepository.findAllByLang(lang).map { VocaResponseDTO(it) }
     }
 
+
+    @Transactional
+    suspend fun findAllByLang(lang : String) : List<VocaDTO> {
+        return vocaRepository.findAllByLang(lang).map { VocaDTO(it) }
+    }
+
+
     @Transactional(readOnly = true)
-    suspend fun findAllContainingVoca(lang : String, content : String) : List<VocaResponseDTO> {
+    suspend fun findAllContainingVoca(lang : String, content : String) : MutableList<VocaResponseDTO> {
         var copyContent = content
         val voca = findAll(lang).sortedByDescending { it.origin.length }
         return voca.filter {
@@ -58,6 +65,6 @@ class VocaService(
             }
             else
                 false
-        }
+        }.toMutableList()
     }
 }

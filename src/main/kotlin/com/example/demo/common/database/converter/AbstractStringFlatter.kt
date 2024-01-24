@@ -8,16 +8,18 @@ abstract class AbstractStringFlatter<T> : AttributeConverter<List<T>, String> {
         return if (p0.isNullOrEmpty())
              ""
         else
-             p0.joinToString(separator = ", ")
+             p0.joinToString(separator = "|| ") { convert(it) }
     }
 
     override fun convertToEntityAttribute(p0: String?): List<T> {
         return if (p0.isNullOrEmpty())
             mutableListOf()
         else
-            p0.split(",").map { convert(it.trim()) }
+            p0.split("||").map { recover(it.trim()) }
     }
 
-    protected abstract fun convert(s : String) : T
+    protected abstract fun recover(s : String) : T
+
+    protected abstract fun convert(obj : T) : String
 }
 

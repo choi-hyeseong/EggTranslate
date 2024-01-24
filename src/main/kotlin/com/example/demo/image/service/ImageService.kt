@@ -67,6 +67,7 @@ class ImageService(
                         response.isSuccess,
                         file,
                         getConvertImage(isConvert, lang, it, paragraph),
+                        allVocaDesc,
                         response.from,
                         response.target,
                         postHandleResponse,

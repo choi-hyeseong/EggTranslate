@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 @JsonIgnoreProperties(ignoreUnknown = true)
 //json creator가 있어야 생성자 인식가능
-class VocaDTO @JsonCreator constructor (
+data class VocaDTO @JsonCreator constructor (
 
     @JsonProperty(value = "lang")
     val lang : String,
@@ -24,4 +24,6 @@ class VocaDTO @JsonCreator constructor (
     }
 
     fun toEntity() : Voca = Voca(id, lang, origin, translate) //null로 안해두면 select 발생함. 굳이 엔티티 저장할때는 id값 필요 없음 (리셋됨)
+
+    fun toResponseDTO() : VocaResponseDTO = VocaResponseDTO(origin, lang, translate)
 }
