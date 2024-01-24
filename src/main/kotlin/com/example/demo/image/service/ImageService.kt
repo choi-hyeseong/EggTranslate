@@ -69,9 +69,10 @@ class ImageService(
                         getConvertImage(isConvert, lang, it, paragraph),
                         response.from,
                         response.target,
-                        response.origin,
+                        postHandleResponse,
                         response.result
                     )
+                    //결과 반환시에는 origin에는 replace 된 값 보내줘선 안됨. 오직 origin 데이터.
                 }
             }.toList()
             requestList.awaitAll().toList()
