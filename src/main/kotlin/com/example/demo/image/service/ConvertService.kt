@@ -112,14 +112,12 @@ class ConvertService(
         val startX = area.min.x.toInt()
         var startY = area.min.y.toInt()
         g.color = Color.black
-        g.font = Font(fontData.font.name, Font.PLAIN, fontData.font.size - 3)
-        if (g.font.size < 9)
-            g.font = Font(g.font.name, Font.BOLD, 9)
-
-        val charPerLine = if (g.font.size == 9) //폰트사이즈가 9면 9에 맞는 줄바꿈 데이터 불러오기..
-            findFontData(g, g.font, area.width.toInt(), area.height.toInt(), content).maxCharPerLine
+        if (fontData.font.size < 9)
+            g.font = Font(g.font.name, Font.PLAIN, 9)
         else
-            fontData.maxCharPerLine
+            g.font = Font(g.font.name, Font.PLAIN, 12)
+
+        val charPerLine = findFontData(g, g.font, area.width.toInt() - (area.width.toInt()* 0.15).toInt(), area.height.toInt(), content).maxCharPerLine
 
         startY += g.fontMetrics.ascent //꼭짓점에서 폰트의 중간 좌표로 이동.
 
