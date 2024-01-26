@@ -56,6 +56,7 @@ dependencies {
     implementation("com.google.firebase:firebase-admin:9.2.0")
     implementation("com.azure:azure-ai-formrecognizer:4.1.0")
     implementation("com.drewnoakes:metadata-extractor:2.19.0")
+    implementation("kr.dogfoot:hwplib:1.1.4")
 }
 
 tasks.withType<KotlinCompile> {
