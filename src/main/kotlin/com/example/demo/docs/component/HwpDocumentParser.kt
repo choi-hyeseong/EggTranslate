@@ -29,6 +29,7 @@ class HwpDocumentParser(file: MultipartFile) : DocumentParser(file) {
     }
 
     override suspend fun write(translate: String, path: String): DocumentWriteResponse {
+        // TODO 여백 있는 줄 번역기가 인식못하므로 지우기.
         TODO("Not yet implemented")
     }
 
@@ -36,8 +37,8 @@ class HwpDocumentParser(file: MultipartFile) : DocumentParser(file) {
         val builder : StringBuilder = StringBuilder()
         hwpFile.bodyText.sectionList.forEach { section ->
             section.paragraphs.forEach {
-                val paragraphResponse = parseParagraph(it)
-                builder.append(paragraphResponse.plus("\n"))
+                val paragraphResponse = parseParagraph(it).plus("\n")
+                builder.append(paragraphResponse)
             }
         }
         return DocumentReadResponse(true, builder.toString())
@@ -48,7 +49,7 @@ class HwpDocumentParser(file: MultipartFile) : DocumentParser(file) {
         if (paragraph.normalString.isNotBlank()) {
             //문단내에 내용이 있을때
             paragraphs.add(paragraph)
-            return paragraph.normalString
+            return paragraph.normalString.trim()
         }
         else
             return handleControl(paragraph.controlList)
@@ -65,7 +66,7 @@ class HwpDocumentParser(file: MultipartFile) : DocumentParser(file) {
             if (control.type == ControlType.Table) {
                 //여러개의 테이블이 한 문단에 존재할 수 있음.
                 val tableResponse = handleTable(control as ControlTable)
-                builder.append(tableResponse.plus("\n")) //테이블 파싱한경우 줄바꿈 포함해서 추가.
+                builder.append(tableResponse) //테이블 파싱한경우 줄바꿈 포함해서 추가.
             }
         }
         return builder.toString()
@@ -81,7 +82,6 @@ class HwpDocumentParser(file: MultipartFile) : DocumentParser(file) {
                 }
                 builder.append("\t") //한 셀이 끝났을때 탭 넣기
             }
-            builder.append("\n") //한 줄이 끝났을때 줄바꿈
         }
         return builder.toString()
     }
