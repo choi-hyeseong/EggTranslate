@@ -49,7 +49,7 @@ class HwpDocumentParser(file: MultipartFile) : DocumentParser(file) {
         if (paragraph.normalString.isNotBlank()) {
             //문단내에 내용이 있을때
             paragraphs.add(paragraph)
-            return paragraph.normalString.trim()
+            return paragraph.normalString
         }
         else
             return handleControl(paragraph.controlList)
