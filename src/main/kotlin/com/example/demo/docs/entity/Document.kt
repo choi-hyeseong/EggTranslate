@@ -1,5 +1,6 @@
 package com.example.demo.docs.entity
 
+import com.example.demo.common.database.entity.BaseEntity
 import com.example.demo.docs.type.DocumentType
 import jakarta.persistence.*
 
@@ -17,4 +18,4 @@ class Document (
 
     @Column
     val savePath : String,
-)
+) : BaseEntity()

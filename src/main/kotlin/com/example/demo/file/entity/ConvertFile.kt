@@ -1,5 +1,6 @@
 package com.example.demo.file.entity
 
+import com.example.demo.common.database.entity.BaseEntity
 import com.example.demo.file.util.FileUtil
 import com.example.demo.user.basic.entity.User
 import jakarta.persistence.*
@@ -18,7 +19,7 @@ class ConvertFile( // 괄호 안에는 기본 생성자들
 
     var savePath : String,
 
-    ) {
+    ) : BaseEntity() {
 
     @PreRemove
     fun deleteFile() {
