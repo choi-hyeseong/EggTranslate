@@ -57,6 +57,7 @@ dependencies {
     implementation("com.azure:azure-ai-formrecognizer:4.1.0")
     implementation("com.drewnoakes:metadata-extractor:2.19.0")
     implementation("kr.dogfoot:hwplib:1.1.4")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
 }
 
 tasks.withType<KotlinCompile> {

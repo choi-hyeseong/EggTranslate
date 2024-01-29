@@ -15,7 +15,7 @@ class TestController(private val documentFactory: DocumentFactory, private val w
 
     @PostMapping(name = "", produces = ["application/json;charset=UTF-8"])
     suspend fun notify(@RequestParam file : MultipartFile) : DocumentWriteResponse? {
-        val parser = documentFactory.createParser(DocumentType.HWP, file)
+        val parser = documentFactory.createParser(DocumentType.DOCX, file)
         val response = parser.read()
         val translate = webTranslateService.translateContent(TranslateRequestDTO(
             "ko",
