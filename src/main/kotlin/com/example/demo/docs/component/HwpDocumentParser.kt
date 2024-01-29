@@ -37,7 +37,7 @@ class HwpDocumentParser(file: MultipartFile) : DocumentParser(file) {
         }
         HWPWriter.toFile(hwpFile, "C:\\Users\\bd284\\OneDrive\\바탕 화면\\convert.hwp")
 
-        return DocumentWriteResponse(true, "", "", translate)
+        return DocumentWriteResponse("", "", translate)
     }
 
     private fun readFile(hwpFile: HWPFile): DocumentReadResponse {
@@ -46,7 +46,7 @@ class HwpDocumentParser(file: MultipartFile) : DocumentParser(file) {
                 parseParagraph(it)
             }
         }
-        return DocumentReadResponse(true, paragraphs.joinToString(separator = "\n") { it.normalString })
+        return DocumentReadResponse(paragraphs.joinToString(separator = "\n") { it.normalString })
     }
 
     private fun parseParagraph(paragraph: Paragraph) {
