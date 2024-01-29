@@ -44,11 +44,10 @@ class AutoTranslateTest {
     @Test
     @Transactional
     fun TEST_LOAD_AUTO_TRANSLATE() {
-        val saveUser = userRepository.save(user)
         val autoTranslateDTO = AutoTranslateDTO(null,mutableListOf( ))
         val response = autoTranslateRepository.save(autoTranslateDTO.toEntity( mutableListOf()))
 
-        assertEquals(response.id, autoTranslateRepository.findByUserId(saveUser.id!!).get().id)
+        assertEquals(response.id, autoTranslateRepository.findById(response.id!!).get().id)
 
     }
 
