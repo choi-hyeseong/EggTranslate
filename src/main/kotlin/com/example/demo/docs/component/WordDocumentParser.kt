@@ -7,13 +7,11 @@ import com.example.demo.logger
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.apache.poi.xwpf.usermodel.XWPFParagraph
 import org.apache.poi.xwpf.usermodel.XWPFTable
-import org.apache.poi.xwpf.usermodel.XWPFTableCell
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
 import java.io.FileOutputStream
-import kotlin.math.log
 
-class WordDocumentParser(file: MultipartFile) : DocumentParser(file) {
+class WordDocumentParser(stream: ByteArrayInputStream) : DocumentParser(stream) {
 
     private val logger = logger()
     private lateinit var document: XWPFDocument
@@ -21,7 +19,7 @@ class WordDocumentParser(file: MultipartFile) : DocumentParser(file) {
 
     override suspend fun read(): DocumentReadResponse {
         try {
-            document = XWPFDocument(ByteArrayInputStream(file.bytes))
+            document = XWPFDocument(stream)
             document.paragraphs.forEach(this::parseParagraph)
             document.tables.forEach(this::parseTable)
         } catch (e: Exception) {

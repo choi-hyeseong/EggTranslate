@@ -11,19 +11,18 @@ import kr.dogfoot.hwplib.`object`.bodytext.control.ControlType
 import kr.dogfoot.hwplib.`object`.bodytext.paragraph.Paragraph
 import kr.dogfoot.hwplib.reader.HWPReader
 import kr.dogfoot.hwplib.writer.HWPWriter
-import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
 
 
 //빈 사용 대신 팩토리가 하나 필요할듯?
-class HwpDocumentParser(file: MultipartFile) : DocumentParser(file) {
+class HwpDocumentParser(file: ByteArrayInputStream) : DocumentParser(file) {
 
     private lateinit var hwpFile: HWPFile
     private val paragraphs: MutableList<Paragraph> = mutableListOf()
 
     override suspend fun read(): DocumentReadResponse {
         try {
-            hwpFile = HWPReader.fromInputStream(ByteArrayInputStream(file.bytes))
+            hwpFile = HWPReader.fromInputStream(stream)
             return readFile(hwpFile)
         } catch (e: Exception) {
             throw DocumentException(e.localizedMessage)
