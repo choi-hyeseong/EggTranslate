@@ -27,20 +27,18 @@ class WordDocumentParser(file: MultipartFile) : DocumentParser(file) {
         } catch (e: Exception) {
             throw DocumentException(e.localizedMessage)
         }
-        val result = this.paragraphs
-        return DocumentReadResponse(result.joinToString(separator = "\n") {it.text})
+        return DocumentReadResponse(paragraphs.joinToString(separator = "\n") { it.text })
     }
 
     override suspend fun write(translate: String, path: String): DocumentWriteResponse {
         translate.split("\n").forEachIndexed { index, splitText ->
             if (paragraphs.size > index)
                 setParagraphText(paragraphs[index], splitText)
-
             else
                 logger.warn("Can't parse $splitText index of $index")
         }
         document.write(FileOutputStream("C:\\Users\\bd284\\OneDrive\\바탕 화면\\result1.docx"))
-        return DocumentWriteResponse("", "", translate)
+        return DocumentWriteResponse(path, paragraphs.joinToString(separator = "\n") { it.text }, translate)
     }
 
 
@@ -66,15 +64,13 @@ class WordDocumentParser(file: MultipartFile) : DocumentParser(file) {
     //테이블을 recursive하게 파싱.
     private fun parseTable(table: XWPFTable) {
         table.rows.forEach { row ->
-            row.tableCells.forEach {cell ->
+            row.tableCells.forEach { cell ->
                 cell.paragraphs.forEach(this::parseParagraph)
                 if (cell.tables != null)
                     cell.tables.forEach(this::parseTable)
             }
         }
     }
-
-
 
 
 }
