@@ -32,6 +32,7 @@ class TranslateResultDTO(
         TranslateResultResponseDTO(
             id,
             user.id,
+            user.userType,
             autoTranslate.toResponseDTO(),
             child?.id,
             manualResultDTO?.let {
