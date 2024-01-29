@@ -8,6 +8,7 @@ import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.web.multipart.MultipartFile
+import java.io.ByteArrayInputStream
 
 
 class DocumentFactoryTest {
@@ -16,7 +17,7 @@ class DocumentFactoryTest {
     @Test
     fun TEST_SATISFY_PARSER() {
         val factory = DocumentFactory()
-        val file = mockk<MultipartFile>()
+        val file = mockk<ByteArrayInputStream>()
         DocumentType.values().forEach {
             val parser = factory.createParser(it, file)
 

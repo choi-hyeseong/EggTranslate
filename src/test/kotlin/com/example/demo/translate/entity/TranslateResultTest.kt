@@ -83,10 +83,10 @@ class TranslateResultTest {
         )
         val savedParent = parentRepository.save(parent.toEntity(savedParentUser,child.map { it.toEntity() }.toMutableList() ))
 
-        val autoTrans = AutoTranslateDTO(    null, UserDto(savedUser), mutableListOf())
+        val autoTrans = AutoTranslateDTO(    null, mutableListOf())
 
         val request = TranslateResultDTO(null, UserDto(savedParentUser), autoTrans, ChildDTO(savedParent.children[0]), null)
-        val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity(savedParentUser, autoTrans.toEntity(savedParentUser, mutableListOf()), null)) }
+        val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity(savedParentUser, autoTrans.toEntity( mutableListOf()), null)) }
         assertNotEquals(-1, savedRequest.id)
 
     }
@@ -111,10 +111,10 @@ class TranslateResultTest {
         val saveFile = FileDTO(fileRepository.save(fileDto.toEntity(savedParentUser)))
 
         val translateFileDTO = TranslateFileDTO(null, saveFile, null, mutableListOf(),"ORIGIN", "TRANSLATE", "FROM", "TO")
-        val autoTrans = AutoTranslateDTO(null, UserDto(savedUser), mutableListOf(translateFileDTO))
+        val autoTrans = AutoTranslateDTO(null, mutableListOf(translateFileDTO))
 
         val request = TranslateResultDTO(null, UserDto(savedParentUser), autoTrans, ChildDTO(savedParent.children[0]), null)
-        val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity(savedParentUser, autoTrans.toEntity(savedParentUser, autoTrans.translateFile.map {
+        val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity(savedParentUser, autoTrans.toEntity(autoTrans.translateFile.map {
             val fileDto = it.file
             val loadFile = fileRepository.findById(fileDto.id!!).get()
             it.toEntity(loadFile)
@@ -136,8 +136,8 @@ class TranslateResultTest {
         val savedUser = userRepository.save(user)
         val savedParentUser = userRepository.save(parent)
 
-        val autoTrans = AutoTranslateDTO(null, UserDto(savedUser), mutableListOf())
-        val autoEntity = autoTrans.toEntity(savedParentUser, mutableListOf())
+        val autoTrans = AutoTranslateDTO(null, mutableListOf())
+        val autoEntity = autoTrans.toEntity( mutableListOf())
 
         val request = TranslateResultDTO(null, UserDto(savedParentUser), autoTrans, null, null)
         val response = translateResultRepository.save(request.toEntity(savedParentUser, autoEntity, null))

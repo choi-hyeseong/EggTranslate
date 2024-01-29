@@ -36,7 +36,7 @@ class TranslateResultService(
             val file = fileService.findFileEntityById(it.file.id!!)
             it.toEntity(file)
         }.toMutableList()
-        val autoTranslate = translateResultDTO.autoTranslate.toEntity(user, translateFiles)
+        val autoTranslate = translateResultDTO.autoTranslate.toEntity(translateFiles)
         return translateResultRepository.save(translateResultDTO.toEntity(user, autoTranslate, null)).id
     }
 

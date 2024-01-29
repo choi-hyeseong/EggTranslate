@@ -33,7 +33,7 @@ class TranslateService(
     @Transactional
     suspend fun saveTranslate(userDto: UserDto, childDTO: ChildDTO?, response: List<TranslateFileResponseDTO>): TranslateResultResponseDTO {
         val fileDtoList = mapFileDTO(userDto, response)
-        val autoDTO = AutoTranslateDTO(null, userDto, fileDtoList)
+        val autoDTO = AutoTranslateDTO(null, fileDtoList)
 
         val resultDTO = TranslateResultDTO(null, userDto, autoDTO, childDTO, null) //저장시 Manual Result (번역가 번역 요청은 없음)
         val saveResult = translateResultService.saveTranslateResult(userDto.id!!, resultDTO)

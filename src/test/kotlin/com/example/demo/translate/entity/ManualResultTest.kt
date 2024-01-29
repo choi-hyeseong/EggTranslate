@@ -101,7 +101,7 @@ class ManualResultTest {
         )
         val saveTranslator = translatorRepository.save(translator.toEntity(translatorUser))
 
-        val autoTrans = AutoTranslateDTO(null, UserDto(parentUser), mutableListOf())
+        val autoTrans = AutoTranslateDTO(null, mutableListOf())
 
         val request = TranslateResultDTO(
             null,
@@ -110,7 +110,7 @@ class ManualResultTest {
             ChildDTO(parent.children[0]),
             null
         )
-        val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity(parentUser, autoTrans.toEntity(parentUser, mutableListOf()), null)) }
+        val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity(parentUser, autoTrans.toEntity( mutableListOf()), null)) }
 
         val manualResultDTO = ManualResultDTO(null,  TranslatorDTO(saveTranslator), TranslateState.REQUEST, mutableListOf())
         savedRequest.manualResult = manualResultDTO.toEntity(saveTranslator, mutableListOf())
@@ -151,7 +151,7 @@ class ManualResultTest {
         )
         val saveTranslator = translatorRepository.save(translator.toEntity(translatorUser))
 
-        val autoTrans = AutoTranslateDTO(null, UserDto(parentUser), mutableListOf())
+        val autoTrans = AutoTranslateDTO(null, mutableListOf())
 
         val request = TranslateResultDTO(
             null,
@@ -160,7 +160,7 @@ class ManualResultTest {
             ChildDTO(parent.children[0]),
             null
         )
-        val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity(parentUser, autoTrans.toEntity(parentUser, mutableListOf()), null)) }
+        val savedRequest = assertDoesNotThrow { translateResultRepository.save(request.toEntity(parentUser, autoTrans.toEntity( mutableListOf()), null)) }
 
         val manualResultDTO = ManualResultDTO(null,  TranslatorDTO(saveTranslator), TranslateState.REQUEST, mutableListOf())
         savedRequest.manualResult = manualResultDTO.toEntity(saveTranslator, mutableListOf())
