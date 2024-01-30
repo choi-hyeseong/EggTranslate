@@ -30,8 +30,8 @@ class TranslateResultService(
 
 
     @Transactional
-    suspend fun saveTranslateResult(userId: Long, translateResultDTO: TranslateResultDTO): Long? {
-        val user = userService.getUserEntity(userId)
+    suspend fun saveTranslateResult(userId: Long?, translateResultDTO: TranslateResultDTO): Long? {
+        val user = if (userId == null) null else userService.getUserEntity(userId)
         val translateFiles = translateResultDTO.autoTranslate.translateFile.map {
             val file = fileService.findFileEntityById(it.file.id!!)
             it.toEntity(file, user)

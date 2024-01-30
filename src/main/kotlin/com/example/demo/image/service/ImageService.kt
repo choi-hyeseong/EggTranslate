@@ -35,7 +35,7 @@ class ImageService(
 
     suspend fun handleImage(imageDTO: ImageDTO): TranslateResultResponseDTO {
         //save image
-        val user = userService.getUser(imageDTO.userId)
+        val user = if (imageDTO.userId == null) null else userService.getUser(imageDTO.userId)
         //read parallel logic
         val response = requestImage(imageDTO.image ?: false, imageDTO.lang, user, imageDTO.file)
         // return translated string
@@ -47,7 +47,7 @@ class ImageService(
     private suspend fun requestImage(
         isConvert: Boolean,
         lang: String,
-        userDto: UserDto,
+        userDto: UserDto?,
         image: List<MultipartFile>
     ): List<TranslateFileResponseDTO> {
         return coroutineScope {

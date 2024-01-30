@@ -63,6 +63,7 @@ class ProfileService(
             UserType.TEACHER -> teacherService.deleteByUserId(id)
             UserType.TRANSLATOR -> deleteTranslator(id)
             UserType.PARENT -> deleteParent(id)
+            else -> {} //구현 없음.
         }
         deleteUser(user.id!!)
     }

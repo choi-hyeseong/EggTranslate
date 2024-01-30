@@ -16,7 +16,7 @@ class TranslateResult(
 
         @ManyToOne
         @JoinColumn(name = "user_id")
-        var user : User,
+        var user : User?,
 
         @Enumerated(EnumType.STRING)
         var userType : UserType,

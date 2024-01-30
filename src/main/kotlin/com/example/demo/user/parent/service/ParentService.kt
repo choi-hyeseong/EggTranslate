@@ -76,7 +76,10 @@ class ParentService(
     }
 
     @Transactional
-    suspend fun findByChildIdOrNull(userId : Long, childId : Long?) : ChildDTO? {
+    suspend fun findByChildIdOrNull(userId : Long?, childId : Long?) : ChildDTO? {
+        if (userId == null)
+            return null
+
         if (childId == null)
             return null
 

@@ -7,18 +7,21 @@ import com.example.demo.translate.manual.dto.ManualResultResponseDTO
 import com.example.demo.translate.manual.entity.ManualResult
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.entity.User
+import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.child.dto.ChildDTO
 
 class TranslateResultDTO(
     val id: Long?,
-    val user: UserDto,
+    val user: UserDto?,
+    val userType : UserType,
     val autoTranslate: AutoTranslateDTO,
     val child: ChildDTO?,
     var manualResultDTO: ManualResultDTO?
 ) {
     constructor(translateResult: TranslateResult) : this(
         translateResult.id,
-        UserDto(translateResult.user),
+        translateResult.user?.let { UserDto(it) },
+        translateResult.userType,
         AutoTranslateDTO(translateResult.autoTranslate),
         translateResult.child?.let {
             ChildDTO(it)
@@ -31,8 +34,8 @@ class TranslateResultDTO(
     fun toResponseDTO(): TranslateResultResponseDTO =
         TranslateResultResponseDTO(
             id,
-            user.id,
-            user.userType,
+            user?.id,
+            userType,
             autoTranslate.toResponseDTO(),
             child?.id,
             manualResultDTO?.let {
@@ -41,10 +44,10 @@ class TranslateResultDTO(
                 }.toMutableList(), it.translatorDTO?.id, it.status)
             })
 
-    fun toEntity(user : User, autoTranslate: AutoTranslate, result: ManualResult?): TranslateResult = TranslateResult(
+    fun toEntity(user : User?, autoTranslate: AutoTranslate, result: ManualResult?): TranslateResult = TranslateResult(
         id,
         user,
-        user.userType,
+        userType,
         autoTranslate,
         child?.toEntity()
     ).apply {

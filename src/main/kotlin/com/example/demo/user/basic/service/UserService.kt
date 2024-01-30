@@ -33,6 +33,15 @@ class UserService(private val userRepository: UserRepository) {
             }
     }
 
+
+    @Transactional(readOnly = true)
+    suspend fun getUserEntityOrNull(id: Long?): User? {
+        return if (id == null)
+            null
+        else
+            getUserEntity(id)
+    }
+
     @Transactional(readOnly = true)
     suspend fun getUser(id: Long): UserDto {
         return UserDto(getUserEntity(id))

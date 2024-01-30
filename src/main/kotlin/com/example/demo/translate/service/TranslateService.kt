@@ -13,6 +13,7 @@ import com.example.demo.translate.web.dto.TranslateRequestDTO
 import com.example.demo.translate.web.dto.TranslateResponseDTO
 import com.example.demo.translate.web.service.WebTranslateService
 import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.translator.dto.TranslatorDTO
 import kotlinx.coroutines.async
@@ -21,6 +22,7 @@ import kotlinx.coroutines.coroutineScope
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+//웹 번역 (WebTransService)와 저장된 번역 (TranslateResult...)를 연결시켜주는 서비스.
 @Service
 class TranslateService(
     private val translateResultService: TranslateResultService,
@@ -31,12 +33,13 @@ class TranslateService(
 ) {
 
     @Transactional
-    suspend fun saveTranslate(userDto: UserDto, childDTO: ChildDTO?, response: List<TranslateFileResponseDTO>): TranslateResultResponseDTO {
+    suspend fun saveTranslate(userDto: UserDto?, childDTO: ChildDTO?, response: List<TranslateFileResponseDTO>): TranslateResultResponseDTO {
         val fileDtoList = mapFileDTO(userDto, response)
         val autoDTO = AutoTranslateDTO(null, fileDtoList)
 
-        val resultDTO = TranslateResultDTO(null, userDto, autoDTO, childDTO, null) //저장시 Manual Result (번역가 번역 요청은 없음)
-        val saveResult = translateResultService.saveTranslateResult(userDto.id!!, resultDTO)
+        val userType = userDto?.userType ?: UserType.GUEST
+        val resultDTO = TranslateResultDTO(null, userDto, userType, autoDTO, childDTO, null) //저장시 Manual Result (번역가 번역 요청은 없음)
+        val saveResult = translateResultService.saveTranslateResult(userDto?.id, resultDTO)
             ?: throw TranslateException("번역 결과가 정상적으로 저장되지 않았습니다.")
 
         return translateResultService.findTranslateResult(saveResult).toResponseDTO()
@@ -56,7 +59,7 @@ class TranslateService(
         return translateResultService.findTranslateResult(resultId).toResponseDTO()
     }
 
-    suspend fun mapFileDTO(userDto: UserDto, responseDTO: List<TranslateFileResponseDTO>) : MutableList<TranslateFileDTO> {
+    suspend fun mapFileDTO(userDto: UserDto?, responseDTO: List<TranslateFileResponseDTO>) : MutableList<TranslateFileDTO> {
         return responseDTO.map {
             TranslateFileDTO(null, fileService.findFileById(it.fileId!!), it.convert, it.voca, it.origin ?: "", it.result ?: "", it.from, it.target)
         }.toMutableList()

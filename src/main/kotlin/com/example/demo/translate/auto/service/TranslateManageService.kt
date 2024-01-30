@@ -91,7 +91,7 @@ class TranslateManageService(
     suspend fun saveManualResult(resultId: Long, translatorId: Long, resultDTO: ManualResultDTO): Long? {
         val translateResultDTO = translateResultService.findTranslateResult(resultId)
 
-        val user = userService.getUserEntity(translateResultDTO.user.id!!)
+        val user = userService.getUserEntityOrNull(translateResultDTO.user?.id)
         val translator = translatorService.findTranslatorEntityById(translatorId)
 
         val autoTranslate = autoTranslateService.findAutoTranslateEntityById(translateResultDTO.autoTranslate.id!!)

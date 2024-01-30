@@ -12,7 +12,7 @@ data class TranslateResultSimpleDTO(
 ) {
     constructor(translateResult: TranslateResult) : this(
         translateResult.id,
-        translateResult.user.id,
+        translateResult.user?.id,
         translateResult.autoTranslate.id,
         translateResult.child?.id,
         translateResult.manualResult?.id
@@ -20,7 +20,7 @@ data class TranslateResultSimpleDTO(
 
     constructor(translateResultDTO: TranslateResultDTO) : this(
         translateResultDTO.id,
-        translateResultDTO.user.id,
+        translateResultDTO.user?.id,
         translateResultDTO.autoTranslate.id,
         translateResultDTO.child?.id,
         translateResultDTO.manualResultDTO?.id

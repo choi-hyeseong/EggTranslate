@@ -21,7 +21,7 @@ class TranslateFileDTO(
 
     constructor(translateFile: TranslateFile) : this(translateFile.id, FileDTO(translateFile.file),
         translateFile.convertFile?.let { ConvertFileDTO(it) }, translateFile.voca, translateFile.origin, translateFile.translate, translateFile.fromLang, translateFile.toLang)
-    fun toEntity(file : File, user : User): TranslateFile = TranslateFile(id, convert?.toEntity(user), file,  origin, translate, from, to, vocaDto)
+    fun toEntity(file : File, user : User?): TranslateFile = TranslateFile(id, convert?.toEntity(user), file,  origin, translate, from, to, vocaDto)
 
     fun toResponseDTO() : TranslateFileResultDTO = TranslateFileResultDTO(id, convert?.id, file.id, vocaDto, origin, translate, from, to)
 }

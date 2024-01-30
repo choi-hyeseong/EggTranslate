@@ -78,7 +78,7 @@ class FileService(
         }
     }
 
-    suspend fun saveImage(userDto: UserDto, image: MultipartFile): FileDTO {
+    suspend fun saveImage(userDto: UserDto?, image: MultipartFile): FileDTO {
         //parallel image save
         return coroutineScope {
             async {
