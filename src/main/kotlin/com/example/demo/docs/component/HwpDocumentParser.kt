@@ -39,7 +39,7 @@ class HwpDocumentParser(file: ByteArrayInputStream) : DocumentParser(file) {
         if (!file.parentFile.exists())
             file.parentFile.mkdir()
         HWPWriter.toFile(hwpFile, file.path)
-        return DocumentWriteResponse(path, translate)
+        return DocumentWriteResponse(file.path, translate)
     }
 
     private fun readFile(hwpFile: HWPFile): DocumentReadResponse {

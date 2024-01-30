@@ -40,7 +40,7 @@ class WordDocumentParser(stream: ByteArrayInputStream) : DocumentParser(stream) 
         if (!file.parentFile.exists())
             file.parentFile.mkdir()
         document.write(file.outputStream())
-        return DocumentWriteResponse(path, translate)
+        return DocumentWriteResponse(file.path, translate)
     }
 
 

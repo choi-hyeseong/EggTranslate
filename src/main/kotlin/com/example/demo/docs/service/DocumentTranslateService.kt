@@ -42,7 +42,7 @@ class DocumentTranslateService(
     private val parentService: ParentService,
     private val vocaService: VocaService,
     private val documentFactory: DocumentFactory,
-    @Value("\${image-path}") private val path : String
+    @Value("\${image-path}") private val path: String
 ) {
 
     suspend fun request(requestDTO: DocumentRequestDTO): TranslateResultResponseDTO {
@@ -80,28 +80,24 @@ class DocumentTranslateService(
         lang: String,
         userDto: UserDto?,
         documentFile: MultipartFile
-    ): Deferred<TranslateFileResponseDTO> {
-        val response = coroutineScope {
-            async {
-                val resolveResponse = resolveFile(lang, documentFile, userDto)
-                val documentId = documentService.saveDocument(resolveResponse.documentDTO)
-                TranslateFileResponseDTO(
-                    null,
-                    true,
-                    null,
-                    null,
-                    documentId,
-                    resolveResponse.convertDocumentDTO,
-                    resolveResponse.voca,
-                    "ko",
-                    lang,
-                    resolveResponse.documentReadResponse.content,
-                    resolveResponse.documentWriteResponse.translate
-                )
-                //결과 반환시에는 origin에는 replace 된 값 보내줘선 안됨. 오직 origin 데이터.
-            }
-        }
-        return response
+    ): TranslateFileResponseDTO {
+        val resolveResponse = resolveFile(lang, documentFile, userDto)
+        val documentId = documentService.saveDocument(resolveResponse.documentDTO)
+        return TranslateFileResponseDTO(
+            null,
+            true,
+            null,
+            null,
+            documentId,
+            resolveResponse.convertDocumentDTO,
+            resolveResponse.voca,
+            "ko",
+            lang,
+            resolveResponse.documentReadResponse.content,
+            resolveResponse.documentWriteResponse.translate
+        )
+        //결과 반환시에는 origin에는 replace 된 값 보내줘선 안됨. 오직 origin 데이터.
+
     }
 
     private suspend fun requestDocuments(
@@ -109,19 +105,23 @@ class DocumentTranslateService(
         userDto: UserDto?,
         documents: List<MultipartFile>
     ): List<TranslateFileResponseDTO> {
-        return documents.map {
-            requestAsync(lang, userDto, it)
-        }.awaitAll()
+        return coroutineScope {
+            documents.map {
+                async {
+                    requestAsync(lang, userDto, it)
+                }
+            }.awaitAll()
+        }
     }
 
 
 
-    suspend fun saveDocumentFile(userDto: UserDto?, type : DocumentType, file : MultipartFile) : DocumentDTO {
-        val ext = FileUtil.findExtension(file.originalFilename ?: file.name)
-        val savePath = path.plus("/document/${System.currentTimeMillis()}.$ext")
-        FileUtil.saveFileWithCreateDir(file.bytes, savePath)
-        return DocumentDTO(null, type, file.originalFilename ?: file.name, savePath, userDto)
+        suspend fun saveDocumentFile(userDto: UserDto?, type: DocumentType, file: MultipartFile): DocumentDTO {
+            val ext = FileUtil.findExtension(file.originalFilename ?: file.name)
+            val savePath = path.plus("/document/${System.currentTimeMillis()}.$ext")
+            FileUtil.saveFileWithCreateDir(file.bytes, savePath)
+            return DocumentDTO(null, type, file.originalFilename ?: file.name, savePath, userDto)
+        }
+
+
     }
-
-
-}
