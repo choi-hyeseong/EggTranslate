@@ -8,7 +8,8 @@ import org.springframework.web.multipart.MultipartFile
 
 @Component
 class DocumentResolver {
-
+//apache tika 쓰는게 좋긴함
+    
     suspend fun resolve(file : MultipartFile) : DocumentType {
         val ext = FileUtil.findExtension(file.originalFilename ?: file.name)
         return when (ext.lowercase()) {
