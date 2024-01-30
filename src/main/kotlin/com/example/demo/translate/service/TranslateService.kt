@@ -2,7 +2,6 @@ package com.example.demo.translate.service
 
 import com.example.demo.convertOrNull
 import com.example.demo.docs.service.DocumentService
-import com.example.demo.docs.service.DocumentTranslateService
 import com.example.demo.file.service.FileService
 import com.example.demo.translate.auto.dto.*
 import com.example.demo.translate.auto.service.ManualResultService
@@ -37,12 +36,17 @@ class TranslateService(
 ) {
 
     @Transactional
-    suspend fun saveTranslate(userDto: UserDto?, childDTO: ChildDTO?, response: List<TranslateFileResponseDTO>): TranslateResultResponseDTO {
+    suspend fun saveTranslate(
+        userDto: UserDto?,
+        childDTO: ChildDTO?,
+        response: List<TranslateFileResponseDTO>
+    ): TranslateResultResponseDTO {
         val fileDtoList = mapFileDTO(userDto, response)
         val autoDTO = AutoTranslateDTO(null, fileDtoList)
 
         val userType = userDto?.userType ?: UserType.GUEST
-        val resultDTO = TranslateResultDTO(null, userDto, userType, autoDTO, childDTO, null) //저장시 Manual Result (번역가 번역 요청은 없음)
+        val resultDTO =
+            TranslateResultDTO(null, userDto, userType, autoDTO, childDTO, null) //저장시 Manual Result (번역가 번역 요청은 없음)
         val saveResult = translateResultService.saveTranslateResult(userDto?.id, resultDTO)
             ?: throw TranslateException("번역 결과가 정상적으로 저장되지 않았습니다.")
 
@@ -51,7 +55,7 @@ class TranslateService(
     }
 
     @Transactional
-    suspend fun request(translatorDTO: TranslatorDTO, resultId : Long) : TranslateResultResponseDTO {
+    suspend fun request(translatorDTO: TranslatorDTO, resultId: Long): TranslateResultResponseDTO {
         val saveDTO = ManualResultDTO(null, translatorDTO, TranslateState.REQUEST, mutableListOf())
         if (manualResultService.manualResultExists(resultId))
             throw ManualException("이미 요청된 번역 결과입니다. 결과 ID : $resultId")
@@ -63,21 +67,37 @@ class TranslateService(
         return translateResultService.findTranslateResult(resultId).toResponseDTO()
     }
 
-    suspend fun mapFileDTO(userDto: UserDto?, responseDTO: List<TranslateFileResponseDTO>) : MutableList<TranslateFileDTO> {
+    suspend fun mapFileDTO(
+        userDto: UserDto?,
+        responseDTO: List<TranslateFileResponseDTO>
+    ): MutableList<TranslateFileDTO> {
         return responseDTO.map {
-            val file = it.fileId.convertOrNull { id -> fileService.findFileById(id) }
-            val document = it.documentId.convertOrNull { id -> documentService.findDocumentById(id) }
-            TranslateFileDTO(null, file, it.convert, document, it.convertDocumentDTO, it.voca, it.origin ?: "", it.result ?: "", it.from, it.target)
+            val fileData = it.translateFileData
+            val translateData = it.translateResultData
+            val file = fileData.fileId.convertOrNull { id -> fileService.findFileById(id) }
+            val document = fileData.documentId.convertOrNull { id -> documentService.findDocumentById(id) }
+            TranslateFileDTO(
+                null,
+                file,
+                fileData.convert,
+                document,
+                fileData.convertDocumentDTO,
+                translateData.voca,
+                translateData.origin ?: "",
+                translateData.result ?: "",
+                translateData.from,
+                translateData.to
+            )
         }.toMutableList()
     }
 
     //웹 요청이기 때문에 Transactional 필요 없음
-    suspend fun requestWebTranslate(requestDTO: TranslateRequestDTO) : TranslateResponseDTO {
+    suspend fun requestWebTranslate(requestDTO: TranslateRequestDTO): TranslateResponseDTO {
         val request = TranslateRequestDTO(requestDTO.from, requestDTO.to, requestDTO.content)
-        return  webTranslateService.translateContent(request)
+        return webTranslateService.translateContent(request)
     }
 
-    suspend fun requestWebTranslate(requestDTO: List<TranslateRequestDTO>) : List<TranslateResponseDTO> {
+    suspend fun requestWebTranslate(requestDTO: List<TranslateRequestDTO>): List<TranslateResponseDTO> {
         return coroutineScope {
             requestDTO.map {
                 async {

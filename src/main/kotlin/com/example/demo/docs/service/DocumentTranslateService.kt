@@ -13,7 +13,9 @@ import com.example.demo.docs.repository.ConvertDocumentRepository
 import com.example.demo.docs.repository.DocumentRepository
 import com.example.demo.docs.type.DocumentType
 import com.example.demo.file.util.FileUtil
+import com.example.demo.translate.auto.dto.TranslateFileData
 import com.example.demo.translate.auto.dto.TranslateFileResponseDTO
+import com.example.demo.translate.auto.dto.TranslateResultData
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.translate.web.dto.TranslateRequestDTO
@@ -64,15 +66,11 @@ class DocumentTranslateService(
         val parser = documentFactory.createParser(type, ByteArrayInputStream(file.bytes))
         val response = parser.read()
         val voca = vocaService.findAllContainingVoca(lang, response.content)
-        val translate = translateService.requestWebTranslate(
-            TranslateRequestDTO(
-                "ko",
-                lang,
-                response.content
-            )
-        )
+
+        val translate = translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, response.content))
         val write = parser.write(translate.result ?: "", path.plus("/convertDocument"))
         val convertDocumentDTO = ConvertDocumentDTO(null, type, write.savePath, userDto)
+
         return DocumentResolveDTO(response, write, saveDocument, convertDocumentDTO, voca)
     }
 
@@ -82,22 +80,14 @@ class DocumentTranslateService(
         documentFile: MultipartFile
     ): TranslateFileResponseDTO {
         val resolveResponse = resolveFile(lang, documentFile, userDto)
+        val readResponse = resolveResponse.documentReadResponse
+        val writeResponse = resolveResponse.documentWriteResponse
         val documentId = documentService.saveDocument(resolveResponse.documentDTO).id
-        return TranslateFileResponseDTO(
-            null,
-            true,
-            null,
-            null,
-            documentId,
-            resolveResponse.convertDocumentDTO,
-            resolveResponse.voca,
-            "ko",
-            lang,
-            resolveResponse.documentReadResponse.content,
-            resolveResponse.documentWriteResponse.translate
-        )
-        //결과 반환시에는 origin에는 replace 된 값 보내줘선 안됨. 오직 origin 데이터.
 
+        val translateFileData = TranslateFileData(null, null, documentId, resolveResponse.convertDocumentDTO)
+        val translateResultData = TranslateResultData(resolveResponse.voca, "ko", lang, readResponse.content, writeResponse.translate)
+        return TranslateFileResponseDTO(null, true, translateFileData, translateResultData)
+        //결과 반환시에는 origin에는 replace 된 값 보내줘선 안됨. 오직 origin 데이터.
     }
 
     private suspend fun requestDocuments(
@@ -115,13 +105,12 @@ class DocumentTranslateService(
     }
 
 
-
-        suspend fun saveDocumentFile(userDto: UserDto?, type: DocumentType, file: MultipartFile): DocumentDTO {
-            val ext = FileUtil.findExtension(file.originalFilename ?: file.name)
-            val savePath = path.plus("/document/${System.currentTimeMillis()}.$ext")
-            FileUtil.saveFileWithCreateDir(file.bytes, savePath)
-            return DocumentDTO(null, type, file.originalFilename ?: file.name, savePath, userDto)
-        }
-
-
+    suspend fun saveDocumentFile(userDto: UserDto?, type: DocumentType, file: MultipartFile): DocumentDTO {
+        val ext = FileUtil.findExtension(file.originalFilename ?: file.name)
+        val savePath = path.plus("/document/${System.currentTimeMillis()}.$ext")
+        FileUtil.saveFileWithCreateDir(file.bytes, savePath)
+        return DocumentDTO(null, type, file.originalFilename ?: file.name, savePath, userDto)
     }
+
+
+}

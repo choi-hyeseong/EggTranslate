@@ -7,7 +7,9 @@ import com.example.demo.logger
 import com.example.demo.ocr.component.ocr.model.Paragraph
 import com.example.demo.ocr.component.posthandle.OCRPostHandler
 import com.example.demo.ocr.service.OCRService
+import com.example.demo.translate.auto.dto.TranslateFileData
 import com.example.demo.translate.auto.dto.TranslateFileResponseDTO
+import com.example.demo.translate.auto.dto.TranslateResultData
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.translate.web.dto.TranslateRequestDTO
@@ -58,22 +60,14 @@ class ImageService(
                     val paragraph = ocrResponse.paragraphs
                     //번역을 위한 flatten
                     val postHandleResponse = ocrPostHandler.handleText(ocrResponse.content)
-                    val allVocaDesc = vocaService.findAllContainingVoca(lang, postHandleResponse) //여기서 찾으면 2번 호출하는데.. (Translate Pre Handler)
-                    val response =
-                        translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, postHandleResponse))
-                    TranslateFileResponseDTO(
-                        null,
-                        response.isSuccess,
-                        file,
-                        getConvertImage(isConvert, lang, it, paragraph, userDto),
-                        null,
-                        null,
-                        allVocaDesc,
-                        response.from,
-                        response.target,
-                        postHandleResponse,
-                        response.result
-                    )
+                    //여기서 찾으면 2번 호출하는데.. (Translate Pre Handler)
+                    val allVocaDesc = vocaService.findAllContainingVoca(lang, postHandleResponse)
+                    val response = translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, postHandleResponse))
+
+                    val fileData = TranslateFileData(file, getConvertImage(isConvert, lang, it, paragraph, userDto), null, null)
+                    val translateData = TranslateResultData(allVocaDesc, response.from, response.to, postHandleResponse, response.result)
+
+                    TranslateFileResponseDTO(null, response.isSuccess, fileData, translateData)
                     //결과 반환시에는 origin에는 replace 된 값 보내줘선 안됨. 오직 origin 데이터.
                 }
             }.toList()
@@ -82,7 +76,13 @@ class ImageService(
     }
 
     //image 요청이 false면 null을 리턴
-    private suspend fun getConvertImage(isRequested: Boolean, lang : String, file : MultipartFile, paragraphs: List<Paragraph>, userDto: UserDto?): ConvertFileDTO? {
+    private suspend fun getConvertImage(
+        isRequested: Boolean,
+        lang: String,
+        file: MultipartFile,
+        paragraphs: List<Paragraph>,
+        userDto: UserDto?
+    ): ConvertFileDTO? {
         if (!isRequested)
             return null
         val paragraphResponse = ocrPostHandler.handleText(getFlattenParagraphContent(paragraphs))
