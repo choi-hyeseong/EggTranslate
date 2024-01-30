@@ -8,8 +8,8 @@ import com.example.demo.docs.exception.DocumentException
 import com.example.demo.docs.repository.ConvertDocumentRepository
 import com.example.demo.docs.repository.DocumentRepository
 import com.example.demo.user.basic.service.UserService
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
 
 @Service
@@ -21,7 +21,7 @@ class DocumentService(
 
     @Transactional
     suspend fun saveDocument(documentDTO: DocumentDTO): Long? {
-        val user = userService.getUserEntityOrNull(documentDTO.id)
+        val user = userService.getUserEntityOrNull(documentDTO.userDto?.id)
         return documentRepository.save(documentDTO.toEntity(user)).id
     }
 
@@ -50,5 +50,10 @@ class DocumentService(
     @Transactional
     suspend fun findConvertDocumentEntityById(id: Long): ConvertDocument {
         return convertDocumentRepository.findById(id).orElseThrow { DocumentException("존재하지 않는 변환된 문서입니다.") }
+    }
+
+    @Transactional
+    suspend fun deleteAllDocumentByUserId(userId : Long) {
+        documentRepository.deleteAllByUserId(userId)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.profile.service
 
+import com.example.demo.docs.service.DocumentService
 import com.example.demo.file.service.FileService
 import com.example.demo.profile.dto.ParentEditDTO
 import com.example.demo.profile.dto.TeacherEditDTO
@@ -22,6 +23,7 @@ class ProfileService(
     private val userService: UserService,
     private val parentService: ParentService,
     private val teacherService: TeacherService,
+    private val documentService: DocumentService,
     private val translatorService: TranslatorService,
     private val translateManageService: TranslateManageService,
     private val fileService: FileService,
@@ -81,6 +83,7 @@ class ProfileService(
         translateManageService.deleteUserResult(id)
         heartService.removeUserHeart(id)
         fileService.deleteFileByUserId(id)
+        documentService.deleteAllDocumentByUserId(id)
         userService.deleteById(id)
     }
 
