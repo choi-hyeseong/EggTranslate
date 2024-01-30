@@ -8,12 +8,12 @@ class FileDTO(
         val id : Long?,
         val originName : String,
         val saveName : String,
-        val user : UserDto,
+        val user : UserDto?,
         savePath : String
 
 ) : AbstractFileDTO(savePath) {
-        constructor(file: File) : this(file.id, file.originName, file.saveName, UserDto(file.user), file.savePath)
-        fun toEntity(user : User) : File = File(
+        constructor(file: File) : this(file.id, file.originName, file.saveName, file.user?.let { UserDto(it) }, file.savePath)
+        fun toEntity(user : User?) : File = File(
                 id = id,
                 user = user,
                 originName = originName,

@@ -12,7 +12,7 @@ class File( // 괄호 안에는 기본 생성자들
 
         @ManyToOne
         @JoinColumn(name = "user_id")
-        var user : User,
+        var user : User?,
 
         @Column(nullable = false, length = 255)
         var originName : String,

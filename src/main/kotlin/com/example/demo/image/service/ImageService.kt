@@ -66,7 +66,7 @@ class ImageService(
                         null,
                         response.isSuccess,
                         file,
-                        getConvertImage(isConvert, lang, it, paragraph),
+                        getConvertImage(isConvert, lang, it, paragraph, userDto),
                         allVocaDesc,
                         response.from,
                         response.target,
@@ -81,7 +81,7 @@ class ImageService(
     }
 
     //image 요청이 false면 null을 리턴
-    private suspend fun getConvertImage(isRequested: Boolean, lang : String, file : MultipartFile, paragraphs: List<Paragraph>): ConvertFileDTO? {
+    private suspend fun getConvertImage(isRequested: Boolean, lang : String, file : MultipartFile, paragraphs: List<Paragraph>, userDto: UserDto?): ConvertFileDTO? {
         if (!isRequested)
             return null
         val paragraphResponse = ocrPostHandler.handleText(getFlattenParagraphContent(paragraphs))
@@ -90,7 +90,7 @@ class ImageService(
         paraResponse.result?.split("\n")?.forEachIndexed { index, content ->
             paragraphs[index].content = content
         }
-        return convertService.convertFile(file, paragraphs)
+        return convertService.convertFile(file, paragraphs, userDto)
     }
 
     private fun getFlattenParagraphContent(paragraphs: List<Paragraph>): String {

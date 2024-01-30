@@ -19,6 +19,10 @@ class ConvertFile( // 괄호 안에는 기본 생성자들
 
     var savePath : String,
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    var user : User?,
+
     ) : BaseEntity() {
 
     @PreRemove

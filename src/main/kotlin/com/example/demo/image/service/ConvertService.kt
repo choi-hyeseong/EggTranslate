@@ -6,6 +6,7 @@ import com.example.demo.file.util.FileUtil
 import com.example.demo.file.dto.ConvertFileDTO
 import com.example.demo.ocr.component.ocr.model.Area
 import com.example.demo.ocr.component.ocr.model.Paragraph
+import com.example.demo.user.basic.dto.UserDto
 import jakarta.transaction.Transactional
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,7 +34,7 @@ class ConvertService(
         return FileUtil.convertFileToResource(fileDto)
     }
 
-    suspend fun convertFile(file: MultipartFile, paragraph: List<Paragraph>): ConvertFileDTO {
+    suspend fun convertFile(file: MultipartFile, paragraph: List<Paragraph>, userDto : UserDto?): ConvertFileDTO {
         return withContext(Dispatchers.IO) {
             val image = FileUtil.cloneImage(file) //이미지 복제 (새로운 이미지 파일)
             val graphic = image.graphics
@@ -46,7 +47,7 @@ class ConvertService(
             val savePath = path.plus("/convert").plus("/$saveName")
             FileUtil.saveImage(image, savePath)
 
-            ConvertFileDTO(null, saveName, savePath)
+            ConvertFileDTO(null, saveName, savePath, userDto)
         }
     }
 

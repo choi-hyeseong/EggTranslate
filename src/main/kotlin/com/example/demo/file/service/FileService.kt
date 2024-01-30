@@ -50,15 +50,20 @@ class FileService(
 
     @Transactional
     suspend fun saveEntity(fileDTO: FileDTO): Long? {
-        val user = userService.getUserEntity(fileDTO.user.id!!)
-        return fileRepository.save(fileDTO.toEntity(user)).id
+        val file : File = if (fileDTO.user != null)
+            fileDTO.toEntity(userService.getUserEntity(fileDTO.user.id!!))
+        else
+            fileDTO.toEntity(null)
+        return fileRepository.save(file).id
     }
 
     @Transactional
     suspend fun saveAllEntity(fileDTO: List<FileDTO>) {
         fileRepository.saveAll(fileDTO.map {
-            val user = userService.getUserEntity(it.user.id!!)
-            it.toEntity(user)
+            if (it.user != null)
+                it.toEntity(userService.getUserEntity(it.user.id!!))
+            else
+                it.toEntity(null)
         }.toList())
     }
 
