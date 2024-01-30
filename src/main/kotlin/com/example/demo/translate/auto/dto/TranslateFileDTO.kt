@@ -1,5 +1,6 @@
 package com.example.demo.translate.auto.dto
 
+import com.example.demo.convertOrNull
 import com.example.demo.docs.dto.ConvertDocumentDTO
 import com.example.demo.docs.dto.DocumentDTO
 import com.example.demo.docs.entity.ConvertDocument
@@ -27,10 +28,10 @@ class TranslateFileDTO(
 
     constructor(translateFile: TranslateFile) : this(
         translateFile.id,
-        translateFile.file?.let { FileDTO(it) },
-        translateFile.convertFile?.let { ConvertFileDTO(it) },
-        translateFile.document?.let { DocumentDTO(it) },
-        translateFile.convertDocument?.let { ConvertDocumentDTO(it) },
+        translateFile.file.convertOrNull { FileDTO(it) },
+        translateFile.convertFile.convertOrNull { ConvertFileDTO(it) },
+        translateFile.document.convertOrNull { DocumentDTO(it) },
+        translateFile.convertDocument.convertOrNull { ConvertDocumentDTO(it) },
         translateFile.voca,
         translateFile.origin,
         translateFile.translate,

@@ -1,5 +1,6 @@
 package com.example.demo.translate.auto.dto
 
+import com.example.demo.convertOrNull
 import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.translate.manual.dto.ManualResultResponseDTO
 import com.example.demo.user.basic.type.UserType
@@ -19,7 +20,7 @@ data class TranslateResultResponseDTO(
         translateResult.userType,
         AutoTranslateResponseDTO(translateResult.autoTranslate),
         translateResult.child?.id,
-        translateResult.manualResult?.let {
+        translateResult.manualResult.convertOrNull {
             ManualResultResponseDTO(it)
         }
     )

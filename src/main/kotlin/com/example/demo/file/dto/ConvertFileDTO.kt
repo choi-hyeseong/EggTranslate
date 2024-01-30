@@ -1,5 +1,6 @@
 package com.example.demo.file.dto
 
+import com.example.demo.convertOrNull
 import com.example.demo.file.dto.AbstractFileDTO
 import com.example.demo.file.entity.ConvertFile
 import com.example.demo.user.basic.dto.UserDto
@@ -12,7 +13,11 @@ class ConvertFileDTO(
     savePath: String,
     val userDto: UserDto?
 ) : AbstractFileDTO(savePath) {
-    constructor(convertFile: ConvertFile) : this(convertFile.id, convertFile.saveName, convertFile.savePath, convertFile.user?.let { UserDto(it) })
+    constructor(convertFile: ConvertFile) : this(
+        convertFile.id,
+        convertFile.saveName,
+        convertFile.savePath,
+        convertFile.user.convertOrNull { UserDto(it) })
 
-    fun toEntity(user : User?) = ConvertFile(id, saveName, savePath, user)
+    fun toEntity(user: User?) = ConvertFile(id, saveName, savePath, user)
 }

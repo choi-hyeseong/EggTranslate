@@ -1,5 +1,6 @@
 package com.example.demo.user.parent.service
 
+import com.example.demo.convertOrNull
 import com.example.demo.logger
 import com.example.demo.profile.dto.ParentEditDTO
 import com.example.demo.translate.auto.service.TranslateManageService
@@ -48,7 +49,7 @@ class ParentService(
         val parent = parentRepository
             .findByUserId(id)
             .getOrNull()
-        return if (parent != null) ParentDTO(parent) else null
+        return parent.convertOrNull { ParentDTO(it) }
     }
 
     @Transactional(readOnly = true)

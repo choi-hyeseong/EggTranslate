@@ -1,5 +1,6 @@
 package com.example.demo.translate.auto.dto
 
+import com.example.demo.convertOrNull
 import com.example.demo.docs.dto.ConvertDocumentDTO
 import com.example.demo.file.dto.ConvertFileDTO
 import com.example.demo.translate.auto.entity.TranslateFile
@@ -28,9 +29,9 @@ data class TranslateFileResponseDTO(
         fileDTO.id,
         true,
         fileDTO.file?.id,
-        fileDTO.convertFile?.let { ConvertFileDTO(it) },
+        fileDTO.convertFile.convertOrNull { ConvertFileDTO(it) },
         fileDTO.document?.id,
-        fileDTO.convertDocument?.let { ConvertDocumentDTO(it) },
+        fileDTO.convertDocument.convertOrNull { ConvertDocumentDTO(it) },
         fileDTO.voca,
         fileDTO.fromLang,
         fileDTO.toLang,

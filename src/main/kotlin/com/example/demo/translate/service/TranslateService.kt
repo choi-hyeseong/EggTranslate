@@ -1,5 +1,6 @@
 package com.example.demo.translate.service
 
+import com.example.demo.convertOrNull
 import com.example.demo.docs.service.DocumentService
 import com.example.demo.docs.service.DocumentTranslateService
 import com.example.demo.file.service.FileService
@@ -64,8 +65,8 @@ class TranslateService(
 
     suspend fun mapFileDTO(userDto: UserDto?, responseDTO: List<TranslateFileResponseDTO>) : MutableList<TranslateFileDTO> {
         return responseDTO.map {
-            val file = if (it.fileId == null) null else fileService.findFileById(it.fileId!!)
-            val document = if (it.documentId == null) null else documentService.findDocumentById(it.documentId!!)
+            val file = it.fileId.convertOrNull { id -> fileService.findFileById(id) }
+            val document = it.documentId.convertOrNull { id -> documentService.findDocumentById(id) }
             TranslateFileDTO(null, file, it.convert, document, it.convertDocumentDTO, it.voca, it.origin ?: "", it.result ?: "", it.from, it.target)
         }.toMutableList()
     }

@@ -1,5 +1,6 @@
 package com.example.demo.user.basic.service
 
+import com.example.demo.convertOrNull
 import com.example.demo.profile.dto.UserEditDTO
 import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserDto
@@ -36,10 +37,7 @@ class UserService(private val userRepository: UserRepository) {
 
     @Transactional(readOnly = true)
     suspend fun getUserEntityOrNull(id: Long?): User? {
-        return if (id == null)
-            null
-        else
-            getUserEntity(id)
+        return id.convertOrNull { getUserEntity(it) }
     }
 
     @Transactional(readOnly = true)

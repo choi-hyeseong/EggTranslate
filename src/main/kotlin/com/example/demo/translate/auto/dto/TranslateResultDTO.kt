@@ -1,5 +1,6 @@
 package com.example.demo.translate.auto.dto
 
+import com.example.demo.convertOrNull
 import com.example.demo.translate.auto.entity.AutoTranslate
 import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.translate.manual.dto.ManualResultDTO
@@ -20,15 +21,11 @@ class TranslateResultDTO(
 ) {
     constructor(translateResult: TranslateResult) : this(
         translateResult.id,
-        translateResult.user?.let { UserDto(it) },
+        translateResult.user.convertOrNull { UserDto(it) },
         translateResult.userType,
         AutoTranslateDTO(translateResult.autoTranslate),
-        translateResult.child?.let {
-            ChildDTO(it)
-        },
-        translateResult.manualResult?.let {
-            ManualResultDTO(it)
-        }
+        translateResult.child.convertOrNull { ChildDTO(it) },
+        translateResult.manualResult.convertOrNull { ManualResultDTO(it) }
     )
 
     fun toResponseDTO(): TranslateResultResponseDTO =
@@ -38,7 +35,7 @@ class TranslateResultDTO(
             userType,
             autoTranslate.toResponseDTO(),
             child?.id,
-            manualResultDTO?.let {
+            manualResultDTO.convertOrNull {
                 ManualResultResponseDTO(it.translateList.map { translate ->
                     translate.toResponseDTO()
                 }.toMutableList(), it.translatorDTO?.id, it.status)
