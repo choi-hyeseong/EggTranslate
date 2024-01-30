@@ -20,9 +20,9 @@ class DocumentService(
 ) {
 
     @Transactional
-    suspend fun saveDocument(documentDTO: DocumentDTO): Long? {
+    suspend fun saveDocument(documentDTO: DocumentDTO): Document {
         val user = userService.getUserEntityOrNull(documentDTO.userDto?.id)
-        return documentRepository.save(documentDTO.toEntity(user)).id
+        return documentRepository.save(documentDTO.toEntity(user))
     }
 
     @Transactional

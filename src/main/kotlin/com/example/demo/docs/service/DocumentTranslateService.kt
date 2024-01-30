@@ -59,7 +59,7 @@ class DocumentTranslateService(
     private suspend fun resolveFile(lang: String, file: MultipartFile, userDto: UserDto?): DocumentResolveDTO {
         val type = documentResolver.resolve(file)
         val document = saveDocumentFile(userDto, type, file)
-        documentService.saveDocument(document)
+        val saveDocument = DocumentDTO(documentService.saveDocument(document))
 
         val parser = documentFactory.createParser(type, ByteArrayInputStream(file.bytes))
         val response = parser.read()
@@ -73,7 +73,7 @@ class DocumentTranslateService(
         )
         val write = parser.write(translate.result ?: "", path.plus("/convertDocument"))
         val convertDocumentDTO = ConvertDocumentDTO(null, type, write.savePath, userDto)
-        return DocumentResolveDTO(response, write, document, convertDocumentDTO, voca)
+        return DocumentResolveDTO(response, write, saveDocument, convertDocumentDTO, voca)
     }
 
     private suspend fun requestAsync(
@@ -82,7 +82,7 @@ class DocumentTranslateService(
         documentFile: MultipartFile
     ): TranslateFileResponseDTO {
         val resolveResponse = resolveFile(lang, documentFile, userDto)
-        val documentId = documentService.saveDocument(resolveResponse.documentDTO)
+        val documentId = documentService.saveDocument(resolveResponse.documentDTO).id
         return TranslateFileResponseDTO(
             null,
             true,
