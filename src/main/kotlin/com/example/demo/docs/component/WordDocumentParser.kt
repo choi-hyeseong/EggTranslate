@@ -36,7 +36,7 @@ class WordDocumentParser(stream: ByteArrayInputStream) : DocumentParser(stream) 
                 logger.warn("Can't parse $splitText index of $index")
         }
         document.write(FileOutputStream("C:\\Users\\bd284\\OneDrive\\바탕 화면\\result1.docx"))
-        return DocumentWriteResponse(path, paragraphs.joinToString(separator = "\n") { it.text }, translate)
+        return DocumentWriteResponse(path, translate)
     }
 
 
