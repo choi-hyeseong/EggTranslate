@@ -1,4 +1,4 @@
-package com.example.demo.docs.component.adobe
+package com.example.demo.docs.component.pdf
 
 import com.adobe.pdfservices.operation.PDFServices
 import com.adobe.pdfservices.operation.auth.ServicePrincipalCredentials

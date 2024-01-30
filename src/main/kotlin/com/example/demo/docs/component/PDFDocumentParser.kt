@@ -1,10 +1,8 @@
 package com.example.demo.docs.component
 
-import com.example.demo.docs.component.adobe.PDFConverter
+import com.example.demo.docs.component.pdf.PDFConverter
 import com.example.demo.docs.dto.DocumentReadResponse
 import com.example.demo.docs.dto.DocumentWriteResponse
-import com.example.demo.docs.factory.DocumentFactory
-import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
 
 class PDFDocumentParser(

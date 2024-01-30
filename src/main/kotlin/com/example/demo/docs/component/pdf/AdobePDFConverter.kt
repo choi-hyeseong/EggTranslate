@@ -1,4 +1,4 @@
-package com.example.demo.docs.component.adobe
+package com.example.demo.docs.component.pdf
 
 import com.adobe.pdfservices.operation.PDFServices
 import com.adobe.pdfservices.operation.PDFServicesMediaType
@@ -10,12 +10,11 @@ import com.example.demo.docs.exception.DocumentException
 import org.springframework.stereotype.Component
 import java.io.ByteArrayInputStream
 import java.io.InputStream
-import java.io.OutputStream
 
 @Component
-class PDFConverter(private val pdfServices: PDFServices) {
+class AdobePDFConverter(private val pdfServices: PDFServices) : PDFConverter {
 
-    fun convertPdfToDocx(stream : ByteArrayInputStream) : ByteArrayInputStream {
+    override fun convertPdfToDocx(stream : ByteArrayInputStream) : ByteArrayInputStream {
         val pollUrl = submitPDF(stream)
         val response = readDocx(pollUrl)
         return ByteArrayInputStream(response.readAllBytes()) //ByteArrayStream으로 변경.
