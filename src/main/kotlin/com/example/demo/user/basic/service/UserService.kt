@@ -47,6 +47,14 @@ class UserService(private val userRepository: UserRepository) {
         return UserDto(getUserEntity(id))
     }
 
+    @Transactional(readOnly = true)
+    suspend fun getUserOrNull(id: Long?): UserDto? {
+        if (id == null)
+            return null
+        return UserDto(getUserEntity(id))
+    }
+
+
     @Transactional
     suspend fun updateProfile(id: Long, userEditDTO: UserEditDTO) {
         val existingUser = getUserEntity(id)

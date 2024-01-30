@@ -1,5 +1,7 @@
 package com.example.demo.translate.service
 
+import com.example.demo.docs.service.DocumentService
+import com.example.demo.docs.service.DocumentTranslateService
 import com.example.demo.file.service.FileService
 import com.example.demo.translate.auto.dto.*
 import com.example.demo.translate.auto.service.ManualResultService
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class TranslateService(
     private val translateResultService: TranslateResultService,
+    private val documentService: DocumentService,
     private val fileService: FileService,
     private val webTranslateService: WebTranslateService,
     private val manualResultService: ManualResultService,
@@ -61,7 +64,9 @@ class TranslateService(
 
     suspend fun mapFileDTO(userDto: UserDto?, responseDTO: List<TranslateFileResponseDTO>) : MutableList<TranslateFileDTO> {
         return responseDTO.map {
-            TranslateFileDTO(null, fileService.findFileById(it.fileId!!), it.convert, it.voca, it.origin ?: "", it.result ?: "", it.from, it.target)
+            val file = if (it.fileId == null) null else fileService.findFileById(it.fileId!!)
+            val document = if (it.documentId == null) null else documentService.findDocumentById(it.documentId!!)
+            TranslateFileDTO(null, file, it.convert, document, it.convertDocumentDTO, it.voca, it.origin ?: "", it.result ?: "", it.from, it.target)
         }.toMutableList()
     }
 

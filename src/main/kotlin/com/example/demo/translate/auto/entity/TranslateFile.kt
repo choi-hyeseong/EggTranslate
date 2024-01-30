@@ -2,6 +2,8 @@ package com.example.demo.translate.auto.entity
 
 import com.example.demo.common.database.converter.JsonVocaFlatter
 import com.example.demo.common.database.converter.StringFlatter
+import com.example.demo.docs.entity.ConvertDocument
+import com.example.demo.docs.entity.Document
 import com.example.demo.file.entity.ConvertFile
 import com.example.demo.file.entity.File
 import com.example.demo.voca.dto.VocaResponseDTO
@@ -21,7 +23,15 @@ class TranslateFile(
 
     @ManyToOne
     @JoinColumn(name = "file_id")
-    var file: File,
+    var file: File?,
+
+    @ManyToOne
+    @JoinColumn(name = "document_id")
+    var document : Document?,
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "convertDocument_id")
+    var convertDocument: ConvertDocument?,
 
     @Column(nullable = false, columnDefinition = "TEXT")
     var origin: String,

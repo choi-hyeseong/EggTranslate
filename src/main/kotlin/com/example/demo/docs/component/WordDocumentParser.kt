@@ -9,6 +9,7 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph
 import org.apache.poi.xwpf.usermodel.XWPFTable
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
+import java.io.File
 import java.io.FileOutputStream
 
 class WordDocumentParser(stream: ByteArrayInputStream) : DocumentParser(stream) {
@@ -35,7 +36,10 @@ class WordDocumentParser(stream: ByteArrayInputStream) : DocumentParser(stream) 
             else
                 logger.warn("Can't parse $splitText index of $index")
         }
-        document.write(FileOutputStream("C:\\Users\\bd284\\OneDrive\\바탕 화면\\result1.docx"))
+        val file = File(path.plus("/${System.currentTimeMillis()}.docx"))
+        if (!file.parentFile.exists())
+            file.parentFile.mkdir()
+        document.write(file.outputStream())
         return DocumentWriteResponse(path, translate)
     }
 

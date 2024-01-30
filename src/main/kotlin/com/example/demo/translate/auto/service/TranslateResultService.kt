@@ -1,23 +1,13 @@
 package com.example.demo.translate.auto.service
 
+import com.example.demo.docs.service.DocumentService
+import com.example.demo.docs.service.DocumentTranslateService
 import com.example.demo.file.service.FileService
-import com.example.demo.translate.auto.dto.AutoTranslateDTO
 import com.example.demo.translate.auto.dto.TranslateResultDTO
-import com.example.demo.translate.auto.entity.AutoTranslate
 import com.example.demo.translate.auto.entity.TranslateResult
-import com.example.demo.translate.auto.repository.AutoTranslateRepository
 import com.example.demo.translate.auto.repository.TranslateResultRepository
 import com.example.demo.translate.exception.TranslateException
-import com.example.demo.translate.manual.dto.ManualResultDTO
-import com.example.demo.translate.manual.dto.ManualTranslateRequestDTO
-import com.example.demo.translate.manual.entity.ManualTranslate
-import com.example.demo.translate.manual.exception.ManualException
-import com.example.demo.translate.manual.repository.ManualResultRepository
-import com.example.demo.translate.manual.repository.ManualTranslateRepository
-import com.example.demo.translate.manual.type.TranslateState
 import com.example.demo.user.basic.service.UserService
-import com.example.demo.user.translator.service.TranslatorService
-import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -26,6 +16,7 @@ class TranslateResultService(
     val userService: UserService,
     val fileService: FileService,
     val translateResultRepository: TranslateResultRepository,
+    val documentService: DocumentService,
 ) {
 
 
@@ -33,8 +24,9 @@ class TranslateResultService(
     suspend fun saveTranslateResult(userId: Long?, translateResultDTO: TranslateResultDTO): Long? {
         val user = if (userId == null) null else userService.getUserEntity(userId)
         val translateFiles = translateResultDTO.autoTranslate.translateFile.map {
-            val file = fileService.findFileEntityById(it.file.id!!)
-            it.toEntity(file, user)
+            val file = fileService.findFileEntityByIdOrNull(it.file?.id)
+            val document = documentService.findDocumentEntityByIdOrNull(it.document?.id)
+            it.toEntity(file, document, user)
         }.toMutableList()
         val autoTranslate = translateResultDTO.autoTranslate.toEntity(translateFiles)
         return translateResultRepository.save(translateResultDTO.toEntity(user, autoTranslate, null)).id

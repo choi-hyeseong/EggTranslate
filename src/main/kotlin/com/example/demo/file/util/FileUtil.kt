@@ -49,6 +49,18 @@ class FileUtil {
             }
         }
 
+
+        suspend fun saveFileWithCreateDir(byteArray: ByteArray, path: String) {
+            withContext(Dispatchers.IO) {
+                val file = File(path)
+                if (!file.parentFile.exists())
+                    file.parentFile.mkdir()
+                FileOutputStream(path).use {
+                    it.write(byteArray)
+                }
+            }
+        }
+
         suspend fun saveImage(image: BufferedImage, path: String) {
             withContext(Dispatchers.IO) {
                 val file = File(path)
@@ -61,7 +73,7 @@ class FileUtil {
             }
         }
 
-        suspend fun cloneImage(file: MultipartFile) : BufferedImage {
+        suspend fun cloneImage(file: MultipartFile): BufferedImage {
             val image = readImageNonRotate(file)
             val cloneImage = BufferedImage(image.width, image.height, java.awt.Image.SCALE_FAST)
             val graphic = cloneImage.graphics
@@ -71,7 +83,8 @@ class FileUtil {
 
         private suspend fun readImageNonRotate(file: MultipartFile): BufferedImage {
             val byteStream = ByteArrayInputStream(file.bytes)
-            val originImage = ImageIO.read(ByteArrayInputStream(file.bytes)) //byteStream 변수 사용하면 안됨. 여기서 다 읽으면 메타데이터를 못읽음.
+            val originImage =
+                ImageIO.read(ByteArrayInputStream(file.bytes)) //byteStream 변수 사용하면 안됨. 여기서 다 읽으면 메타데이터를 못읽음.
             try {
                 val metadata = ImageMetadataReader.readMetadata(byteStream, file.size)
                 val directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory::class.java)
@@ -80,7 +93,7 @@ class FileUtil {
                 //왼쪽으로 눕혀지는 경우만 정상적으로 표시되므로 나머지만 rotate
                 return rotateImage(originImage, orientation)
             } catch (e: Exception) {
-                log.warn("Encountered Exception : {} : {}, return origin image",e::class.simpleName, e.message)
+                log.warn("Encountered Exception : {} : {}, return origin image", e::class.simpleName, e.message)
                 return originImage
             }
         }
@@ -102,9 +115,13 @@ class FileUtil {
                 return originImage //회전할 필요 없음
 
             val graphic = image.createGraphics()
-            graphic.rotate(Math.toRadians(degree.toDouble()), (image.width / 2).toDouble(), (image.height / 2).toDouble())
-            graphic.translate((image.width - originImage.width) /2, (image.height - originImage.height) / 2)
-            graphic.drawImage(originImage, 0,0, originImage.width, originImage.height, null)
+            graphic.rotate(
+                Math.toRadians(degree.toDouble()),
+                (image.width / 2).toDouble(),
+                (image.height / 2).toDouble()
+            )
+            graphic.translate((image.width - originImage.width) / 2, (image.height - originImage.height) / 2)
+            graphic.drawImage(originImage, 0, 0, originImage.width, originImage.height, null)
             graphic.dispose()
             return image
 

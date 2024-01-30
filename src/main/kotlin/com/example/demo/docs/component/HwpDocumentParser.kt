@@ -12,6 +12,7 @@ import kr.dogfoot.hwplib.`object`.bodytext.paragraph.Paragraph
 import kr.dogfoot.hwplib.reader.HWPReader
 import kr.dogfoot.hwplib.writer.HWPWriter
 import java.io.ByteArrayInputStream
+import java.io.File
 
 
 //빈 사용 대신 팩토리가 하나 필요할듯?
@@ -34,8 +35,10 @@ class HwpDocumentParser(file: ByteArrayInputStream) : DocumentParser(file) {
             if (paragraphs.size > index)
                 HWPUtil.setParagraphString(paragraphs[index], translateString)
         }
-        HWPWriter.toFile(hwpFile, "C:\\Users\\bd284\\OneDrive\\바탕 화면\\convert.hwp")
-
+        val file = File(path.plus("/${System.currentTimeMillis()}.hwp"))
+        if (!file.parentFile.exists())
+            file.parentFile.mkdir()
+        HWPWriter.toFile(hwpFile, file.path)
         return DocumentWriteResponse(path, translate)
     }
 

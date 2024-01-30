@@ -59,7 +59,6 @@ class ImageService(
                     //번역을 위한 flatten
                     val postHandleResponse = ocrPostHandler.handleText(ocrResponse.content)
                     val allVocaDesc = vocaService.findAllContainingVoca(lang, postHandleResponse) //여기서 찾으면 2번 호출하는데.. (Translate Pre Handler)
-                    log.warn("$allVocaDesc")
                     val response =
                         translateService.requestWebTranslate(TranslateRequestDTO("ko", lang, postHandleResponse))
                     TranslateFileResponseDTO(
@@ -67,6 +66,8 @@ class ImageService(
                         response.isSuccess,
                         file,
                         getConvertImage(isConvert, lang, it, paragraph, userDto),
+                        null,
+                        null,
                         allVocaDesc,
                         response.from,
                         response.target,

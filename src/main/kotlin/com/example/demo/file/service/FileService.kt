@@ -39,6 +39,13 @@ class FileService(
         .orElseThrow { FileException("존재하지 않는 파일입니다.") }
 
     @Transactional
+    suspend fun findFileEntityByIdOrNull(id: Long?): File? {
+        if (id == null)
+            return null
+        return fileRepository.findById(id).getOrNull()
+    }
+
+    @Transactional
     suspend fun findAllFileEntityByUserIdOrNull(id: Long): List<File> = fileRepository
         .findAllByUserId(id)
 
@@ -91,7 +98,7 @@ class FileService(
             }.await()
         }
     }
-
+    @Transactional
     suspend fun deleteFileByUserId(userId : Long) {
         val file = findAllFileEntityByUserIdOrNull(userId)
         file.forEach {
