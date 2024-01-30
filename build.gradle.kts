@@ -58,6 +58,7 @@ dependencies {
     implementation("com.drewnoakes:metadata-extractor:2.19.0")
     implementation("kr.dogfoot:hwplib:1.1.4")
     implementation("org.apache.poi:poi-ooxml:5.2.3")
+    implementation("com.adobe.documentservices:pdfservices-sdk:4.0.0")
 }
 
 tasks.withType<KotlinCompile> {
