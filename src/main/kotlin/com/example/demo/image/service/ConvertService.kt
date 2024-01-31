@@ -34,7 +34,7 @@ class ConvertService(
         return FileUtil.convertFileToResource(fileDto)
     }
 
-    suspend fun convertFile(file: MultipartFile, paragraph: List<Paragraph>, userDto : UserDto?): ConvertFileDTO {
+    suspend fun convertFile(file: MultipartFile, paragraph: List<Paragraph>, userDto: UserDto?): ConvertFileDTO {
         return withContext(Dispatchers.IO) {
             val image = FileUtil.cloneImage(file) //이미지 복제 (새로운 이미지 파일)
             val graphic = image.graphics
@@ -93,16 +93,19 @@ class ConvertService(
         val metrics = g.getFontMetrics(font)
         val bounds: Rectangle2D = metrics.getStringBounds(content, g)
         // 10보다 작을경우 너비를 좀 늘려서 줄바꿈을 생기게 함
-        val fontWidth =
+        var fontWidth =
             if (font.size <= 10)
                 ((bounds.width.toInt() / content.length) * 1.3).toInt()
             else
                 bounds.width.toInt() / content.length
-        val fontHeight = bounds.height.toInt()
+        if (fontWidth == 0)
+            fontWidth = 1
+
         var maxWidth = width / (fontWidth) //최대 들어갈 수 있는 char의 수
         if (maxWidth == 0)
             maxWidth = 1
 
+        val fontHeight = bounds.height.toInt()
         val contentLine = content.length / maxWidth
         return FontData(font, maxWidth, contentLine, fontWidth, fontHeight)
     }
@@ -118,7 +121,13 @@ class ConvertService(
         else
             g.font = Font(g.font.name, Font.PLAIN, 12)
 
-        val charPerLine = findFontData(g, g.font, area.width.toInt() - (area.width.toInt()* 0.15).toInt(), area.height.toInt(), content).maxCharPerLine
+        val charPerLine = findFontData(
+            g,
+            g.font,
+            area.width.toInt() - (area.width.toInt() * 0.15).toInt(),
+            area.height.toInt(),
+            content
+        ).maxCharPerLine
 
         startY += g.fontMetrics.ascent //꼭짓점에서 폰트의 중간 좌표로 이동.
 
@@ -129,11 +138,10 @@ class ConvertService(
             val next = min(index + charPerLine, content.length)
 
             val drawString = content.substring(index, next)
-            if ( startY + fontData.charHeight > area.max.y) {
+            if (startY + fontData.charHeight > area.max.y) {
                 g.drawString("$drawString.", startX, startY)
                 break
-            }
-            else
+            } else
                 g.drawString(drawString, startX, startY)
 
             startY += fontData.charHeight //다음 줄로 이동
