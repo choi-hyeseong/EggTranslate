@@ -5,12 +5,7 @@ import com.example.demo.docs.dto.ConvertDocumentDTO
 import com.example.demo.docs.dto.DocumentDTO
 import com.example.demo.docs.dto.DocumentRequestDTO
 import com.example.demo.docs.dto.DocumentResolveDTO
-import com.example.demo.docs.entity.ConvertDocument
-import com.example.demo.docs.entity.Document
-import com.example.demo.docs.exception.DocumentException
 import com.example.demo.docs.factory.DocumentFactory
-import com.example.demo.docs.repository.ConvertDocumentRepository
-import com.example.demo.docs.repository.DocumentRepository
 import com.example.demo.docs.type.DocumentType
 import com.example.demo.file.util.FileUtil
 import com.example.demo.translate.auto.dto.TranslateFileData
@@ -23,8 +18,6 @@ import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.voca.service.VocaService
-import jakarta.transaction.Transactional
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -32,7 +25,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
-import kotlin.jvm.optionals.getOrNull
 
 //순환참조를 해결하기 위한 서비스. 실질적인 번역 요청에만 작동.
 @Service
@@ -58,7 +50,7 @@ class DocumentTranslateService(
 
     }
 
-    private suspend fun resolveFile(lang: String, file: MultipartFile, userDto: UserDto?): DocumentResolveDTO {
+    private suspend fun parseFile(lang: String, file: MultipartFile, userDto: UserDto?): DocumentResolveDTO {
         val type = documentResolver.resolve(file)
         val document = saveDocumentFile(userDto, type, file)
         val saveDocument = DocumentDTO(documentService.saveDocument(document))
@@ -74,18 +66,18 @@ class DocumentTranslateService(
         return DocumentResolveDTO(response, write, saveDocument, convertDocumentDTO, voca)
     }
 
-    private suspend fun requestAsync(
+    private suspend fun requestEach(
         lang: String,
         userDto: UserDto?,
         documentFile: MultipartFile
     ): TranslateFileResponseDTO {
-        val resolveResponse = resolveFile(lang, documentFile, userDto)
-        val readResponse = resolveResponse.documentReadResponse
-        val writeResponse = resolveResponse.documentWriteResponse
-        val documentId = documentService.saveDocument(resolveResponse.documentDTO).id
+        val parseResponse = parseFile(lang, documentFile, userDto)
+        val readResponse = parseResponse.documentReadResponse
+        val writeResponse = parseResponse.documentWriteResponse
+        val documentId = documentService.saveDocument(parseResponse.documentDTO).id
 
-        val translateFileData = TranslateFileData(null, null, documentId, resolveResponse.convertDocumentDTO)
-        val translateResultData = TranslateResultData(resolveResponse.voca, "ko", lang, readResponse.content, writeResponse.translate)
+        val translateFileData = TranslateFileData(null, null, documentId, parseResponse.convertDocumentDTO)
+        val translateResultData = TranslateResultData(parseResponse.voca, "ko", lang, readResponse.content, writeResponse.translate)
         return TranslateFileResponseDTO(null, true, translateFileData, translateResultData)
         //결과 반환시에는 origin에는 replace 된 값 보내줘선 안됨. 오직 origin 데이터.
     }
@@ -98,7 +90,7 @@ class DocumentTranslateService(
         return coroutineScope {
             documents.map {
                 async {
-                    requestAsync(lang, userDto, it)
+                    requestEach(lang, userDto, it)
                 }
             }.awaitAll()
         }

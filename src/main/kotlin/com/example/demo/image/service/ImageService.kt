@@ -1,5 +1,6 @@
 package com.example.demo.image.service
 
+import com.example.demo.convertOrNull
 import com.example.demo.file.service.FileService
 import com.example.demo.file.dto.ConvertFileDTO
 import com.example.demo.image.dto.ImageDTO
@@ -37,7 +38,7 @@ class ImageService(
 
     suspend fun handleImage(imageDTO: ImageDTO): TranslateResultResponseDTO {
         //save image
-        val user = if (imageDTO.userId == null) null else userService.getUser(imageDTO.userId)
+        val user = imageDTO.userId.convertOrNull { userService.getUser(it) }
         //read parallel logic
         val response = requestImage(imageDTO.image ?: false, imageDTO.lang, user, imageDTO.file)
         // return translated string
