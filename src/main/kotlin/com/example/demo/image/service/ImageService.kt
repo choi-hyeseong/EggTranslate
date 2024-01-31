@@ -56,7 +56,7 @@ class ImageService(
         return coroutineScope {
             val requestList = image.map {
                 async {
-                    val file = fileService.saveEntity(fileService.saveImage(userDto, it))
+                    val file = fileService.saveEntity(fileService.saveFile(userDto, it))
                     val ocrResponse = ocrService.readAll(it)
                     val paragraph = ocrResponse.paragraphs
                     //번역을 위한 flatten

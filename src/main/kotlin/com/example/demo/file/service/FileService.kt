@@ -65,27 +65,28 @@ class FileService(
     }
 
     @Transactional
-    suspend fun saveAllEntity(fileDTO: List<FileDTO>) {
-        fileRepository.saveAll(fileDTO.map {
+    suspend fun saveAllEntity(fileDTO: List<FileDTO>) : List<Long?> {
+        return fileRepository.saveAll(fileDTO.map {
             if (it.user != null)
                 it.toEntity(userService.getUserEntity(it.user.id!!))
             else
                 it.toEntity(null)
-        }.toList())
+        }.toList()).map { it.id }
     }
 
-    suspend fun saveImage(userDto: UserDto, image: List<MultipartFile>): List<FileDTO> {
+
+    suspend fun saveFile(userDto: UserDto, image: List<MultipartFile>): List<FileDTO> {
         //parallel image save
         return coroutineScope {
             image.map { image ->
                 async {
-                    saveImage(userDto, image)
+                    saveFile(userDto, image)
                 }
             }.toList().awaitAll()
         }
     }
 
-    suspend fun saveImage(userDto: UserDto?, image: MultipartFile): FileDTO {
+    suspend fun saveFile(userDto: UserDto?, image: MultipartFile): FileDTO {
         //parallel image save
         return coroutineScope {
             async {
