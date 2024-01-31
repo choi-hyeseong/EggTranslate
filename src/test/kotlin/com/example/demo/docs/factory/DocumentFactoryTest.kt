@@ -16,7 +16,7 @@ class DocumentFactoryTest {
 
     @Test
     fun TEST_SATISFY_PARSER() {
-        val factory = DocumentFactory()
+        val factory = DocumentFactory(mockk())
         val file = mockk<ByteArrayInputStream>()
         DocumentType.values().forEach {
             val parser = factory.createParser(it, file)

@@ -54,8 +54,8 @@ class ManualTranslateTest {
         val fileDto = FileDTO(null, "ORIGIN", "SAVE", saveUser, "PATH")
         val saveFile = fileRepository.save(fileDto.toEntity(user))
 
-        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), null, mutableListOf(), "ORIGIN", "TRANSLATE", "FROM", "TO")
-        val saveTranslateFile = translateFileRepository.save(translateFileDTO.toEntity(saveFile))
+        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), null, null, null, mutableListOf(), "ORIGIN", "TRANSLATE", "FROM", "TO")
+        val saveTranslateFile = translateFileRepository.save(translateFileDTO.toEntity(saveFile, null, null))
 
         val translateDTO = ManualTranslateDTO(null, TranslateFileDTO(saveTranslateFile), "TRANSLATED_CONTENT")
         val response : ManualTranslate = assertDoesNotThrow{ manualTranslateRepository.save(ManualTranslate(null, saveTranslateFile, translateDTO.content)) }
@@ -71,15 +71,15 @@ class ManualTranslateTest {
         val fileDto = FileDTO(null, "ORIGIN", "SAVE", UserDto(saveUser), "PATH")
         val saveFile = fileRepository.save(fileDto.toEntity(user))
 
-        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), null, mutableListOf(), "ORIGIN", "TRANSLATE", "FROM", "TO")
-        val saveTranslateFile = translateFileRepository.save(translateFileDTO.toEntity(saveFile))
+        val translateFileDTO = TranslateFileDTO(null, FileDTO(saveFile), null, null, null, mutableListOf(), "ORIGIN", "TRANSLATE", "FROM", "TO")
+        val saveTranslateFile = translateFileRepository.save(translateFileDTO.toEntity(saveFile, null, saveUser))
 
         val translateDTO = ManualTranslateDTO(null, TranslateFileDTO(saveTranslateFile), "TRANSLATED_CONTENT")
         val response : ManualTranslate = assertDoesNotThrow{ manualTranslateRepository.save(ManualTranslate(null, saveTranslateFile, translateDTO.content)) }
         assertNotEquals(-1, response.id)
 
         val load = assertDoesNotThrow { manualTranslateRepository.findById(response.id!!).get() }
-        assertEquals("SAVE", load.translateFile.file.saveName)
+        assertEquals("SAVE", load.translateFile.file?.saveName)
         assertEquals("TRANSLATED_CONTENT", load.translateContent)
 
     }

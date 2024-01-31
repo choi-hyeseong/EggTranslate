@@ -106,6 +106,7 @@ class ManualResultTest {
         val request = TranslateResultDTO(
             null,
             UserDto(parentUser),
+            UserType.PARENT,
             autoTrans,
             ChildDTO(parent.children[0]),
             null
@@ -156,6 +157,7 @@ class ManualResultTest {
         val request = TranslateResultDTO(
             null,
             UserDto(parentUser),
+            UserType.PARENT,
             autoTrans,
             ChildDTO(parent.children[0]),
             null

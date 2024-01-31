@@ -48,7 +48,7 @@ class FileTest(@Autowired private val userRepository: UserRepository, @Autowired
         val fileLoad = assertDoesNotThrow { fileRepository.findById(response.id!!).get() }
         assertEquals("ORIGIN", fileLoad.originName)
         assertEquals("SAVE", fileLoad.saveName)
-        assertEquals(user.id, fileLoad.user.id)
+        assertEquals(user.id, fileLoad.user?.id)
 
     }
 
