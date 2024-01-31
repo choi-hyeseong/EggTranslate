@@ -25,7 +25,7 @@ class JsonConverter(private val normalConverter: NormalConverter) : Converter {
             gson.toJson(JsonParser.parseString(normalConverter.convert(obj)))
         }
         catch (e: Exception) {
-            return normalConverter.convert(obj)
+            return ""
         }
     }
 
