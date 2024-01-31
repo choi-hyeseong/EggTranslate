@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.net.URLEncoder
 
 @RestController
 @RequestMapping("/api/document")
@@ -28,8 +29,9 @@ class DocumentController(private val documentTranslateService: DocumentTranslate
     @GetMapping("/{id}")
     suspend fun getDocument(@PathVariable(value = "id", required = true) id : Long) : ResponseEntity<Resource> {
         val document = documentService.findDocumentById(id)
+        val filename = URLEncoder.encode(document.originName, "UTF-8")
         return ResponseEntity(FileUtil.convertFileToResource(document), HttpHeaders().apply {
-            add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${document.originName}")
+            add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=$filename")
         }, HttpStatus.OK)
     }
 
