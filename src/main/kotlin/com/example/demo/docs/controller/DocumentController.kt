@@ -4,6 +4,7 @@ import com.example.demo.common.response.Response
 import com.example.demo.docs.dto.DocumentRequestDTO
 import com.example.demo.docs.service.DocumentService
 import com.example.demo.docs.service.DocumentTranslateService
+import com.example.demo.docs.valid.DocumentRequestValid
 import com.example.demo.file.util.FileUtil
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import org.springframework.core.io.Resource
@@ -18,7 +19,7 @@ class DocumentController(private val documentTranslateService: DocumentTranslate
     private val documentService: DocumentService) {
 
     @PostMapping("/upload")
-    suspend fun request(documentRequestDTO: DocumentRequestDTO) : Response<TranslateResultResponseDTO> {
+    suspend fun request(@DocumentRequestValid documentRequestDTO: DocumentRequestDTO) : Response<TranslateResultResponseDTO> {
        return Response.ofSuccess(null, documentTranslateService.request(documentRequestDTO))
     }
 
