@@ -24,7 +24,7 @@ class BoardController(
     @GetMapping("/{id}")
     suspend fun getBoard(@PathVariable(required = true, value = "id") id : Long) : BoardResponseDTO {
         val response = boardService.getBoard(id)
-        boardService.increaseViewCount(response.id!!)
+        boardService.increaseViewCount(response.id)
         return response
     }
 }
