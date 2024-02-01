@@ -1,16 +1,9 @@
 package com.example.demo.board.entity
 
+import com.example.demo.board.type.BoardVisibility
 import com.example.demo.file.entity.File
 import com.example.demo.user.basic.entity.User
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
 
 @Entity
 class Board (
@@ -31,6 +24,11 @@ class Board (
 
     @Column
     var count : Int,
+
+    //해당 게시글을 보이게 할지 여부 (삭제는 아님)
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    var visibility: BoardVisibility,
 
     @JoinColumn(name = "board_id")
     @OneToMany(cascade = [CascadeType.REMOVE])
