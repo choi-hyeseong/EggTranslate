@@ -7,6 +7,7 @@ import com.example.demo.board.service.BoardService
 import com.example.demo.common.page.Pageable
 import com.example.demo.common.response.Response
 import com.example.demo.file.service.FileService
+import com.example.demo.profile.service.ProfileService
 import com.example.demo.user.basic.dto.UserInfoDTO
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
@@ -19,6 +20,7 @@ class AdminController(
     private val userService: UserService,
     private val fileService: FileService,
     private val boardService: BoardService,
+    private val profileService: ProfileService
 ) {
 
     /*
@@ -53,6 +55,12 @@ class AdminController(
     @GetMapping("/user/{id}")
     suspend fun userInfo(@PathVariable id : Long) : Response<UserResponseDTO> {
         return Response.ofSuccess(null, userService.getUser(id).toResponseDTO())
+    }
+
+    @DeleteMapping("/user/{id}")
+    suspend fun deleteUser(@PathVariable id : Long) : Response<UserResponseDTO> {
+        profileService.deleteProfile(id)
+        return Response.ofSuccess("해당 유저가 삭제되었습니다. id : $id", null)
     }
 
 }

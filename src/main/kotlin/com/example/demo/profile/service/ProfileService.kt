@@ -1,5 +1,6 @@
 package com.example.demo.profile.service
 
+import com.example.demo.board.service.BoardService
 import com.example.demo.docs.service.DocumentService
 import com.example.demo.file.service.FileService
 import com.example.demo.profile.dto.ParentEditDTO
@@ -27,7 +28,9 @@ class ProfileService(
     private val translatorService: TranslatorService,
     private val translateManageService: TranslateManageService,
     private val fileService: FileService,
-    private val heartService: HeartService) {
+    private val heartService: HeartService,
+    private val boardService: BoardService
+    ) {
 
     suspend fun updateUser(id : Long, userEditDto: UserEditDTO) {
         userService.updateProfile(id, userEditDto)
@@ -83,6 +86,7 @@ class ProfileService(
         translateManageService.deleteUserResult(id)
         heartService.removeUserHeart(id)
         fileService.deleteFileByUserId(id)
+        boardService.deleteAllBoardByUserId(id) //보드와 연관된 데이터 다 지우고 해야 외래키 끊어짐
         documentService.deleteAllDocumentByUserId(id)
         userService.deleteById(id)
     }
