@@ -34,4 +34,18 @@ class Board (
     @OneToMany(cascade = [CascadeType.REMOVE])
     var files : MutableList<File> = mutableListOf() //file list
 
-)
+) {
+    fun updateBoard(title : String?, content : String?, visibility: BoardVisibility?, files: MutableList<File>?) {
+        if (title != null)
+            this.title = title
+
+        if (content != null)
+            this.content = content
+
+        if (visibility != null)
+            this.visibility = visibility
+
+        if (files != null)
+            this.files = files
+    }
+}

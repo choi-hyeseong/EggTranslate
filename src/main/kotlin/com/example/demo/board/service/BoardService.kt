@@ -59,20 +59,17 @@ class BoardService(
 
     @Transactional
     suspend fun editBoard(boardEditDTO: BoardEditDTO): BoardResponseDTO {
-        val board = findBoardEntityById(boardEditDTO.id)
-
-        if (boardEditDTO.title != null)
-            board.title = boardEditDTO.title
-
-        if (boardEditDTO.content != null)
-            board.content = boardEditDTO.content
-
-        if (boardEditDTO.visibility != null)
-            board.visibility = boardEditDTO.visibility
-
-        if (boardEditDTO.files != null)
-            board.files = boardEditDTO.files.map { fileService.findFileEntityById(it) }.toMutableList()
-
+        val mappedFile = boardEditDTO.files.convertOrNull { fileIds ->
+            fileIds.map { fileService.findFileEntityById(it) }.toMutableList()
+        }
+        val board = findBoardEntityById(boardEditDTO.id).apply {
+            updateBoard(
+                boardEditDTO.title,
+                boardEditDTO.content,
+                boardEditDTO.visibility,
+                mappedFile
+            )
+        }
         boardRepository.save(board)
         return getBoard(boardEditDTO.id)
     }
