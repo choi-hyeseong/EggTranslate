@@ -18,6 +18,7 @@ import jakarta.transaction.Transactional
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import kotlin.math.max
 
 @Service
 class BoardService(
@@ -80,7 +81,7 @@ class BoardService(
         val boardListItems = pageBoard.map {
             BoardListItemDTO(it.id!!, it.title, it.content, it.visibility)
         }.toMutableList()
-        return Pageable(page, pageBoard.totalPages - 1, boardListItems)
+        return Pageable(page, max(0, pageBoard.totalPages - 1), boardListItems)
     }
 
     @Transactional

@@ -12,6 +12,7 @@ import com.example.demo.user.basic.repository.UserRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.math.max
 
 @Service
 class UserService(private val userRepository: UserRepository) {
@@ -77,7 +78,7 @@ class UserService(private val userRepository: UserRepository) {
     @Transactional
     suspend fun getUserList(page: Int, amount: Int): Pageable<UserListItemDTO> {
         val pageUser = userRepository.findAll(PageRequest.of(page, amount))
-        return Pageable(page, pageUser.totalPages - 1, pageUser.content.map { UserListItemDTO(it) })
+        return Pageable(page, max(0, pageUser.totalPages - 1), pageUser.content.map { UserListItemDTO(it) })
     }
 }
 
