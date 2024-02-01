@@ -1,12 +1,11 @@
 package com.example.demo.user.basic.service
 
-import com.example.demo.board.dto.BoardListItemDTO
 import com.example.demo.common.page.Pageable
 import com.example.demo.convertOrNull
 import com.example.demo.profile.dto.UserEditDTO
-import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.dto.UserListItemDTO
+import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.repository.UserRepository

@@ -19,4 +19,6 @@ class UserDto(
 
     fun toInfoDTO() : UserInfoDTO = UserInfoDTO(name, phone, email, languages)
 
+    fun toResponseDTO() : UserResponseDTO = UserResponseDTO(id, userName, name, phone, email, languages, userType)
+
 }

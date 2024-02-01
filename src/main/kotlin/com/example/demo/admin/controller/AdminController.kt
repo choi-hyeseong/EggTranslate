@@ -1,6 +1,5 @@
 package com.example.demo.admin.controller
 
-import com.example.demo.board.dto.BoardEditDTO
 import com.example.demo.board.dto.BoardEditRequestDTO
 import com.example.demo.board.dto.BoardRequestDTO
 import com.example.demo.board.dto.BoardResponseDTO
@@ -8,7 +7,9 @@ import com.example.demo.board.service.BoardService
 import com.example.demo.common.page.Pageable
 import com.example.demo.common.response.Response
 import com.example.demo.file.service.FileService
+import com.example.demo.user.basic.dto.UserInfoDTO
 import com.example.demo.user.basic.dto.UserListItemDTO
+import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
 import org.springframework.web.bind.annotation.*
 
@@ -47,6 +48,11 @@ class AdminController(
     @GetMapping("/user")
     suspend fun users(@RequestParam(defaultValue = "0") page : Int, @RequestParam(defaultValue = "20") amount : Int) : Response<Pageable<UserListItemDTO>> {
         return Response.ofSuccess(null, userService.getUserList(page, amount))
+    }
+
+    @GetMapping("/user/{id}")
+    suspend fun userInfo(@PathVariable id : Long) : Response<UserResponseDTO> {
+        return Response.ofSuccess(null, userService.getUser(id).toResponseDTO())
     }
 
 }
