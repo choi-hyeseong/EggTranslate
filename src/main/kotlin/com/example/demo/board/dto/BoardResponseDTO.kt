@@ -17,7 +17,7 @@ class BoardResponseDTO(
     var id: Long = 0L
 
     constructor(board: Board) : this(board.user.id, board.title, board.content, board.count, board.visibility, board.files.map { FileSimpleDTO(it.id, it.originName) }) {
-        Assert.isNull(id, "ID값은 NULL이 와선 안됩니다.")
+        Assert.notNull(board.id, "ID값은 NULL이 와선 안됩니다.")
         this.id = board.id!!
     }
 }
