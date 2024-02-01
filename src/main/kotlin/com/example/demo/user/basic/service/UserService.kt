@@ -1,12 +1,16 @@
 package com.example.demo.user.basic.service
 
+import com.example.demo.board.dto.BoardListItemDTO
+import com.example.demo.common.page.Pageable
 import com.example.demo.convertOrNull
 import com.example.demo.profile.dto.UserEditDTO
 import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.repository.UserRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -68,6 +72,13 @@ class UserService(private val userRepository: UserRepository) {
     suspend fun deleteById(id : Long) {
         // TODO 갖고 있는 모든 연관관계 제거
         userRepository.deleteById(id)
+    }
+
+
+    @Transactional
+    suspend fun getUserList(page: Int, amount: Int): Pageable<UserListItemDTO> {
+        val pageUser = userRepository.findAll(PageRequest.of(page, amount))
+        return Pageable(page, pageUser.totalPages - 1, pageUser.content.map { UserListItemDTO(it) })
     }
 }
 
