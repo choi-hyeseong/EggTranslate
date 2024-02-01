@@ -32,8 +32,7 @@ class BoardController(
     }
 
     @GetMapping
-    suspend fun getBoardList(@RequestParam(defaultValue = "0") page : Int, @RequestParam(defaultValue = "0") amount : Int) : Response<Pageable<BoardListItemDTO>> {
-        val requestAmount = if (amount == 0) 20 else amount
-        return Response.ofSuccess(null, boardService.getBoardList(page, requestAmount))
+    suspend fun getBoardList(@RequestParam(defaultValue = "0") page : Int, @RequestParam(defaultValue = "20") amount : Int) : Response<Pageable<BoardListItemDTO>> {
+        return Response.ofSuccess(null, boardService.getBoardList(page, amount))
     }
 }

@@ -84,7 +84,7 @@ class BoardService(
             val content = if (it.content.length > 30) it.content.substring(0, 30) else it.content //내용이 길면 30자까지 자르고 출력
             BoardListItemDTO(it.id!!, it.title, content, it.visibility)
         }.toMutableList()
-        return Pageable(page, pageBoard.totalPages, boardListItems)
+        return Pageable(page, pageBoard.totalPages - 1, boardListItems)
     }
 
     @Transactional
