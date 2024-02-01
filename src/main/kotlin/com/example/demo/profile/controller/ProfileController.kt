@@ -28,11 +28,6 @@ class ProfileController(
     private val profileService: ProfileService
 ) {
 
-    @GetMapping("")
-    fun retrieveAllUsers(): List<User> {
-        return userRepository.findAll()
-    }
-
     @PutMapping("/edit/parent/{id}")
     suspend fun editParentProfile(@PathVariable id: Long, @RequestBody parentEditDTO: ParentEditDTO): Long {
         profileService.updateParent(id, parentEditDTO)
@@ -56,8 +51,4 @@ class ProfileController(
         profileService.deleteProfile(id)
     }
 
-    @GetMapping("/{id}")
-    fun retrieveUser(@PathVariable id: Long): Optional<User> {
-        return userRepository.findById(id)
-    }
 }
