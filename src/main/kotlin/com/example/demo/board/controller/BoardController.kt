@@ -20,15 +20,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/board")
 class BoardController(
-    private val userService: UserService,
     private val boardService: BoardService,
-    private val fileService: FileService
 ){
 
     @GetMapping("/{id}")
     suspend fun getBoard(@PathVariable(required = true, value = "id") id : Long) : BoardResponseDTO {
         val response = boardService.getBoard(id)
         boardService.increaseViewCount(response.id)
+        //todo board가 invisible이면 user가 admin이 아니면 못봄
         return response
     }
 
