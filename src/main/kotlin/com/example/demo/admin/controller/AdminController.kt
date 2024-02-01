@@ -1,8 +1,11 @@
 package com.example.demo.admin.controller
 
+import com.example.demo.board.dto.BoardEditDTO
+import com.example.demo.board.dto.BoardEditRequestDTO
 import com.example.demo.board.dto.BoardRequestDTO
 import com.example.demo.board.dto.BoardResponseDTO
 import com.example.demo.board.service.BoardService
+import com.example.demo.common.response.Response
 import com.example.demo.file.service.FileService
 import com.example.demo.user.basic.service.UserService
 import org.springframework.web.bind.annotation.*
@@ -18,11 +21,22 @@ class AdminController(
     /*
     * Board Part
     */
-    @PostMapping("/board/write/{id}")
-    suspend fun write(@PathVariable id : Long, @ModelAttribute boardRequestDTO: BoardRequestDTO) : BoardResponseDTO {
+    @PostMapping("/board/{id}")
+    suspend fun write(@PathVariable id : Long, @ModelAttribute boardRequestDTO: BoardRequestDTO) : Response<BoardResponseDTO> {
         val userDto = userService.getUser(id)
         val fileDto = fileService.saveFile(userDto, boardRequestDTO.file)
-        return boardService.writeBoard(id, fileDto, boardRequestDTO)
+        return Response.ofSuccess(null, boardService.writeBoard(id, fileDto, boardRequestDTO))
+    }
+
+    @PutMapping("/board/{id}")
+    suspend fun edit(@PathVariable id : Long, @RequestBody boardEditDTO: BoardEditRequestDTO) : Response<BoardResponseDTO> {
+        return Response.ofSuccess("게시글이 수정되었습니다. id : $id", boardService.editBoard(boardEditDTO.toEditDTO(id)))
+    }
+
+
+    @DeleteMapping("/board/{id}")
+    suspend fun delete(@PathVariable id : Long) : Response<BoardResponseDTO> {
+        return Response.ofSuccess("게시글이 삭제되었습니다. id : $id", boardService.deleteBoard(id))
     }
 
 }

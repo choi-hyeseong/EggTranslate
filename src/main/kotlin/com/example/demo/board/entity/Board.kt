@@ -17,10 +17,10 @@ class Board (
     val user : User,
 
     @Column(length = 100)
-    val title : String,
+    var title : String,
 
     @Column(columnDefinition = "TEXT")
-    val content : String,
+    var content : String,
 
     @Column
     var count : Int,
@@ -32,6 +32,6 @@ class Board (
 
     @JoinColumn(name = "board_id")
     @OneToMany(cascade = [CascadeType.REMOVE])
-    val files : MutableList<File> = mutableListOf() //file list
+    var files : MutableList<File> = mutableListOf() //file list
 
 )

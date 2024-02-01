@@ -1,4 +1,4 @@
-package com.example.demo.board.page
+package com.example.demo.common.page
 
 data class Pageable<T> (
     //현재 페이지
@@ -6,5 +6,5 @@ data class Pageable<T> (
     //최대 페이지
     val max : Int,
     //내용
-    val content : T,
+    val content : List<T>,
 )
