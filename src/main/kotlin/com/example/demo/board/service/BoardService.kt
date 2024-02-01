@@ -36,7 +36,7 @@ class BoardService(
     }
 
     @Transactional
-    suspend fun deleteBoard(id: Long) : BoardResponseDTO {
+    suspend fun deleteBoard(id: Long): BoardResponseDTO {
         val board = getBoard(id)
         boardRepository.deleteById(id)
         return board
@@ -81,8 +81,7 @@ class BoardService(
     suspend fun getBoardList(page: Int, amount: Int): Pageable<BoardListItemDTO> {
         val pageBoard = boardRepository.findAll(PageRequest.of(page, amount))
         val boardListItems = pageBoard.map {
-            val content = if (it.content.length > 30) it.content.substring(0, 30) else it.content //내용이 길면 30자까지 자르고 출력
-            BoardListItemDTO(it.id!!, it.title, content, it.visibility)
+            BoardListItemDTO(it.id!!, it.title, it.content, it.visibility)
         }.toMutableList()
         return Pageable(page, pageBoard.totalPages - 1, boardListItems)
     }
