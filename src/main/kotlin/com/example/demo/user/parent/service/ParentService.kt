@@ -8,8 +8,10 @@ import com.example.demo.translate.auto.service.TranslateManageService
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.child.dto.ChildDTO
+import com.example.demo.user.parent.child.entity.Child
 import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.parent.dto.ParentListItemDTO
+import com.example.demo.user.parent.dto.ParentUpdateDTO
 import com.example.demo.user.parent.entity.Parent
 import com.example.demo.user.parent.repository.ParentRepository
 import org.springframework.data.domain.PageRequest
@@ -90,8 +92,33 @@ class ParentService(
         val parent = findByParentUserIdOrNull(userId)
         return parent?.children?.find { it.id == childId }
     }
+    @Transactional
+    suspend fun updateParent(id : Long, parentUpdateDTO: ParentUpdateDTO) {
+        val parent = findByParentEntityId(id)
+        userService.updateUser(id, parentUpdateDTO.user) //유저 업데이트
+        updateChild(parent, parentUpdateDTO.children)
+        parentRepository.save(parent)
 
+    }
 
+    @Transactional
+    suspend fun updateChild(parent: Parent, children: List<ChildDTO>) {
+        val requestChild =
+        //child의 id가 null인경우 -> 새로 추가되는 자식 (Insert)
+            //기존 자식의 id랑 일치하는 id (Update) -> 기존 자식 업데이트. 즉 다른 부모의 자식이랑 연결되지 않게 하기 위함
+            children.filter { child -> child.id == null || parent.children.any { it.id == child.id } }
+                .map { it.toEntity() }.toMutableList()
+        //제거되는 자식 확인
+        //부모의 현재 자식 루프 -> 현재 자식이 새로 업데이트 되는 자식에 포함되지 않았다면 삭제.
+        val filteredChild = parent.children.filter { child -> requestChild.all { child.id != it.id } }
+        deleteChild(parent, filteredChild)
+        parent.children.let { //list 강제로 set해버리면 manage 안됨
+            it.clear()
+            it.addAll(requestChild)
+        }
+    }
+
+    // TODO FIX
     @Transactional
     suspend fun updateProfile(id: Long, parentEditDTO: ParentEditDTO) {
         val existingUser = parentRepository.findByUserId(id).orElseThrow {
@@ -122,15 +149,7 @@ class ParentService(
     //부모가 수정되어 child가 제거된 상황이라면 remove child를 호출해줘야되는데..
     // TODO 추후 EditService로 분리해서 AutoTranslateService 호출하기.
     @Transactional
-    suspend fun deleteChild(parentId : Long, childId: Long) {
-        val parent = findByParentEntityIdOrNull(parentId)
-        if (parent != null) {
-            val findChild = parent.children.find { it.id == childId }
-            parent.children.remove(findChild)
-            translateManageService.removeChild(childId)
-            parentRepository.save(parent)
-        }
-        else
-            log.warn("존재 하지 않는 부모 ID입니다 : {}", parentId)
+    suspend fun deleteChild(parent: Parent, children: List<Child>) {
+        children.forEach { translateManageService.removeChild(it.id!!) }
     }
 }

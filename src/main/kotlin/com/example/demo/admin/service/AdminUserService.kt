@@ -7,9 +7,7 @@ import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.basic.type.UserType
-import com.example.demo.user.parent.dto.ParentConvertDTO
-import com.example.demo.user.parent.dto.ParentListItemDTO
-import com.example.demo.user.parent.dto.ParentResponseDTO
+import com.example.demo.user.parent.dto.*
 import com.example.demo.user.parent.service.ParentService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -61,6 +59,8 @@ class AdminUserService(
     }
 
     @Transactional
-    suspend fun updateParent(@PathVariable id : Long)  {
+    suspend fun updateParent(id : Long, updateDTO: ParentUpdateDTO) : ParentDTO {
+        parentService.updateParent(id, updateDTO)
+        return parentService.findByParentId(id)
     }
 }

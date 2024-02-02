@@ -20,7 +20,6 @@ class Parent(
     var user: User
 ) {
 
-
 }
 
 

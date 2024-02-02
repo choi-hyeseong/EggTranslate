@@ -14,9 +14,7 @@ import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.basic.type.UserType
-import com.example.demo.user.parent.dto.ParentConvertDTO
-import com.example.demo.user.parent.dto.ParentListItemDTO
-import com.example.demo.user.parent.dto.ParentResponseDTO
+import com.example.demo.user.parent.dto.*
 import com.example.demo.user.parent.service.ParentService
 import org.springframework.web.bind.annotation.*
 
@@ -90,8 +88,9 @@ class AdminController(
         return Response.ofSuccess("해당 유저를 부모 회원으로 변경하였습니다. User Id : $id Parent Id : $response", null)
     }
 
+    //유저 정보도 업데이트 하기 때문에 좀더 상세한 정보를 담는 ParentDTO를 반환.
     @PutMapping("/user/parent/{id}")
-    suspend fun updateParent(@PathVariable id : Long) : Response<UserResponseDTO> {
-        return Response.ofSuccess(null, userService.getUser(id).toResponseDTO())
+    suspend fun updateParent(@PathVariable id : Long, @RequestBody parentUpdateDTO: ParentUpdateDTO) : Response<ParentDTO> {
+        return Response.ofSuccess(null, adminUserService.updateParent(id, parentUpdateDTO))
     }
 }

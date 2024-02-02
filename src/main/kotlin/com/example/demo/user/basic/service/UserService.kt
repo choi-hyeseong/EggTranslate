@@ -6,6 +6,7 @@ import com.example.demo.profile.dto.UserEditDTO
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
+import com.example.demo.user.basic.dto.UserUpdateDTO
 import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.repository.UserRepository
@@ -87,6 +88,13 @@ class UserService(private val userRepository: UserRepository) {
     suspend fun getUserList(page: Int, amount: Int): Pageable<UserListItemDTO> {
         val pageUser = userRepository.findAll(PageRequest.of(page, amount))
         return Pageable(page, max(0, pageUser.totalPages - 1), pageUser.content.map { UserListItemDTO(it) })
+    }
+
+    @Transactional
+    suspend fun updateUser(id : Long, userUpdateDTO: UserUpdateDTO) {
+        val user = getUserEntity(id)
+        user.update(userUpdateDTO)
+        userRepository.save(user)
     }
 }
 

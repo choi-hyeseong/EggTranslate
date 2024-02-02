@@ -2,6 +2,7 @@ package com.example.demo.user.basic.entity
 
 import com.example.demo.common.database.converter.StringFlatter
 import com.example.demo.common.database.entity.BaseEntity
+import com.example.demo.user.basic.dto.UserUpdateDTO
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.heart.entity.TranslatorHeart
 import jakarta.persistence.*
@@ -48,5 +49,22 @@ class User(
 
     fun removeHeart(translatorHeart: TranslatorHeart) {
         heartList.removeIf { it.id == translatorHeart.id }
+    }
+
+    fun update(update: UserUpdateDTO) {
+        if (update.name != null)
+            this.name = update.name
+
+        if (update.password != null)
+            this.password = update.password
+
+        if (update.phone != null)
+            this.phone = update.phone
+
+        if (update.email != null)
+            this.email = update.email
+
+        if (!update.languages.isNullOrEmpty())
+            this.language = update.languages
     }
 }
