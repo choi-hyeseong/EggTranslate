@@ -1,7 +1,9 @@
 package com.example.demo.docs.controller
 
 import com.example.demo.common.response.Response
+import com.example.demo.docs.dto.DocumentDTO
 import com.example.demo.docs.dto.DocumentRequestDTO
+import com.example.demo.docs.dto.DocumentResponseDTO
 import com.example.demo.docs.service.DocumentService
 import com.example.demo.docs.service.DocumentTranslateService
 import com.example.demo.docs.valid.DocumentRequestValid
@@ -35,6 +37,12 @@ class DocumentController(private val documentTranslateService: DocumentTranslate
         }, HttpStatus.OK)
     }
 
+    @GetMapping("/info/{id}")
+    suspend fun getDocumentInfo(@PathVariable(value = "id", required = true) id : Long) : Response<DocumentResponseDTO> {
+        val document = documentService.findDocumentById(id)
+        return Response.ofSuccess(null, document.toResponseDTO())
+    }
+
     @GetMapping("/convert/{id}")
     suspend fun getConvertDocument(@PathVariable(value = "id", required = true) id : Long) : ResponseEntity<Resource> {
         val document = documentService.findConvertDocumentById(id)
@@ -44,6 +52,11 @@ class DocumentController(private val documentTranslateService: DocumentTranslate
         }, HttpStatus.OK)
     }
 
+    @GetMapping("/convert/info/{id}")
+    suspend fun getConvertDocumentInfo(@PathVariable(value = "id", required = true) id : Long) : Response<DocumentResponseDTO> {
+        val document = documentService.findConvertDocumentById(id)
+        return Response.ofSuccess(null, document.toResponseDTO())
+    }
 
 
 

@@ -23,4 +23,6 @@ class DocumentDTO(
 
     fun toEntity(user: User?): Document = Document(id, type, originName, savePath, user)
 
+    fun toResponseDTO() : DocumentResponseDTO = DocumentResponseDTO(id!!, type, originName)
+
 }

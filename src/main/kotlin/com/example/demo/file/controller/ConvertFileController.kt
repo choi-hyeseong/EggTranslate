@@ -1,5 +1,7 @@
 package com.example.demo.file.controller
 
+import com.example.demo.common.response.Response
+import com.example.demo.file.dto.FileSimpleDTO
 import com.example.demo.image.service.ConvertService
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
@@ -21,5 +23,10 @@ class ConvertFileController(
         return ResponseEntity(convertService.getFile(id), HttpHeaders().apply {
             add("Content-Type", "image/jpeg")
         }, HttpStatus.OK)
+    }
+
+    @GetMapping("/info/{id}")
+    suspend fun getFileInfo(@PathVariable(value = "id") id: Long): Response<FileSimpleDTO> {
+        return Response.ofSuccess(null, convertService.findFileById(id).toResponseDTO())
     }
 }

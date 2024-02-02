@@ -4,6 +4,7 @@ import com.example.demo.convertOrNull
 import com.example.demo.docs.entity.ConvertDocument
 import com.example.demo.docs.type.DocumentType
 import com.example.demo.file.dto.AbstractFileDTO
+import com.example.demo.file.util.FileUtil
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.entity.User
 
@@ -21,4 +22,5 @@ class ConvertDocumentDTO(
 
     fun toEntity(user: User?): ConvertDocument = ConvertDocument(id, type, savePath, user)
 
+    fun toResponseDTO() : DocumentResponseDTO = DocumentResponseDTO(id!!, type, "download.${FileUtil.findExtension(savePath)}")
 }

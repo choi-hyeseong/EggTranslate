@@ -20,4 +20,6 @@ class ConvertFileDTO(
         convertFile.user.convertOrNull { UserDto(it) })
 
     fun toEntity(user: User?) = ConvertFile(id, saveName, savePath, user)
+
+    fun toResponseDTO() : FileSimpleDTO = FileSimpleDTO(id, saveName)
 }

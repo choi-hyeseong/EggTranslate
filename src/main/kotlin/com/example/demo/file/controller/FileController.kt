@@ -1,9 +1,12 @@
 package com.example.demo.file.controller
 
+import com.example.demo.common.response.Response
 import com.example.demo.file.dto.FileDTO
 import com.example.demo.file.dto.FileRequestDTO
+import com.example.demo.file.dto.FileSimpleDTO
 import com.example.demo.file.service.FileService
 import com.example.demo.file.util.FileUtil
+import org.apache.tomcat.jni.FileInfo
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -25,6 +28,11 @@ class FileController(private val fileService: FileService) {
         return ResponseEntity(fileService.getFile(id), HttpHeaders().apply {
             add("Content-Type", "image/jpeg")
         }, HttpStatus.OK)
+    }
+
+    @GetMapping("/info/{id}")
+    suspend fun getFileInfo(@PathVariable(value = "id") id: Long): Response<FileSimpleDTO> {
+        return Response.ofSuccess(null, fileService.findFileById(id).toResponseDTO())
     }
 
     @GetMapping("/download/{id}")

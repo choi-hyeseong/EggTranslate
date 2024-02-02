@@ -29,5 +29,7 @@ class FileDTO(
         savePath = savePath
     )
 
+    fun toResponseDTO() : FileSimpleDTO = FileSimpleDTO(id, originName)
+
 
 }

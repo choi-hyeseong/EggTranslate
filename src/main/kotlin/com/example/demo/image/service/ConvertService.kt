@@ -29,9 +29,13 @@ class ConvertService(
 
     @Transactional
     suspend fun getFile(fileId: Long): Resource {
-        val fileDto = ConvertFileDTO(
+        return FileUtil.convertFileToResource(findFileById(fileId))
+    }
+
+    @Transactional
+    suspend fun findFileById(fileId: Long): ConvertFileDTO {
+        return ConvertFileDTO(
             convertFileRepository.findById(fileId).orElseThrow { FileException("존재 하지 않는 변환된 이미지 파일입니다.") })
-        return FileUtil.convertFileToResource(fileDto)
     }
 
     suspend fun convertFile(file: MultipartFile, paragraph: List<Paragraph>, userDto: UserDto?): ConvertFileDTO {
