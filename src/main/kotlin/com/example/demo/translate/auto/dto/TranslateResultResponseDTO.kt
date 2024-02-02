@@ -17,7 +17,7 @@ data class TranslateResultResponseDTO(
     constructor(translateResult: TranslateResult) : this(
         translateResult.id,
         translateResult.user?.id,
-        translateResult.userType,
+        translateResult.getUserType(),
         AutoTranslateResponseDTO(translateResult.autoTranslate),
         translateResult.child?.id,
         translateResult.manualResult.convertOrNull {

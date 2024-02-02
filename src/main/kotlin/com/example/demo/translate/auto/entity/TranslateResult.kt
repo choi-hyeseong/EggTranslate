@@ -18,9 +18,6 @@ class TranslateResult(
         @JoinColumn(name = "user_id")
         var user : User?,
 
-        @Enumerated(EnumType.STRING)
-        var userType : UserType,
-
         @OneToOne(cascade = [CascadeType.ALL])
         @JoinColumn(name = "autoTranslate_id")
         var autoTranslate: AutoTranslate,
@@ -35,5 +32,8 @@ class TranslateResult(
         @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn(name = "manualResult_id")
         var manualResult: ManualResult? = null
+
+        //usertype이 관리자에 의해 변할 수 있으므로 column이 아니라 동적으로 가져올 수 있게 함.
+        fun getUserType()= if (user == null) UserType.GUEST else user!!.userType
 
 }

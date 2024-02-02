@@ -14,19 +14,23 @@ import com.example.demo.user.parent.child.dto.ChildDTO
 class TranslateResultDTO(
     val id: Long?,
     val user: UserDto?,
-    val userType : UserType,
+
     val autoTranslate: AutoTranslateDTO,
     val child: ChildDTO?,
     var manualResultDTO: ManualResultDTO?
 ) {
+
+    var userType : UserType = UserType.GUEST
+
     constructor(translateResult: TranslateResult) : this(
         translateResult.id,
         translateResult.user.convertOrNull { UserDto(it) },
-        translateResult.userType,
         AutoTranslateDTO(translateResult.autoTranslate),
         translateResult.child.convertOrNull { ChildDTO(it) },
         translateResult.manualResult.convertOrNull { ManualResultDTO(it) }
-    )
+    ) {
+        this.userType = translateResult.getUserType()
+    }
 
     fun toResponseDTO(): TranslateResultResponseDTO =
         TranslateResultResponseDTO(
@@ -44,7 +48,6 @@ class TranslateResultDTO(
     fun toEntity(user : User?, autoTranslate: AutoTranslate, result: ManualResult?): TranslateResult = TranslateResult(
         id,
         user,
-        userType,
         autoTranslate,
         child?.toEntity()
     ).apply {

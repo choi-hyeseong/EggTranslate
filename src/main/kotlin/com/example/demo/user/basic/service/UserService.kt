@@ -9,6 +9,7 @@ import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.entity.User
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.repository.UserRepository
+import com.example.demo.user.basic.type.UserType
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -66,6 +67,13 @@ class UserService(private val userRepository: UserRepository) {
         existingUser.language = userEditDTO.languages
 
         userRepository.save(existingUser)
+    }
+
+    @Transactional
+    suspend fun updateUserType(id : Long, userType: UserType) {
+        val user = getUserEntity(id)
+        user.userType = userType
+        userRepository.save(user)
     }
 
     @Transactional
