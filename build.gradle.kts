@@ -59,6 +59,7 @@ dependencies {
     implementation("kr.dogfoot:hwplib:1.1.4")
     implementation("org.apache.poi:poi-ooxml:5.2.3")
     implementation("com.adobe.documentservices:pdfservices-sdk:4.0.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
 tasks.withType<KotlinCompile> {
