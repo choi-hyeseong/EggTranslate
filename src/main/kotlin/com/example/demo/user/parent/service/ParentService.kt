@@ -1,19 +1,24 @@
 package com.example.demo.user.parent.service
 
+import com.example.demo.common.page.Pageable
 import com.example.demo.convertOrNull
 import com.example.demo.logger
 import com.example.demo.profile.dto.ParentEditDTO
 import com.example.demo.translate.auto.service.TranslateManageService
 import com.example.demo.translate.auto.service.TranslateResultService
+import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.parent.dto.ParentDTO
+import com.example.demo.user.parent.dto.ParentListItemDTO
 import com.example.demo.user.parent.entity.Parent
 import com.example.demo.user.parent.repository.ParentRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
+import kotlin.math.max
 
 @Service
 class ParentService(
@@ -107,6 +112,12 @@ class ParentService(
             }
         }
         parentRepository.save(existingUser)
+    }
+
+    @Transactional
+    suspend fun getParentList(page: Int, amount: Int): Pageable<ParentListItemDTO> {
+        val pageUser = parentRepository.findAll(PageRequest.of(page, amount))
+        return Pageable(page, max(0, pageUser.totalPages - 1), pageUser.content.map { ParentListItemDTO(it) })
     }
 
     //for edit. 만약 parent삭제를 위한 기능이면 이미 profile service에서 remove child를 호출함

@@ -12,6 +12,9 @@ import com.example.demo.user.basic.dto.UserInfoDTO
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
+import com.example.demo.user.parent.dto.ParentListItemDTO
+import com.example.demo.user.parent.dto.ParentResponseDTO
+import com.example.demo.user.parent.service.ParentService
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -20,7 +23,8 @@ class AdminController(
     private val userService: UserService,
     private val fileService: FileService,
     private val boardService: BoardService,
-    private val profileService: ProfileService
+    private val profileService: ProfileService,
+    private val parentService: ParentService
 ) {
 
     /*
@@ -63,4 +67,27 @@ class AdminController(
         return Response.ofSuccess("해당 유저가 삭제되었습니다. id : $id", null)
     }
 
+    /*
+    *   Parent Part, id는 parent id로 고정.
+    */
+    @GetMapping("/user/parent")
+    suspend fun parents(@RequestParam(defaultValue = "0") page : Int, @RequestParam(defaultValue = "20") amount : Int) : Response<Pageable<ParentListItemDTO>> {
+        return Response.ofSuccess(null, parentService.getParentList(page, amount))
+    }
+
+    @GetMapping("/user/parent/{id}")
+    suspend fun parentInfo(@PathVariable id : Long) : Response<ParentResponseDTO> {
+        return Response.ofSuccess(null, parentService.findByParentId(id).toResponseDTO())
+    }
+
+    //해당 유저를 parent로 설정함. (번역가든, 교사이든 데이터 제거하고)
+    @PostMapping("/user/parent/{id}")
+    suspend fun setParent(@PathVariable id : Long) : Response<UserResponseDTO> {
+        return Response.ofSuccess(null, userService.getUser(id).toResponseDTO())
+    }
+
+    @PutMapping("/user/parent/{id}")
+    suspend fun updateParent(@PathVariable id : Long) : Response<UserResponseDTO> {
+        return Response.ofSuccess(null, userService.getUser(id).toResponseDTO())
+    }
 }
