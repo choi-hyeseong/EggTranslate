@@ -4,7 +4,6 @@ import com.example.demo.signup.dto.ParentSignUpDTO
 import com.example.demo.signup.dto.TeacherSignUpDTO
 import com.example.demo.signup.dto.TranslatorSignUpDTO
 import com.example.demo.signup.exception.RegistrationFailedException
-import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.dto.ParentDTO
@@ -36,7 +35,7 @@ class RegistrationService(
         if (userResult == null)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        val parentResult = parentService.signUp(dto.apply {user.id = userResult})
+        val parentResult = parentService.createParent(dto.apply {user.id = userResult})
         if (parentResult == null)
             throw RegistrationFailedException("부모 회원가입에 실패하였습니다.")
 

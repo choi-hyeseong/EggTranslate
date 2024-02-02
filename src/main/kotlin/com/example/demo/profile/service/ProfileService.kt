@@ -61,16 +61,27 @@ class ProfileService(
     }
 
     @Transactional
-    suspend fun deleteProfile(id : Long) {
+    suspend fun deleteProfile(id : Long, force : Boolean) {
         val user = userService.getUser(id)
-        when(user.userType) {
+        if (!force)
+            deleteSpecific(id, user.userType) //강제로 유저 데이터 지우는게 아니라면 각 유저별 타입 데이터 지움
+        deleteUser(user.id!!)
+    }
+
+    @Transactional
+    suspend fun deleteProfile(id : Long) {
+        deleteProfile(id, false)
+    }
+
+    @Transactional
+    suspend fun deleteSpecific(id : Long, userType: UserType) {
+        when(userType) {
             //support (UserType)해서 깔끔하게 하는것도 좋을듯
             UserType.TEACHER -> teacherService.deleteByUserId(id)
             UserType.TRANSLATOR -> deleteTranslator(id)
             UserType.PARENT -> deleteParent(id)
             else -> {} //구현 없음.
         }
-        deleteUser(user.id!!)
     }
 
     @Transactional

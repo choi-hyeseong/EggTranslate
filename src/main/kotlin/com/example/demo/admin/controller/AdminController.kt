@@ -8,10 +8,11 @@ import com.example.demo.common.page.Pageable
 import com.example.demo.common.response.Response
 import com.example.demo.file.service.FileService
 import com.example.demo.profile.service.ProfileService
-import com.example.demo.user.basic.dto.UserInfoDTO
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
+import com.example.demo.user.basic.type.UserType
+import com.example.demo.user.parent.dto.ParentConvertDTO
 import com.example.demo.user.parent.dto.ParentListItemDTO
 import com.example.demo.user.parent.dto.ParentResponseDTO
 import com.example.demo.user.parent.service.ParentService
@@ -61,14 +62,15 @@ class AdminController(
         return Response.ofSuccess(null, userService.getUser(id).toResponseDTO())
     }
 
+    //force를 true로 주면 parent, translator, teacher 데이터 삭제를 무시하고 user를 삭제함 (user 데이터만 남아있는경우 사용할것)
     @DeleteMapping("/user/{id}")
-    suspend fun deleteUser(@PathVariable id : Long) : Response<UserResponseDTO> {
-        profileService.deleteProfile(id)
+    suspend fun deleteUser(@PathVariable id : Long, @RequestParam(defaultValue = "false") force : Boolean) : Response<UserResponseDTO> {
+        profileService.deleteProfile(id, force)
         return Response.ofSuccess("해당 유저가 삭제되었습니다. id : $id", null)
     }
 
     /*
-    *   Parent Part, id는 parent id로 고정.
+    *   Parent Part, id는 userId로 고정.
     */
     @GetMapping("/user/parent")
     suspend fun parents(@RequestParam(defaultValue = "0") page : Int, @RequestParam(defaultValue = "20") amount : Int) : Response<Pageable<ParentListItemDTO>> {
@@ -82,8 +84,12 @@ class AdminController(
 
     //해당 유저를 parent로 설정함. (번역가든, 교사이든 데이터 제거하고)
     @PostMapping("/user/parent/{id}")
-    suspend fun setParent(@PathVariable id : Long) : Response<UserResponseDTO> {
-        return Response.ofSuccess(null, userService.getUser(id).toResponseDTO())
+    suspend fun convertParent(@PathVariable id : Long, @RequestBody parentConvertDTO: ParentConvertDTO) : Response<Nothing> {
+        val user = userService.getUser(id)
+        profileService.deleteSpecific(id, user.userType) //등록된 다른 데이터 삭제
+        userService.updateUserType(id, UserType.PARENT)
+        val response = parentService.createParent(parentConvertDTO.toParentDTO(user))
+        return Response.ofSuccess("해당 유저를 부모 회원으로 변경하였습니다. User Id : $id Parent Id : $response", null)
     }
 
     @PutMapping("/user/parent/{id}")

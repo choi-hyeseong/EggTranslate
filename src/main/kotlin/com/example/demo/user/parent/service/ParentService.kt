@@ -5,8 +5,6 @@ import com.example.demo.convertOrNull
 import com.example.demo.logger
 import com.example.demo.profile.dto.ParentEditDTO
 import com.example.demo.translate.auto.service.TranslateManageService
-import com.example.demo.translate.auto.service.TranslateResultService
-import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.child.dto.ChildDTO
@@ -30,8 +28,8 @@ class ParentService(
     val log = logger()
 
     @Transactional
-    suspend fun signUp(parentDTO: ParentDTO): Long? {
-        return if (existParent(parentDTO.user.id!!))
+    suspend fun createParent(parentDTO: ParentDTO): Long? {
+        return if (existParentByUserId(parentDTO.user.id!!))
             null
         else {
             val user = userService.getUserEntity(parentDTO.user.id!!)
@@ -40,7 +38,7 @@ class ParentService(
     }
 
     @Transactional(readOnly = true)
-    suspend fun existParent(id: Long): Boolean = parentRepository.existsById(id)
+    suspend fun existParentByUserId(userId: Long): Boolean = parentRepository.existsByUserId(userId)
 
     @Transactional(readOnly = true)
     suspend fun findByParentUserId(id: Long): ParentDTO =
