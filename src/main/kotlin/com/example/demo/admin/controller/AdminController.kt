@@ -16,10 +16,17 @@ import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.dto.*
 import com.example.demo.user.parent.service.ParentService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.enums.ParameterIn
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/admin")
+@Tag(name = "admin", description = "관리자 전용 api입니다.")
 class AdminController(
     private val userService: UserService,
     private val fileService: FileService,
@@ -31,20 +38,68 @@ class AdminController(
     * Board Part
     */
     @PostMapping("/board/{id}")
-    suspend fun write(@PathVariable id : Long, @ModelAttribute boardRequestDTO: BoardRequestDTO) : Response<BoardResponseDTO> {
+    @Operation(
+        summary = "게시글 작성하기", description = "게시글을 작성합니다.", responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "성공",
+                content = [Content(mediaType = "application/json")],
+                useReturnTypeSchema = true
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "실패",
+                content = []
+            )]
+    )
+    suspend fun write(
+        @Parameter(name = "id", `in` = ParameterIn.PATH, description = "작성하는 유저의 id입니다. 추후 제거됩니다.")
+        @PathVariable id : Long, @ModelAttribute boardRequestDTO: BoardRequestDTO) : Response<BoardResponseDTO> {
         val userDto = userService.getUser(id)
         val fileDto = fileService.saveFile(userDto, boardRequestDTO.file)
         return Response.ofSuccess(null, adminBoardService.write(id, fileDto, boardRequestDTO))
     }
 
+    @Operation(
+        summary = "게시글 수정하기", description = "게시글을 수정합니다.", responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "성공",
+                content = [Content(mediaType = "application/json")],
+                useReturnTypeSchema = true
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "실패",
+                content = []
+            )]
+    )
     @PutMapping("/board/{id}")
-    suspend fun edit(@PathVariable id : Long, @RequestBody boardEditDTO: BoardEditRequestDTO) : Response<BoardResponseDTO> {
+    suspend fun edit(
+        @Parameter(name = "id", `in` = ParameterIn.PATH, description = "수정할 게시글의 id입니다.")
+        @PathVariable id : Long, @RequestBody boardEditDTO: BoardEditRequestDTO) : Response<BoardResponseDTO> {
         return Response.ofSuccess("게시글이 수정되었습니다. id : $id", adminBoardService.edit(id, boardEditDTO))
     }
 
 
+    @Operation(
+        summary = "게시글 삭제하기", description = "게시글을 삭제합니다.", responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "성공",
+                content = [Content(mediaType = "application/json")],
+                useReturnTypeSchema = true
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "실패",
+                content = []
+            )]
+    )
     @DeleteMapping("/board/{id}")
-    suspend fun delete(@PathVariable id : Long) : Response<BoardResponseDTO> {
+    suspend fun delete(
+        @Parameter(name = "id", description = "해당 게시글의 id입니다.", `in` = ParameterIn.PATH, required = true)
+        @PathVariable id : Long) : Response<BoardResponseDTO> {
         return Response.ofSuccess("게시글이 삭제되었습니다. id : $id", adminBoardService.delete(id))
     }
 
