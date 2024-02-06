@@ -91,10 +91,12 @@ class UserService(private val userRepository: UserRepository) {
     }
 
     @Transactional
-    suspend fun updateUser(id : Long, userUpdateDTO: UserUpdateDTO) {
+    suspend fun updateUser(id : Long, userUpdateDTO: UserUpdateDTO?) {
         val user = getUserEntity(id)
-        user.update(userUpdateDTO)
-        userRepository.save(user)
+        if (userUpdateDTO != null) {
+            user.update(userUpdateDTO)
+            userRepository.save(user)
+        }
     }
 }
 

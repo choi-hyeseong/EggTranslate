@@ -2,7 +2,6 @@ package com.example.demo.user.basic.dto
 
 
 class UserUpdateDTO (
-    var id : Long,
     val password : String?,
     val name : String?,
     val phone : String?,

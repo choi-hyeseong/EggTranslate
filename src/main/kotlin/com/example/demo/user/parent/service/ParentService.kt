@@ -118,26 +118,26 @@ class ParentService(
         }
     }
 
-    // TODO FIX
-    @Transactional
-    suspend fun updateProfile(id: Long, parentEditDTO: ParentEditDTO) {
-        val existingUser = parentRepository.findByUserId(id).orElseThrow {
-            UserNotFoundException(id, "일치하는 사용자가 없습니다")
-        }
-
-        existingUser.children.forEachIndexed { index, child ->
-            val updatedChildDTO = parentEditDTO.children.getOrNull(index)
-            updatedChildDTO?.let {
-                child.name = it.name
-                child.phone = it.phone
-                child.school = it.school
-                child.grade = it.grade
-                child.className = it.className
-                child.gender = it.gender
-            }
-        }
-        parentRepository.save(existingUser)
-    }
+//    // TODO FIX
+//    @Transactional
+//    suspend fun updateProfile(id: Long, parentEditDTO: ParentEditDTO) {
+//        val existingUser = parentRepository.findByUserId(id).orElseThrow {
+//            UserNotFoundException(id, "일치하는 사용자가 없습니다")
+//        }
+//
+//        existingUser.children.forEachIndexed { index, child ->
+//            val updatedChildDTO = parentEditDTO.children.getOrNull(index)
+//            updatedChildDTO?.let {
+//                child.name = it.name
+//                child.phone = it.phone
+//                child.school = it.school
+//                child.grade = it.grade
+//                child.className = it.className
+//                child.gender = it.gender
+//            }
+//        }
+//        parentRepository.save(existingUser)
+//    }
 
     @Transactional
     suspend fun getParentList(page: Int, amount: Int): Pageable<ParentListItemDTO> {
