@@ -31,4 +31,9 @@ class RequestExceptionHandler {
         log.warn("Constraint Violation : ${e.message}")
         return ResponseEntity(Response.ofFailure(e.message, null), HttpStatus.BAD_REQUEST)
     }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(e : IllegalArgumentException) : ResponseEntity<Response<Nothing>> {
+        return ResponseEntity(Response.ofFailure(e.message, null), HttpStatus.INTERNAL_SERVER_ERROR)
+    }
 }
