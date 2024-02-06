@@ -64,8 +64,7 @@ class AdminUserService(
 
     @Transactional
     suspend fun updateParent(id : Long, updateDTO: ParentUpdateDTO) : ParentDTO {
-        profileService.updateParent(id, updateDTO)
-        return parentService.findByParentId(id)
+        return parentService.update(id, updateDTO)
     }
 
     /*
@@ -89,8 +88,7 @@ class AdminUserService(
 
     @Transactional
     suspend fun updateTeacher(id : Long, teacherUpdateDTO: TeacherUpdateDTO) : TeacherDTO {
-        profileService.updateTeacher(id, teacherUpdateDTO)
-        return teacherService.findTeacherByUserId(id)
+        return profileService.updateTeacher(id, teacherUpdateDTO)
     }
 
 }
