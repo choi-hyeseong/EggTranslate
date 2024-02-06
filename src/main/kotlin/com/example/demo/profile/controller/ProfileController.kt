@@ -10,8 +10,10 @@ import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.dto.ParentDTO
+import com.example.demo.user.parent.dto.ParentUpdateDTO
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.dto.TeacherDTO
+import com.example.demo.user.teacher.dto.TeacherUpdateDTO
 import com.example.demo.user.teacher.repository.TeacherRepository
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.TranslatorDTO
@@ -29,14 +31,14 @@ class ProfileController(
 ) {
 
     @PutMapping("/edit/parent/{id}")
-    suspend fun editParentProfile(@PathVariable id: Long, @RequestBody parentEditDTO: ParentEditDTO): Long {
-        profileService.updateParent(id, parentEditDTO)
+    suspend fun editParentProfile(@PathVariable id: Long, @RequestBody parentUpdateDTO: ParentUpdateDTO): Long {
+        profileService.updateParent(id, parentUpdateDTO)
         return id
     }
 
     @PutMapping("/edit/teacher/{id}")
-    suspend fun editTeacherProfile(@PathVariable id: Long, @RequestBody teacherEditDTO: TeacherEditDTO): Long {
-        profileService.updateTeacher(id, teacherEditDTO)
+    suspend fun editTeacherProfile(@PathVariable id: Long, @RequestBody teacherUpdateDTO: TeacherUpdateDTO): Long {
+        profileService.updateTeacher(id, teacherUpdateDTO)
         return id
     }
 

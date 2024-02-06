@@ -1,19 +1,25 @@
 package com.example.demo.user.teacher.service
 
+import com.example.demo.common.page.Pageable
 import com.example.demo.profile.dto.TeacherEditDTO
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.teacher.dto.TeacherDTO
+import com.example.demo.user.teacher.dto.TeacherListItemDTO
+import com.example.demo.user.teacher.dto.TeacherUpdateDTO
+import com.example.demo.user.teacher.entity.Teacher
 import com.example.demo.user.teacher.repository.TeacherRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.math.max
 
 @Service
 class TeacherService(private val teacherRepository: TeacherRepository,
     private val userService: UserService) {
 
     @Transactional
-    suspend fun signUp(teacherDTO: TeacherDTO): Long? {
+    suspend fun createTeacher(teacherDTO: TeacherDTO): Long? {
         val user = userService.getUserEntity(teacherDTO.user.id!!)
         return teacherRepository.save(teacherDTO.toEntity(user)).id
     }
@@ -28,6 +34,10 @@ class TeacherService(private val teacherRepository: TeacherRepository,
         .orElseThrow { UserNotFoundException(id, "할당되지 않은 유저 id입니다.") }
     )
 
+    @Transactional
+    suspend fun findTeacherEntityByUserId(id : Long) : Teacher =
+        teacherRepository.findByUserId(id).orElseThrow { UserNotFoundException(id, "할당되지 않은 유저 id입니다.")}
+
     @Transactional(readOnly = true)
     suspend fun findTeacherById(id : Long) : TeacherDTO =
         TeacherDTO(teacherRepository
@@ -36,22 +46,22 @@ class TeacherService(private val teacherRepository: TeacherRepository,
         )
 
     @Transactional
-    suspend fun updateProfile(id : Long, teacherEditDTO: TeacherEditDTO) {
-        val existingUser = teacherRepository.findByUserId(id).orElseThrow{
-            UserNotFoundException(id, "일치하는 사용자가 없습니다")
-        }
-        existingUser.school = teacherEditDTO.school
-        existingUser.grade = teacherEditDTO.grade
-        existingUser.className = teacherEditDTO.className
-        existingUser.course = teacherEditDTO.course
-        existingUser.address = teacherEditDTO.address
-
-        teacherRepository.save(existingUser)
+    suspend fun updateTeacher(id : Long, teacherUpdateDTO: TeacherUpdateDTO) {
+        val teacher = findTeacherEntityByUserId(id)
+        userService.updateUser(id, teacherUpdateDTO.user) //유저 업데이트
+        teacher.update(teacherUpdateDTO)
+        teacherRepository.save(teacher)
     }
 
     @Transactional
     suspend fun deleteByUserId(id : Long) {
         val teacher = findTeacherByUserId(id)
         teacherRepository.deleteById(teacher.id!!)
+    }
+
+    @Transactional
+    suspend fun findTeacherList(page : Int, amount : Int) : Pageable<TeacherListItemDTO> {
+        val pageTeacher = teacherRepository.findAll(PageRequest.of(page, amount))
+        return Pageable(page, max(0, pageTeacher.totalPages - 1), pageTeacher.content.map { TeacherListItemDTO(it) })
     }
 }

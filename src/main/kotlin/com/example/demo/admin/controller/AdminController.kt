@@ -16,6 +16,7 @@ import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.dto.*
 import com.example.demo.user.parent.service.ParentService
+import com.example.demo.user.teacher.dto.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.enums.ParameterIn
@@ -147,5 +148,29 @@ class AdminController(
     @PutMapping("/user/parent/{id}")
     suspend fun updateParent(@PathVariable id : Long, @RequestBody parentUpdateDTO: ParentUpdateDTO) : Response<ParentDTO> {
         return Response.ofSuccess(null, adminUserService.updateParent(id, parentUpdateDTO))
+    }
+
+    /*
+    * Teacher Part
+    */
+    @GetMapping("/user/teacher")
+    suspend fun teachers(@RequestParam(defaultValue = "0") page : Int, @RequestParam(defaultValue = "20") amount : Int) : Response<Pageable<TeacherListItemDTO>> {
+        return Response.ofSuccess(null, adminUserService.findTeacherList(page, amount))
+    }
+
+    @GetMapping("/user/teacher/{id}")
+    suspend fun teacherInfo(@PathVariable id : Long) : Response<TeacherResponseDTO> {
+        return Response.ofSuccess(null, adminUserService.findTeacherDetail(id))
+    }
+
+    @PostMapping("/user/teacher/{id}")
+    suspend fun convertTeacher(@PathVariable id : Long, @RequestBody teacherConvertDTO: TeacherConvertDTO) : Response<Nothing> {
+        val response = adminUserService.convertToTeacher(id, teacherConvertDTO)
+        return Response.ofSuccess("해당 유저를 선생 회원으로 변경하였습니다. User Id : $id Teacher Id : $response", null)
+    }
+
+    @PutMapping("/user/teacher/{id}")
+    suspend fun updateTeacher(@PathVariable id : Long, @RequestBody teacherUpdateDTO: TeacherUpdateDTO) : Response<TeacherDTO> {
+        return Response.ofSuccess(null, adminUserService.updateTeacher(id, teacherUpdateDTO))
     }
 }

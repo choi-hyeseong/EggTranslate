@@ -48,7 +48,7 @@ class RegistrationService(
         if (userResult == null)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        val teacherResult = teacherService.signUp(dto.apply { user.id = userResult})
+        val teacherResult = teacherService.createTeacher(dto.apply { user.id = userResult})
         if (teacherResult == null)
             throw RegistrationFailedException("선생 회원가입에 실패하였습니다.")
 

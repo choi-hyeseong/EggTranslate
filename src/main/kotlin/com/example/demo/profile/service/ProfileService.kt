@@ -12,7 +12,12 @@ import com.example.demo.translate.auto.service.TranslateResultService
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.heart.service.HeartService
+import com.example.demo.user.parent.dto.ParentConvertDTO
+import com.example.demo.user.parent.dto.ParentDTO
+import com.example.demo.user.parent.dto.ParentUpdateDTO
 import com.example.demo.user.parent.service.ParentService
+import com.example.demo.user.teacher.dto.TeacherConvertDTO
+import com.example.demo.user.teacher.dto.TeacherUpdateDTO
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
@@ -36,20 +41,14 @@ class ProfileService(
         userService.updateProfile(id, userEditDto)
     }
 
-    suspend fun updateParent(id : Long, parentEditDTO: ParentEditDTO) {
-        //user 정보 업데이트
-        val dto = parentEditDTO.user
-        updateUser(id, dto)
-        //부모 단독 정보 업데이트
-        parentService.updateProfile(id, parentEditDTO)
+    @Transactional
+    suspend fun updateParent(id : Long, parentUpdateDTO: ParentUpdateDTO) {
+        parentService.updateParent(id, parentUpdateDTO)
     }
 
-    suspend fun updateTeacher(id : Long, teacherEditDTO: TeacherEditDTO) {
+    suspend fun updateTeacher(id : Long, teacherUpdateDTO: TeacherUpdateDTO) {
         //user 정보 업데이트
-        val dto = teacherEditDTO.user
-        updateUser(id, dto)
-        //선생 단독 정보 업데이트
-        teacherService.updateProfile(id, teacherEditDTO)
+        teacherService.updateTeacher(id, teacherUpdateDTO)
     }
 
     suspend fun updateTranslator (id : Long, translatorEditDTO: TranslatorEditDTO) {
@@ -106,5 +105,26 @@ class ProfileService(
     suspend fun deleteParent(userId : Long) {
         translateManageService.removeAllChild(parentService.findByParentUserId(userId).children.map { it.id!! })
         parentService.deleteByUserId(userId)
+    }
+
+    @Transactional
+    suspend fun convertToParent(userId: Long, parentConvertDTO : ParentConvertDTO) : Long? {
+        val user = userService.getUser(userId)
+        convertUserType(userId, UserType.PARENT)
+        return parentService.createParent(parentConvertDTO.toParentDTO(user))
+    }
+
+    @Transactional
+    suspend fun convertToTeacher(userId: Long, teacherConvertDTO: TeacherConvertDTO) : Long? {
+        val user = userService.getUser(userId)
+        convertUserType(userId, UserType.TEACHER)
+        return teacherService.createTeacher(teacherConvertDTO.toTeacherDTO(user))
+    }
+
+    @Transactional
+    suspend fun convertUserType(userId: Long, userType: UserType) {
+        val user = userService.getUser(userId)
+        deleteSpecific(userId, user.userType) //등록된 다른 데이터 삭제
+        userService.updateUserType(userId, userType)
     }
 }

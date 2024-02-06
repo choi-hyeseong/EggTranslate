@@ -17,4 +17,5 @@ class TeacherDTO(
 
     constructor(teacher: Teacher) : this(teacher.id, teacher.school, teacher.grade, teacher.className, teacher.course, teacher.address, UserDto(teacher.user))
     fun toEntity(user : User) : Teacher = Teacher(id, school, grade, className, course, address, user)
+    fun toResponseDTO() : TeacherResponseDTO = TeacherResponseDTO(id, user.id, school, grade, className, course, address)
 }

@@ -1,6 +1,7 @@
 package com.example.demo.user.teacher.entity
 
 import com.example.demo.user.basic.entity.User
+import com.example.demo.user.teacher.dto.TeacherUpdateDTO
 import jakarta.persistence.*
 
 @Entity
@@ -30,6 +31,23 @@ class Teacher(
     var user: User
 
 ) {
+
+    fun update(teacherUpdateDTO: TeacherUpdateDTO) {
+        if (teacherUpdateDTO.course != null)
+            this.course = teacherUpdateDTO.course
+
+        if (teacherUpdateDTO.school != null)
+            this.school = teacherUpdateDTO.school
+
+        if (teacherUpdateDTO.grade != null)
+            this.grade = teacherUpdateDTO.grade
+
+        if (teacherUpdateDTO.address != null)
+            this.address = teacherUpdateDTO.address
+
+        if (teacherUpdateDTO.className != null)
+            this.className = teacherUpdateDTO.className
+    }
 
 
 
