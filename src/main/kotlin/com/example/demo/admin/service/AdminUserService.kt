@@ -26,14 +26,17 @@ class AdminUserService(
     //사실상 잘 활용하는 방법이 해당 인터페이스를 구성하고, List<인터페이스>로 받아와 support할경우 반환하는 방식임. - 다형성 이용
     //응답의 추상화 때문에 음...
 
+    //13:15 - 굳이 억지로 다형성을 사용하지 말고, 필요한 기능을 묶는 용도로 사용하면 좋을듯.
+    //SOLID원칙중 I를 준수할 수 있음.
+
     @Transactional
     suspend fun findUserList(page : Int, amount : Int) : Pageable<UserListItemDTO> {
-        return userService.getUserList(page, amount)
+        return userService.getList(page, amount)
     }
 
     @Transactional
     suspend fun findUserDetail(id : Long) : UserResponseDTO {
-        return userService.getUser(id).toResponseDTO()
+        return userService.getDetail(id)
     }
 
     @Transactional
@@ -46,12 +49,12 @@ class AdminUserService(
     */
     @Transactional
     suspend fun findParentList(page : Int, amount : Int) : Pageable<ParentListItemDTO> {
-        return parentService.getParentList(page, amount)
+        return parentService.getList(page, amount)
     }
 
     @Transactional
     suspend fun findParentDetail(id : Long) : ParentResponseDTO {
-        return parentService.findByParentId(id).toResponseDTO()
+        return parentService.getDetail(id)
     }
 
     @Transactional
@@ -71,12 +74,12 @@ class AdminUserService(
 
     @Transactional
     suspend fun findTeacherList(page : Int, amount : Int) : Pageable<TeacherListItemDTO> {
-        return teacherService.findTeacherList(page, amount)
+        return teacherService.getList(page, amount)
     }
 
     @Transactional
     suspend fun findTeacherDetail(id : Long) : TeacherResponseDTO {
-        return teacherService.findTeacherByUserId(id).toResponseDTO()
+        return teacherService.getDetail(id)
     }
 
     @Transactional

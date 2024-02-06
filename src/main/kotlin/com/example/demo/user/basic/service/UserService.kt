@@ -1,5 +1,6 @@
 package com.example.demo.user.basic.service
 
+import com.example.demo.user.basic.data.DataFetcher
 import com.example.demo.common.page.Pageable
 import com.example.demo.convertOrNull
 import com.example.demo.profile.dto.UserEditDTO
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 import kotlin.math.max
 
 @Service
-class UserService(private val userRepository: UserRepository) {
+class UserService(private val userRepository: UserRepository) : DataFetcher<UserListItemDTO, UserResponseDTO> {
 
 
     @Transactional
@@ -85,18 +86,23 @@ class UserService(private val userRepository: UserRepository) {
 
 
     @Transactional
-    suspend fun getUserList(page: Int, amount: Int): Pageable<UserListItemDTO> {
-        val pageUser = userRepository.findAll(PageRequest.of(page, amount))
-        return Pageable(page, max(0, pageUser.totalPages - 1), pageUser.content.map { UserListItemDTO(it) })
-    }
-
-    @Transactional
     suspend fun updateUser(id : Long, userUpdateDTO: UserUpdateDTO?) {
         val user = getUserEntity(id)
         if (userUpdateDTO != null) {
             user.update(userUpdateDTO)
             userRepository.save(user)
         }
+    }
+
+    @Transactional
+    override suspend fun getList(page: Int, amount: Int): Pageable<UserListItemDTO> {
+        val pageUser = userRepository.findAll(PageRequest.of(page, amount))
+        return Pageable(page, max(0, pageUser.totalPages - 1), pageUser.content.map { UserListItemDTO(it) })
+    }
+
+    @Transactional
+    override suspend fun getDetail(id: Long): UserResponseDTO {
+        return getUser(id).toResponseDTO()
     }
 }
 

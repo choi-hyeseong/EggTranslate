@@ -1,9 +1,9 @@
 package com.example.demo.user.parent.service
 
+import com.example.demo.user.basic.data.DataFetcher
 import com.example.demo.common.page.Pageable
 import com.example.demo.convertOrNull
 import com.example.demo.logger
-import com.example.demo.profile.dto.ParentEditDTO
 import com.example.demo.translate.auto.service.TranslateManageService
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
@@ -11,6 +11,7 @@ import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.parent.child.entity.Child
 import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.parent.dto.ParentListItemDTO
+import com.example.demo.user.parent.dto.ParentResponseDTO
 import com.example.demo.user.parent.dto.ParentUpdateDTO
 import com.example.demo.user.parent.entity.Parent
 import com.example.demo.user.parent.repository.ParentRepository
@@ -25,7 +26,7 @@ class ParentService(
     private val userService: UserService,
     private val parentRepository: ParentRepository,
     private val translateManageService: TranslateManageService
-) {
+) : DataFetcher<ParentListItemDTO, ParentResponseDTO> {
 
     val log = logger()
 
@@ -140,16 +141,18 @@ class ParentService(
 //    }
 
     @Transactional
-    suspend fun getParentList(page: Int, amount: Int): Pageable<ParentListItemDTO> {
+    suspend fun deleteChild(parent: Parent, children: List<Child>) {
+        children.forEach { translateManageService.removeChild(it.id!!) }
+    }
+
+    @Transactional
+    override suspend fun getList(page: Int, amount: Int): Pageable<ParentListItemDTO> {
         val pageUser = parentRepository.findAll(PageRequest.of(page, amount))
         return Pageable(page, max(0, pageUser.totalPages - 1), pageUser.content.map { ParentListItemDTO(it) })
     }
 
-    //for edit. 만약 parent삭제를 위한 기능이면 이미 profile service에서 remove child를 호출함
-    //부모가 수정되어 child가 제거된 상황이라면 remove child를 호출해줘야되는데..
-    // TODO 추후 EditService로 분리해서 AutoTranslateService 호출하기.
     @Transactional
-    suspend fun deleteChild(parent: Parent, children: List<Child>) {
-        children.forEach { translateManageService.removeChild(it.id!!) }
+    override suspend fun getDetail(id: Long): ParentResponseDTO {
+       return findByParentUserId(id).toResponseDTO()
     }
 }

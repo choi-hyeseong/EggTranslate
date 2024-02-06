@@ -17,6 +17,7 @@ import com.example.demo.user.parent.dto.ParentDTO
 import com.example.demo.user.parent.dto.ParentUpdateDTO
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.dto.TeacherConvertDTO
+import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.dto.TeacherUpdateDTO
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.service.TranslatorService
@@ -37,24 +38,21 @@ class ProfileService(
     private val boardService: BoardService
     ) {
 
-    suspend fun updateUser(id : Long, userEditDto: UserEditDTO) {
-        userService.updateProfile(id, userEditDto)
-    }
 
     @Transactional
     suspend fun updateParent(id : Long, parentUpdateDTO: ParentUpdateDTO) {
         parentService.updateParent(id, parentUpdateDTO)
     }
 
-    suspend fun updateTeacher(id : Long, teacherUpdateDTO: TeacherUpdateDTO) {
+    @Transactional
+    suspend fun updateTeacher(id : Long, teacherUpdateDTO: TeacherUpdateDTO) : TeacherDTO {
         //user 정보 업데이트
-        teacherService.updateTeacher(id, teacherUpdateDTO)
+       return teacherService.update(id, teacherUpdateDTO)
     }
 
     suspend fun updateTranslator (id : Long, translatorEditDTO: TranslatorEditDTO) {
         //user 정보 업데이트
         val dto = translatorEditDTO.user
-        updateUser(id, dto)
         //번역가 단독 정보 업데이트
         translatorService.updateProfile(id, translatorEditDTO)
     }
@@ -116,9 +114,8 @@ class ProfileService(
 
     @Transactional
     suspend fun convertToTeacher(userId: Long, teacherConvertDTO: TeacherConvertDTO) : Long? {
-        val user = userService.getUser(userId)
         convertUserType(userId, UserType.TEACHER)
-        return teacherService.createTeacher(teacherConvertDTO.toTeacherDTO(user))
+        return teacherService.convert(userId, teacherConvertDTO)
     }
 
     @Transactional

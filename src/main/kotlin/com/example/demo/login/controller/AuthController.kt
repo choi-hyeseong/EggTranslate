@@ -12,7 +12,6 @@ class AuthController(
         private val authService: AuthService
 ) {
 
-    @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequestDTO): ResponseEntity<*> {
         val username = loginRequest.username
         val password = loginRequest.password
