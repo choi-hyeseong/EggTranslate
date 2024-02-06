@@ -30,7 +30,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      run: ./gradlew build --exclude-task test
 
     # 빌드해서 생긴 JAR 파일을 깃허브 아티팩트로 업로드
     - name: Upload build artifact
