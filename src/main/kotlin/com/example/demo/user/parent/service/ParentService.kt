@@ -5,14 +5,13 @@ import com.example.demo.common.page.Pageable
 import com.example.demo.convertOrNull
 import com.example.demo.logger
 import com.example.demo.translate.auto.service.TranslateManageService
+import com.example.demo.user.basic.data.DataUpdater
+import com.example.demo.user.basic.exception.ParentException
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.parent.child.entity.Child
-import com.example.demo.user.parent.dto.ParentDTO
-import com.example.demo.user.parent.dto.ParentListItemDTO
-import com.example.demo.user.parent.dto.ParentResponseDTO
-import com.example.demo.user.parent.dto.ParentUpdateDTO
+import com.example.demo.user.parent.dto.*
 import com.example.demo.user.parent.entity.Parent
 import com.example.demo.user.parent.repository.ParentRepository
 import org.springframework.data.domain.PageRequest
@@ -26,18 +25,17 @@ class ParentService(
     private val userService: UserService,
     private val parentRepository: ParentRepository,
     private val translateManageService: TranslateManageService
-) : DataFetcher<ParentListItemDTO, ParentResponseDTO> {
+) : DataFetcher<ParentListItemDTO, ParentResponseDTO>, DataUpdater<ParentConvertDTO, ParentUpdateDTO, ParentDTO> {
 
     val log = logger()
 
     @Transactional
     suspend fun createParent(parentDTO: ParentDTO): Long? {
-        return if (existParentByUserId(parentDTO.user.id!!))
-            null
-        else {
-            val user = userService.getUserEntity(parentDTO.user.id!!)
-            parentRepository.save(parentDTO.toEntity(user, parentDTO.children.map { it.toEntity() }.toMutableList())).id
-        }
+        if (existParentByUserId(parentDTO.user.id!!))
+            throw ParentException("이미 존재하는 부모 유저입니다.", parentDTO.user.id!!)
+
+        val user = userService.getUserEntity(parentDTO.user.id!!)
+        return parentRepository.save(parentDTO.toEntity(user, parentDTO.children.map { it.toEntity() }.toMutableList())).id
     }
 
     @Transactional(readOnly = true)
@@ -59,21 +57,16 @@ class ParentService(
     }
 
     @Transactional(readOnly = true)
-    suspend fun findByParentEntityIdOrNull(id: Long): Parent? =
-        parentRepository
-            .findById(id)
-            .getOrNull()
-
-    @Transactional(readOnly = true)
     suspend fun findByParentEntityId(id: Long): Parent =
        parentRepository
             .findById(id)
             .orElseThrow { UserNotFoundException(id, "존재하지 않는 부모 id 입니다.") }
 
-
-    @Transactional(readOnly = true)
-    suspend fun findByParentId(id: Long): ParentDTO =
-        ParentDTO(findByParentEntityId(id))
+    @Transactional
+    suspend fun findByParentEntityUserId(id: Long): Parent =
+        parentRepository
+            .findByUserId(id)
+            .orElseThrow { UserNotFoundException(id, "존재하지 않는 부모 id 입니다.") }
 
     @Transactional
     suspend fun deleteByUserId(id : Long) {
@@ -93,17 +86,12 @@ class ParentService(
         val parent = findByParentUserIdOrNull(userId)
         return parent?.children?.find { it.id == childId }
     }
-    @Transactional
-    suspend fun updateParent(id : Long, parentUpdateDTO: ParentUpdateDTO) {
-        val parent = findByParentEntityId(id)
-        userService.updateUser(id, parentUpdateDTO.user) //유저 업데이트
-        updateChild(parent, parentUpdateDTO.children)
-        parentRepository.save(parent)
-
-    }
 
     @Transactional
-    suspend fun updateChild(parent: Parent, children: List<ChildDTO>) {
+    suspend fun updateChild(parent: Parent, children: List<ChildDTO>?) {
+        if (children == null) //변경되지 않을경우 return
+            return
+
         val requestChild =
         //child의 id가 null인경우 -> 새로 추가되는 자식 (Insert)
             //기존 자식의 id랑 일치하는 id (Update) -> 기존 자식 업데이트. 즉 다른 부모의 자식이랑 연결되지 않게 하기 위함
@@ -119,27 +107,6 @@ class ParentService(
         }
     }
 
-//    // TODO FIX
-//    @Transactional
-//    suspend fun updateProfile(id: Long, parentEditDTO: ParentEditDTO) {
-//        val existingUser = parentRepository.findByUserId(id).orElseThrow {
-//            UserNotFoundException(id, "일치하는 사용자가 없습니다")
-//        }
-//
-//        existingUser.children.forEachIndexed { index, child ->
-//            val updatedChildDTO = parentEditDTO.children.getOrNull(index)
-//            updatedChildDTO?.let {
-//                child.name = it.name
-//                child.phone = it.phone
-//                child.school = it.school
-//                child.grade = it.grade
-//                child.className = it.className
-//                child.gender = it.gender
-//            }
-//        }
-//        parentRepository.save(existingUser)
-//    }
-
     @Transactional
     suspend fun deleteChild(parent: Parent, children: List<Child>) {
         children.forEach { translateManageService.removeChild(it.id!!) }
@@ -154,5 +121,19 @@ class ParentService(
     @Transactional
     override suspend fun getDetail(id: Long): ParentResponseDTO {
        return findByParentUserId(id).toResponseDTO()
+    }
+
+    @Transactional
+    override suspend fun convert(id: Long, convertDTO: ParentConvertDTO): Long? {
+        val userDto = userService.getUser(id)
+        return createParent(convertDTO.toParentDTO(userDto))
+    }
+
+    @Transactional
+    override suspend fun update(id: Long, updateDTO: ParentUpdateDTO): ParentDTO {
+        val parent = findByParentEntityUserId(id)
+        userService.updateUser(id, updateDTO.user) //유저 업데이트
+        updateChild(parent, updateDTO.children)
+        return ParentDTO(parentRepository.save(parent))
     }
 }

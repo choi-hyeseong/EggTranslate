@@ -5,5 +5,5 @@ import com.example.demo.user.parent.child.dto.ChildDTO
 
 class ParentUpdateDTO (
     val user : UserUpdateDTO?,
-    val children : List<ChildDTO>
+    val children : List<ChildDTO>?
 )
