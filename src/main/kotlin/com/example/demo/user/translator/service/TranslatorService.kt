@@ -45,7 +45,8 @@ class TranslatorService(
 
     @Transactional
     override suspend fun update(id: Long, updateDTO: TranslatorUpdateDTO): TranslatorDTO {
-        val translator = findTranslatorEntityById(id)
+        val translator = findTranslatorEntityByUserId(id)
+        print(updateDTO.user)
         userService.updateUser(id, updateDTO.user) //유저 업데이트
         translator.update(updateDTO)
         return TranslatorDTO(translatorRepository.save(translator))
@@ -54,6 +55,9 @@ class TranslatorService(
     /*
     * JPA Section
     */
+    @Transactional
+    suspend fun findTranslatorEntityByUserId(userId: Long): Translator =
+        translatorRepository.findByUserId(userId).orElseThrow { UserNotFoundException(userId, "찾을 수 없는 번역가 id입니다.") }
 
 
     @Transactional

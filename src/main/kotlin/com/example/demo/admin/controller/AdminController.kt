@@ -11,6 +11,7 @@ import com.example.demo.common.response.Response
 import com.example.demo.file.service.FileService
 import com.example.demo.profile.service.ProfileService
 import com.example.demo.signup.dto.TranslatorSignUpDTO
+import com.example.demo.signup.validation.SignUpValid
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
@@ -186,7 +187,7 @@ class AdminController(
 
     //번역가 회원가입 시키기.
     @PostMapping("/user/translator")
-    suspend fun registerTranslator(@RequestBody translatorSignUpDTO: TranslatorSignUpDTO) : Response<TranslatorDTO> {
+    suspend fun registerTranslator(@SignUpValid @RequestBody translatorSignUpDTO: TranslatorSignUpDTO) : Response<TranslatorDTO> {
         val response = adminUserService.registerTranslator(translatorSignUpDTO)
         return Response.ofSuccess("번역가 유저 회원가입에 성공하였습니다. User Id : ${response.user.id} Translator Id : ${response.id}", response)
     }
