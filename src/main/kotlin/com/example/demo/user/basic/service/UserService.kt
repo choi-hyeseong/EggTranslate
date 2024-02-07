@@ -3,7 +3,6 @@ package com.example.demo.user.basic.service
 import com.example.demo.user.basic.data.DataFetcher
 import com.example.demo.common.page.Pageable
 import com.example.demo.convertOrNull
-import com.example.demo.profile.dto.UserEditDTO
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
@@ -57,18 +56,6 @@ class UserService(private val userRepository: UserRepository) : DataFetcher<User
         if (id == null)
             return null
         return UserDto(getUserEntity(id))
-    }
-
-
-    @Transactional
-    suspend fun updateProfile(id: Long, userEditDTO: UserEditDTO) {
-        val existingUser = getUserEntity(id)
-        existingUser.name = userEditDTO.name
-        existingUser.phone = userEditDTO.phone
-        existingUser.email = userEditDTO.email
-        existingUser.language = userEditDTO.languages
-
-        userRepository.save(existingUser)
     }
 
     @Transactional
