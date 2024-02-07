@@ -10,6 +10,7 @@ import com.example.demo.common.page.Pageable
 import com.example.demo.common.response.Response
 import com.example.demo.file.service.FileService
 import com.example.demo.profile.service.ProfileService
+import com.example.demo.signup.dto.TranslatorSignUpDTO
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
@@ -17,8 +18,7 @@ import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.parent.dto.*
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.dto.*
-import com.example.demo.user.translator.dto.TranslatorListItemDTO
-import com.example.demo.user.translator.dto.TranslatorResponseDTO
+import com.example.demo.user.translator.dto.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.enums.ParameterIn
@@ -184,20 +184,27 @@ class AdminController(
         return Response.ofSuccess(null, adminUserService.findTranslatorList(page, amount))
     }
 
+    //번역가 회원가입 시키기.
+    @PostMapping("/user/translator")
+    suspend fun registerTranslator(@RequestBody translatorSignUpDTO: TranslatorSignUpDTO) : Response<TranslatorDTO> {
+        val response = adminUserService.registerTranslator(translatorSignUpDTO)
+        return Response.ofSuccess("번역가 유저 회원가입에 성공하였습니다. User Id : ${response.user.id} Translator Id : ${response.id}", response)
+    }
+
     @GetMapping("/user/translator/{id}")
     suspend fun translatorInfo(@PathVariable id : Long) : Response<TranslatorResponseDTO> {
         return Response.ofSuccess(null, adminUserService.findTranslatorDetail(id))
     }
 
     @PostMapping("/user/translator/{id}")
-    suspend fun convertTranslator(@PathVariable id : Long, @RequestBody teacherConvertDTO: TeacherConvertDTO) : Response<Nothing> {
-        val response = adminUserService.convertToTeacher(id, teacherConvertDTO)
-        return Response.ofSuccess("해당 유저를 선생 회원으로 변경하였습니다. User Id : $id Teacher Id : $response", null)
+    suspend fun convertTranslator(@PathVariable id : Long, @RequestBody translatorConvertDTO: TranslatorConvertDTO) : Response<Nothing> {
+        val response = adminUserService.convertToTranslator(id, translatorConvertDTO)
+        return Response.ofSuccess("해당 유저를 번역가 회원으로 변경하였습니다. User Id : $id Transaltor Id : $response", null)
     }
 
     @PutMapping("/user/translator/{id}")
-    suspend fun updateTranslator(@PathVariable id : Long, @RequestBody teacherUpdateDTO: TeacherUpdateDTO) : Response<TeacherDTO> {
-        return Response.ofSuccess(null, adminUserService.updateTeacher(id, teacherUpdateDTO))
+    suspend fun updateTranslator(@PathVariable id : Long, @RequestBody translatorUpdateDTO: TranslatorUpdateDTO) : Response<TranslatorDTO> {
+        return Response.ofSuccess(null, adminUserService.updateTranslator(id, translatorUpdateDTO))
     }
 
 }

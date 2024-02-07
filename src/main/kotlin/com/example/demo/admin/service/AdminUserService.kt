@@ -2,6 +2,8 @@ package com.example.demo.admin.service
 
 import com.example.demo.common.page.Pageable
 import com.example.demo.profile.service.ProfileService
+import com.example.demo.signup.dto.TranslatorSignUpDTO
+import com.example.demo.signup.service.RegistrationService
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
@@ -10,8 +12,7 @@ import com.example.demo.user.parent.dto.*
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.dto.*
 import com.example.demo.user.teacher.service.TeacherService
-import com.example.demo.user.translator.dto.TranslatorListItemDTO
-import com.example.demo.user.translator.dto.TranslatorResponseDTO
+import com.example.demo.user.translator.dto.*
 import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,6 +23,7 @@ class AdminUserService(
     val parentService: ParentService,
     val teacherService: TeacherService,
     val translatorService: TranslatorService,
+    val registrationService: RegistrationService,
     val profileService: ProfileService,
 ) {
 
@@ -111,13 +113,18 @@ class AdminUserService(
     }
 
     @Transactional
-    suspend fun convertToTranslator(userId : Long, teacherConvertDTO: TeacherConvertDTO) : Long? {
-        return profileService.convertToTeacher(userId, teacherConvertDTO)
+    suspend fun registerTranslator(translatorSignUpDTO: TranslatorSignUpDTO) : TranslatorDTO {
+        return registrationService.registerTranslator(translatorSignUpDTO)
     }
 
     @Transactional
-    suspend fun updateTranslator(id : Long, teacherUpdateDTO: TeacherUpdateDTO) : TeacherDTO {
-        return profileService.updateTeacher(id, teacherUpdateDTO)
+    suspend fun convertToTranslator(userId : Long, translatorConvertDTO: TranslatorConvertDTO) : Long? {
+        return profileService.convertToTranslator(userId, translatorConvertDTO)
+    }
+
+    @Transactional
+    suspend fun updateTranslator(id : Long, translatorUpdateDTO: TranslatorUpdateDTO) : TranslatorDTO {
+        return profileService.updateTranslator(id, translatorUpdateDTO)
     }
 
 }

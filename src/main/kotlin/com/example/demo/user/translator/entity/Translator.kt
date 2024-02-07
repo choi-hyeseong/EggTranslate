@@ -4,6 +4,7 @@ import com.example.demo.common.database.converter.StringFlatter
 import com.example.demo.user.basic.entity.User
 import com.example.demo.user.heart.entity.TranslatorHeart
 import com.example.demo.user.translator.converter.TranslatorCategoryFlatter
+import com.example.demo.user.translator.dto.TranslatorUpdateDTO
 import com.example.demo.user.translator.type.TranslatorCategory
 import com.example.demo.user.translator.type.TranslatorLevel
 import jakarta.persistence.*
@@ -47,6 +48,20 @@ class Translator(
 
     fun removeHeart(heart: TranslatorHeart) {
         hearts.removeIf { it.id == heart.id }
+    }
+
+    fun update(translatorUpdateDTO: TranslatorUpdateDTO) {
+        if (translatorUpdateDTO.career != null)
+            this.career = translatorUpdateDTO.career
+
+        if (translatorUpdateDTO.level != null)
+            this.level = translatorUpdateDTO.level
+
+        if (translatorUpdateDTO.certificates != null)
+            this.certificates = translatorUpdateDTO.certificates
+
+        if (translatorUpdateDTO.categories != null)
+            this.categories = translatorUpdateDTO.categories
     }
 
 

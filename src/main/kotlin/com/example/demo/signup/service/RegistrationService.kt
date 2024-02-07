@@ -61,7 +61,7 @@ class RegistrationService(
         if (userResult == null)
             throw RegistrationFailedException("유저 회원가입에 실패하였습니다.")
 
-        val translatorResult = translatorService.signUp(dto.apply { user.id = userResult})
+        val translatorResult = translatorService.createTranslator(dto.apply { user.id = userResult})
         if (translatorResult == null)
             throw RegistrationFailedException("번역가 회원가입에 실패하였습니다.")
 

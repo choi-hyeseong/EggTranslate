@@ -1,14 +1,12 @@
 package com.example.demo.user.translator.service
 
 import com.example.demo.common.page.Pageable
-import com.example.demo.profile.dto.TranslatorEditDTO
 import com.example.demo.user.basic.data.DataFetcher
+import com.example.demo.user.basic.data.DataUpdater
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
-import com.example.demo.user.teacher.dto.TeacherListItemDTO
-import com.example.demo.user.translator.dto.TranslatorDTO
-import com.example.demo.user.translator.dto.TranslatorListItemDTO
-import com.example.demo.user.translator.dto.TranslatorResponseDTO
+import com.example.demo.user.teacher.dto.TeacherDTO
+import com.example.demo.user.translator.dto.*
 import com.example.demo.user.translator.entity.Translator
 import com.example.demo.user.translator.repository.TranslatorRepository
 import org.springframework.data.domain.PageRequest
@@ -20,10 +18,10 @@ import kotlin.math.max
 class TranslatorService(
     private val userService: UserService,
     private val translatorRepository: TranslatorRepository
-) : DataFetcher<TranslatorListItemDTO, TranslatorResponseDTO> {
+) : DataFetcher<TranslatorListItemDTO, TranslatorResponseDTO>, DataUpdater<TranslatorConvertDTO, TranslatorUpdateDTO, TranslatorDTO> {
 
     @Transactional
-    suspend fun signUp(translatorDTO: TranslatorDTO): Long? {
+    suspend fun createTranslator(translatorDTO: TranslatorDTO): Long? {
         val user = userService.getUserEntity(translatorDTO.user.id!!)
         return translatorRepository.save(translatorDTO.toEntity(user)).id
     }
@@ -39,7 +37,19 @@ class TranslatorService(
         return findTranslatorByUserId(id).toResponseDTO()
     }
 
+    @Transactional
+    override suspend fun convert(id: Long, convertDTO: TranslatorConvertDTO): Long? {
+        val userDTO = userService.getUser(id)
+        return createTranslator(convertDTO.toTranslatorDTO(userDTO))
+    }
 
+    @Transactional
+    override suspend fun update(id: Long, updateDTO: TranslatorUpdateDTO): TranslatorDTO {
+        val translator = findTranslatorEntityById(id)
+        userService.updateUser(id, updateDTO.user) //유저 업데이트
+        translator.update(updateDTO)
+        return TranslatorDTO(translatorRepository.save(translator))
+    }
 
     /*
     * JPA Section
@@ -67,5 +77,7 @@ class TranslatorService(
     suspend fun delete(id: Long) {
         translatorRepository.deleteById(id)
     }
+
+
 
 }

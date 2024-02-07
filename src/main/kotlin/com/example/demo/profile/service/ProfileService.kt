@@ -3,10 +3,6 @@ package com.example.demo.profile.service
 import com.example.demo.board.service.BoardService
 import com.example.demo.docs.service.DocumentService
 import com.example.demo.file.service.FileService
-import com.example.demo.profile.dto.ParentEditDTO
-import com.example.demo.profile.dto.TeacherEditDTO
-import com.example.demo.profile.dto.TranslatorEditDTO
-import com.example.demo.profile.dto.UserEditDTO
 import com.example.demo.translate.auto.service.TranslateManageService
 import com.example.demo.translate.auto.service.TranslateResultService
 import com.example.demo.user.basic.service.UserService
@@ -20,6 +16,9 @@ import com.example.demo.user.teacher.dto.TeacherConvertDTO
 import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.teacher.dto.TeacherUpdateDTO
 import com.example.demo.user.teacher.service.TeacherService
+import com.example.demo.user.translator.dto.TranslatorConvertDTO
+import com.example.demo.user.translator.dto.TranslatorDTO
+import com.example.demo.user.translator.dto.TranslatorUpdateDTO
 import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -52,11 +51,9 @@ class ProfileService(
        return teacherService.update(id, teacherUpdateDTO)
     }
 
-    suspend fun updateTranslator (id : Long, translatorEditDTO: TranslatorEditDTO) {
-        //user 정보 업데이트
-        val dto = translatorEditDTO.user
-        //번역가 단독 정보 업데이트
-        //translatorService.updateProfile(id, translatorEditDTO)
+    @Transactional
+    suspend fun updateTranslator (id : Long, translatorUpdateDTO: TranslatorUpdateDTO) : TranslatorDTO{
+        return translatorService.update(id, translatorUpdateDTO)
     }
 
     /*
@@ -73,6 +70,12 @@ class ProfileService(
     suspend fun convertToTeacher(userId: Long, teacherConvertDTO: TeacherConvertDTO) : Long? {
         convertUserType(userId, UserType.TEACHER)
         return teacherService.convert(userId, teacherConvertDTO)
+    }
+
+    @Transactional
+    suspend fun convertToTranslator(userId: Long, translatorConvertDTO: TranslatorConvertDTO) : Long? {
+        convertUserType(userId, UserType.TRANSLATOR)
+        return translatorService.convert(userId, translatorConvertDTO)
     }
 
     @Transactional
