@@ -11,7 +11,7 @@ class VocaReplacer(
 
     override fun replace(lang: String, input: String) = runBlocking {
         withContext(Dispatchers.IO) {
-            service.findAll(lang).fold(input) { data, voca
+            service.findAllContainingVoca(lang, input).fold(input) { data, voca
                 ->
                 data.replace(voca.origin, voca.translate)
             }
