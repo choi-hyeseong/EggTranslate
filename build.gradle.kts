@@ -61,6 +61,13 @@ dependencies {
     implementation("com.adobe.documentservices:pdfservices-sdk:4.0.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+
+
+}
+
+configurations.all {
+    exclude(group = "commons-logging", module = "commons-logging")
 }
 
 tasks.withType<KotlinCompile> {

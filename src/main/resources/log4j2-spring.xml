@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <!--기본 스프링 로그 포맷 형식. PID - 프로세스 아이디 t - 쓰레드 정보 -->
+        <Property name="LOG_DATEFORMAT_PATTERN">{yyyy-MM-dd HH:mm:ss.SSS}</Property>
+        <Property name="LOG_LEVEL_PATTERN">{-%5p}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{${sys:PID}}{magenta} [%15.15t] %style{%-40.40C{1.}}{cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}
+        </Property>
+    </Properties>
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout disableAnsi="false" pattern="%d${LOG_DATEFORMAT_PATTERN} %highlight${LOG_LEVEL_PATTERN}"/>
+        </Console>
+        <RollingFile name="file" fileName="./logs/latest.log" filePattern="./logs/log-%d{yyyy-MM-dd-hh-mm-ss}.log" immediateFlush = "true">
+            <PatternLayout disableAnsi="false" pattern="%d${LOG_DATEFORMAT_PATTERN} %highlight${LOG_LEVEL_PATTERN}"/>
+            <Policies>
+                <!--시작시 기존 latest log파일의 크기기 500 바이트 이상일경우 flush후 새로 작성 = 그냥 새로 작성함-->
+                <OnStartupTriggeringPolicy minSize="500B"/>
+                <SizeBasedTriggeringPolicy size="1MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+
+    <Loggers>
+        <Root level="INFO">
+            <Appender-Ref ref="STDOUT"/>
+            <Appender-Ref ref="file"/>
+        </Root>
+    </Loggers>
+
+
+</Configuration>
