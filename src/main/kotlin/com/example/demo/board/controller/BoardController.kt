@@ -51,7 +51,7 @@ class BoardController(
         @Parameter(name = "id", `in` = ParameterIn.PATH, required = true, description = "해당 id를 가진 공지사항의 상세정보를 조회합니다.")
         @PathVariable(required = true, value = "id") id: Long
     ): BoardResponseDTO {
-        val response = boardService.getBoard(id)
+        val response = boardService.getDetail(id)
         boardService.increaseViewCount(response.id)
         //todo board가 invisible이면 user가 admin이 아니면 못봄
         return response
@@ -81,6 +81,6 @@ class BoardController(
         @RequestParam(defaultValue = "20")
         amount: Int
     ): Response<Pageable<BoardListItemDTO>> {
-        return Response.ofSuccess(null, boardService.getBoardList(page, amount))
+        return Response.ofSuccess(null, boardService.getList(page, amount))
     }
 }

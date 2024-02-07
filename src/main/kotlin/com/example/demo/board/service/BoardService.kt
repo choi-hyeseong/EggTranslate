@@ -12,6 +12,7 @@ import com.example.demo.convertOrNull
 import com.example.demo.file.dto.FileDTO
 import com.example.demo.file.entity.File
 import com.example.demo.file.service.FileService
+import com.example.demo.user.basic.data.DataFetcher
 import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
 import jakarta.transaction.Transactional
@@ -25,7 +26,7 @@ class BoardService(
     private val boardRepository: BoardRepository,
     private val userService: UserService,
     private val fileService: FileService
-) {
+) : DataFetcher<BoardListItemDTO, BoardResponseDTO> {
 
     @Transactional
     suspend fun writeBoard(userId: Long, file: List<FileDTO>, boardRequestDTO: BoardRequestDTO): BoardResponseDTO {
@@ -38,7 +39,7 @@ class BoardService(
 
     @Transactional
     suspend fun deleteBoard(id: Long): BoardResponseDTO {
-        val board = getBoard(id)
+        val board = findBoardById(id)
         boardRepository.deleteById(id)
         return board
     }
@@ -51,12 +52,6 @@ class BoardService(
         boardRepository.deleteAllInBatch(boards)
         return boards.size
     }
-
-    @Transactional
-    suspend fun getBoard(id: Long): BoardResponseDTO {
-        return BoardResponseDTO(findBoardEntityById(id))
-    }
-
 
     @Transactional
     suspend fun editBoard(boardEditDTO: BoardEditDTO): BoardResponseDTO {
@@ -72,16 +67,26 @@ class BoardService(
             )
         }
         boardRepository.save(board)
-        return getBoard(boardEditDTO.id)
+        return findBoardById(boardEditDTO.id)
     }
 
     @Transactional
-    suspend fun getBoardList(page: Int, amount: Int): Pageable<BoardListItemDTO> {
+    suspend fun findBoardById(id : Long) : BoardResponseDTO {
+        return BoardResponseDTO(findBoardEntityById(id))
+    }
+
+    @Transactional
+    override suspend fun getList(page: Int, amount: Int): Pageable<BoardListItemDTO> {
         val pageBoard = boardRepository.findAll(PageRequest.of(page, amount))
         val boardListItems = pageBoard.map {
             BoardListItemDTO(it.id!!, it.title, it.content, it.visibility)
         }.toMutableList()
         return Pageable(page, max(0, pageBoard.totalPages - 1), boardListItems)
+    }
+
+    @Transactional
+    override suspend fun getDetail(id: Long): BoardResponseDTO {
+        return findBoardById(id)
     }
 
     @Transactional
@@ -101,5 +106,7 @@ class BoardService(
             count += 1
         })
     }
+
+
 
 }
