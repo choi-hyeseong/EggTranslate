@@ -12,17 +12,20 @@ import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
 import org.springframework.data.domain.PageRequest
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.max
 
 @Service
-class UserService(private val userRepository: UserRepository) : DataFetcher<UserListItemDTO, UserResponseDTO> {
+class UserService(private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder
+    ) : DataFetcher<UserListItemDTO, UserResponseDTO> {
 
 
     @Transactional
     suspend fun signUp(userDto: UserDto): Long? {
-        return userRepository.save(userDto.toEntity()).id
+        return userRepository.save(userDto.apply { password = passwordEncoder.encode(password) }.toEntity()).id
     }
 
     @Transactional(readOnly = true)
