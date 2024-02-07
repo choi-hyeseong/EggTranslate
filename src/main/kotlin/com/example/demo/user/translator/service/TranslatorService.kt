@@ -1,27 +1,49 @@
 package com.example.demo.user.translator.service
 
+import com.example.demo.common.page.Pageable
 import com.example.demo.profile.dto.TranslatorEditDTO
+import com.example.demo.user.basic.data.DataFetcher
 import com.example.demo.user.basic.exception.UserNotFoundException
 import com.example.demo.user.basic.service.UserService
+import com.example.demo.user.teacher.dto.TeacherListItemDTO
 import com.example.demo.user.translator.dto.TranslatorDTO
+import com.example.demo.user.translator.dto.TranslatorListItemDTO
+import com.example.demo.user.translator.dto.TranslatorResponseDTO
 import com.example.demo.user.translator.entity.Translator
 import com.example.demo.user.translator.repository.TranslatorRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
+import kotlin.math.max
 
 @Service
 class TranslatorService(
     private val userService: UserService,
     private val translatorRepository: TranslatorRepository
-) {
+) : DataFetcher<TranslatorListItemDTO, TranslatorResponseDTO> {
+
     @Transactional
     suspend fun signUp(translatorDTO: TranslatorDTO): Long? {
         val user = userService.getUserEntity(translatorDTO.user.id!!)
         return translatorRepository.save(translatorDTO.toEntity(user)).id
     }
 
-    @Transactional(readOnly = true)
-    suspend fun existTranslatorByUserId(id: Long): Boolean = translatorRepository.existsByUserId(id)
+    @Transactional
+    override suspend fun getList(page: Int, amount: Int): Pageable<TranslatorListItemDTO> {
+        val pageResult = translatorRepository.findAll(PageRequest.of(page, amount))
+        return Pageable(page, max(0, pageResult.totalPages - 1), pageResult.content.map { TranslatorListItemDTO(it) })
+    }
+
+    @Transactional
+    override suspend fun getDetail(id: Long): TranslatorResponseDTO {
+        return findTranslatorByUserId(id).toResponseDTO()
+    }
+
+
+
+    /*
+    * JPA Section
+    */
 
 
     @Transactional
@@ -46,16 +68,4 @@ class TranslatorService(
         translatorRepository.deleteById(id)
     }
 
-    @Transactional
-    suspend fun updateProfile(id: Long, translatorEditDTO: TranslatorEditDTO) {
-        val existingUser = translatorRepository.findByUserId(id).orElseThrow {
-            UserNotFoundException(id, "일치하는 사용자가 없습니다")
-        }
-        existingUser.career = translatorEditDTO.career
-        existingUser.level = translatorEditDTO.level
-        existingUser.certificates = translatorEditDTO.certificates
-        existingUser.categories = translatorEditDTO.categories
-
-        translatorRepository.save(existingUser)
-    }
 }

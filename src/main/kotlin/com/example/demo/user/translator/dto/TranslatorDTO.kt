@@ -33,6 +33,6 @@ class TranslatorDTO(
     //heart는 엔티티에 포함되지 않음.
     fun toEntity(user : User): Translator = Translator(id, career, user, level, certificates, categories)
 
-    fun toInfoDTO() : TranslatorInfoDto = TranslatorInfoDto(id, career, user.toInfoDTO(), level, hearts?.size ?: 0, certificates, categories)
+    fun toResponseDTO() : TranslatorResponseDTO = TranslatorResponseDTO(id, career, user.id, level, hearts, certificates, categories)
 
 }

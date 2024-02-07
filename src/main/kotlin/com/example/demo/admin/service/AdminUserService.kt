@@ -10,6 +10,9 @@ import com.example.demo.user.parent.dto.*
 import com.example.demo.user.parent.service.ParentService
 import com.example.demo.user.teacher.dto.*
 import com.example.demo.user.teacher.service.TeacherService
+import com.example.demo.user.translator.dto.TranslatorListItemDTO
+import com.example.demo.user.translator.dto.TranslatorResponseDTO
+import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,6 +21,7 @@ class AdminUserService(
     val userService: UserService,
     val parentService: ParentService,
     val teacherService: TeacherService,
+    val translatorService: TranslatorService,
     val profileService: ProfileService,
 ) {
 
@@ -88,6 +92,31 @@ class AdminUserService(
 
     @Transactional
     suspend fun updateTeacher(id : Long, teacherUpdateDTO: TeacherUpdateDTO) : TeacherDTO {
+        return profileService.updateTeacher(id, teacherUpdateDTO)
+    }
+
+    /*
+    * Translator Part
+    */
+
+
+    @Transactional
+    suspend fun findTranslatorList(page : Int, amount : Int) : Pageable<TranslatorListItemDTO> {
+        return translatorService.getList(page, amount)
+    }
+
+    @Transactional
+    suspend fun findTranslatorDetail(id : Long) : TranslatorResponseDTO {
+        return translatorService.getDetail(id)
+    }
+
+    @Transactional
+    suspend fun convertToTranslator(userId : Long, teacherConvertDTO: TeacherConvertDTO) : Long? {
+        return profileService.convertToTeacher(userId, teacherConvertDTO)
+    }
+
+    @Transactional
+    suspend fun updateTranslator(id : Long, teacherUpdateDTO: TeacherUpdateDTO) : TeacherDTO {
         return profileService.updateTeacher(id, teacherUpdateDTO)
     }
 

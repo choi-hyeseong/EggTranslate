@@ -56,7 +56,7 @@ class ProfileService(
         //user 정보 업데이트
         val dto = translatorEditDTO.user
         //번역가 단독 정보 업데이트
-        translatorService.updateProfile(id, translatorEditDTO)
+        //translatorService.updateProfile(id, translatorEditDTO)
     }
 
     /*
