@@ -40,7 +40,10 @@ class UserService(
     suspend fun existUser(id: Long) = userRepository.existsById(id)
 
     @Transactional(readOnly = true)
-    suspend fun existUserByUserNameOrEmail(userName: String, email: String) = userRepository.existsByUsernameOrEmail(userName, email)
+    suspend fun existUserByUserName(userName: String) = userRepository.existsByUsername(userName)
+
+    @Transactional(readOnly = true)
+    suspend fun existUserByEmail(email : String) = userRepository.existsByEmail(email)
 
     @Transactional(readOnly = true)
     fun findUserByEmail(email : String) : UserDto = UserDto(userRepository.findByEmail(email).orElseThrow { UserException("잘못된 유저 정보입니다.") })

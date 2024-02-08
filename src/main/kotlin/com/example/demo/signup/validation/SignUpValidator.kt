@@ -1,12 +1,13 @@
 package com.example.demo.signup.validation
 
+import com.example.demo.admin.dto.AdminSignUpDTO
 import com.example.demo.signup.dto.ParentSignUpDTO
 import com.example.demo.signup.dto.TeacherSignUpDTO
 import com.example.demo.signup.dto.TranslatorSignUpDTO
-import com.example.demo.signup.exception.DuplicatedUsernameException
+import com.example.demo.signup.exception.DuplicatedException
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.service.UserService
+import com.example.demo.user.basic.type.UserType
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 import kotlinx.coroutines.*
@@ -23,29 +24,28 @@ class SignUpValidator(private val userService: UserService) : ConstraintValidato
 //    }
 
     override fun isValid(value: Any, context: ConstraintValidatorContext): Boolean {
-        when (value) {
-            is UserDto -> return isUsernameValid(value.userName, value.email)
-            is TeacherSignUpDTO -> {
-                if(isUsernameValid(value.user.userName, value.user.email))
-                    throw DuplicatedUsernameException("이미 존재하는 아이디입니다.")
-                return true
-            }
-            is TranslatorSignUpDTO -> {
-                if(isUsernameValid(value.user.userName, value.user.email))
-                    throw DuplicatedUsernameException("이미 존재하는 아이디입니다.")
-                return true
-            }
-            is ParentSignUpDTO -> {
-                if(isUsernameValid(value.user.userName, value.user.email))
-                    throw DuplicatedUsernameException("이미 존재하는 아이디입니다.")
-                return true
-            }
+        val userDto = when (value) {
+            is UserDto -> value
+            is TeacherSignUpDTO -> value.user.toUserDTO(UserType.GUEST)
+            is TranslatorSignUpDTO -> value.user.toUserDTO(UserType.GUEST)
+            is ParentSignUpDTO -> value.user.toUserDTO(UserType.GUEST)
+            is AdminSignUpDTO -> value.toUserDTO()
             // 다른 DTO 유형에 대한 처리 추가
             else -> throw IllegalArgumentException("Unsupported DTO type")
         }
+        validUser(userDto)
+        return true
     }
 
-    private fun isUsernameValid(username: String, email : String): Boolean {
-        return runBlocking {  userService.existUserByUserNameOrEmail(username, email) }// --> user에 존재하는 아이디일 때 true
+    private fun validUser(userDto: UserDto) {
+        // for suspend fun
+        runBlocking {
+            if (userService.existUserByUserName(userDto.userName))
+                throw DuplicatedException("이미 존재하는 아이디입니다.")
+
+            if (userService.existUserByEmail(userDto.email))
+                throw DuplicatedException("이미 존재하는 이메일입니다.")
+
+        }
     }
 }
