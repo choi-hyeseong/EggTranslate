@@ -10,15 +10,20 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
+import java.time.Duration
 import kotlin.jvm.Throws
 
 @Service
 class UserAuthenticateService(private val userService: UserService, private val jwtTokenProvider: JWTTokenProvider) {
 
+    //단위 ms
+    private val ACCESS_EXPIRE: Long = 86400000
+    private val REFRESH_EXPIRE: Long = 86400000 //TODO 얘는 더 길게 잡아서 재발급 되게
+
     //for login service
     fun login(userLoginDTO: UserLoginDTO) : TokenDTO {
         val userDto = userService.login(userLoginDTO)
-        return jwtTokenProvider.generateToken(userDto)
+        return jwtTokenProvider.generateToken(userDto, Duration.ofMillis(ACCESS_EXPIRE), Duration.ofMillis(REFRESH_EXPIRE))
     }
 
     //for filter

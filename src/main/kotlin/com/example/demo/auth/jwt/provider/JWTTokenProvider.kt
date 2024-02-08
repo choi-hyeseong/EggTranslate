@@ -13,6 +13,7 @@ import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.security.Key
+import java.time.Duration
 import java.util.Date
 import kotlin.jvm.Throws
 
@@ -22,10 +23,6 @@ class JWTTokenProvider(@Value("\${jwt.secret}") key: String, val claimMapper: Cl
     private lateinit var key: Key
     private val log = logger()
 
-    //단위 ms
-    private val ACCESS_EXPIRE: Long = 86400000
-    private val REFRESH_EXPIRE: Long = 86400000 //TODO 얘는 더 길게 잡아서 재발급 되게
-
     init {
         // primary contructor - init순으로 진행.
         val byteKey = Decoders.BASE64.decode(key)
@@ -33,17 +30,17 @@ class JWTTokenProvider(@Value("\${jwt.secret}") key: String, val claimMapper: Cl
     }
 
     // userDTO 이용해서 접근하기. 로그인할때 누가 authentication 가져오고 그러니
-    fun generateToken(userDto: UserDto): TokenDTO {
+    fun generateToken(userDto: UserDto, accessTokenExpire : Duration, refreshTokenExpire : Duration): TokenDTO {
         val now = Date().time
 
         val accessToken = Jwts.builder().apply {
             setClaims(claimMapper.createClaim(UserClaim(userDto.userName, userDto.id!!, userDto.email)))
-            setExpiration(Date(now + ACCESS_EXPIRE))
+            setExpiration(Date(now + accessTokenExpire.toMillis()))
             signWith(key, SignatureAlgorithm.HS256)
         }.compact()
 
         val refreshToken = Jwts.builder().apply {
-            setExpiration(Date(now + REFRESH_EXPIRE))
+            setExpiration(Date(now + refreshTokenExpire.toMillis()))
             signWith(key, SignatureAlgorithm.HS256)
         }.compact()
 
