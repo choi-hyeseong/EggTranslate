@@ -53,7 +53,10 @@ class JWTTokenProvider(@Value("\${jwt.secret}") key: String, val claimMapper: Cl
 
     //accessToken으로부터 body 추출
     @Throws
-    fun parseClaims(accessToken: String): UserClaim {
+    fun parseClaims(accessToken: String?): UserClaim {
+        if (accessToken.isNullOrBlank())
+            throw JWTException("토큰이 비어있습니다.", null)
+
         val claim = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).body
         return claimMapper.decodeClaim(claim) ?: throw JWTException("권한 정보가 없는 JWT 토큰입니다.", accessToken)
     }

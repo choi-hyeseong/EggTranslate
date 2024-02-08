@@ -22,8 +22,6 @@ class UserAuthenticateService(private val userService: UserService, private val 
 
     //for filter
     fun authenticate(accessToken : String?) : Authentication {
-        if (accessToken.isNullOrBlank())
-            throw JWTException("토큰이 비어있습니다.", null)
         try {
             val claim = jwtTokenProvider.parseClaims(accessToken)
             val user = userService.findUserByEmail(claim.email)
