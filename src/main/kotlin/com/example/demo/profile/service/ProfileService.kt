@@ -5,6 +5,7 @@ import com.example.demo.docs.service.DocumentService
 import com.example.demo.file.service.FileService
 import com.example.demo.translate.auto.service.TranslateManageService
 import com.example.demo.translate.auto.service.TranslateResultService
+import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.basic.type.UserType
 import com.example.demo.user.heart.service.HeartService
@@ -76,6 +77,12 @@ class ProfileService(
     suspend fun convertToTranslator(userId: Long, translatorConvertDTO: TranslatorConvertDTO) : Long? {
         convertUserType(userId, UserType.TRANSLATOR)
         return translatorService.convert(userId, translatorConvertDTO)
+    }
+
+    @Transactional
+    suspend fun convertToAdmin(userId: Long) : UserDto {
+        convertUserType(userId, UserType.ADMIN)
+        return userService.getUser(userId)
     }
 
     @Transactional

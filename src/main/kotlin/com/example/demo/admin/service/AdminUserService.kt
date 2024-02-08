@@ -1,9 +1,12 @@
 package com.example.demo.admin.service
 
+import com.example.demo.admin.dto.AdminSignUpDTO
 import com.example.demo.common.page.Pageable
 import com.example.demo.profile.service.ProfileService
 import com.example.demo.signup.dto.TranslatorSignUpDTO
+import com.example.demo.signup.dto.UserSignUpDTO
 import com.example.demo.signup.service.RegistrationService
+import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
@@ -125,6 +128,17 @@ class AdminUserService(
     @Transactional
     suspend fun updateTranslator(id : Long, translatorUpdateDTO: TranslatorUpdateDTO) : TranslatorDTO {
         return profileService.updateTranslator(id, translatorUpdateDTO)
+    }
+
+    @Transactional
+    suspend fun createAdmin(adminSignUpDTO: AdminSignUpDTO) : UserDto {
+        val response = registrationService.registerUser(adminSignUpDTO.toUserDTO())
+        return userService.getUser(response!!)
+    }
+
+    @Transactional
+    suspend fun convertAdmin(id : Long) : UserDto {
+        return profileService.convertToAdmin(id)
     }
 
 }

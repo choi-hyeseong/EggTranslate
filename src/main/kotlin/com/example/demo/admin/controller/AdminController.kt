@@ -1,5 +1,6 @@
 package com.example.demo.admin.controller
 
+import com.example.demo.admin.dto.AdminSignUpDTO
 import com.example.demo.admin.service.AdminBoardService
 import com.example.demo.admin.service.AdminUserService
 import com.example.demo.auth.security.config.getUserOrThrow
@@ -12,7 +13,9 @@ import com.example.demo.common.response.Response
 import com.example.demo.file.service.FileService
 import com.example.demo.profile.service.ProfileService
 import com.example.demo.signup.dto.TranslatorSignUpDTO
+import com.example.demo.signup.dto.UserSignUpDTO
 import com.example.demo.signup.validation.SignUpValid
+import com.example.demo.user.basic.dto.UserDto
 import com.example.demo.user.basic.dto.UserListItemDTO
 import com.example.demo.user.basic.dto.UserResponseDTO
 import com.example.demo.user.basic.service.UserService
@@ -211,4 +214,17 @@ class AdminController(
         return Response.ofSuccess(null, adminUserService.updateTranslator(id, translatorUpdateDTO))
     }
 
+    /*
+    *  Admin Part
+    */
+    @PutMapping("/{id}")
+    suspend fun convertAdmin(@PathVariable id : Long) : Response<UserDto> {
+        return Response.ofSuccess("해당 유저가 관리자로 설정되었습니다.", adminUserService.convertAdmin(id))
+    }
+
+
+    @PostMapping("")
+    suspend fun createAdmin(@SignUpValid @RequestBody adminSignUpDTO: AdminSignUpDTO) : Response<UserDto> {
+        return Response.ofSuccess("관리자가 추가되었습니다.", adminUserService.createAdmin(adminSignUpDTO))
+    }
 }
