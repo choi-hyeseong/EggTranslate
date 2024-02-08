@@ -1,7 +1,7 @@
 package com.example.demo.user.basic.service
 
 import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.exception.UserNotFoundException
+import com.example.demo.user.basic.exception.UserException
 import com.example.demo.user.basic.type.UserType
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
@@ -62,7 +62,7 @@ class UserServiceTest {
     @Test
     @Transactional
     fun TEST_USER_NOT_FOUND()  {
-        assertThrows(UserNotFoundException::class.java) { runBlocking { userService.getUser(-1) }}
+        assertThrows(UserException::class.java) { runBlocking { userService.getUser(-1) }}
     }
 
     @Test
