@@ -2,6 +2,7 @@ package com.example.demo.admin.controller
 
 import com.example.demo.admin.service.AdminBoardService
 import com.example.demo.admin.service.AdminUserService
+import com.example.demo.auth.security.config.getUserOrThrow
 import com.example.demo.board.dto.BoardEditRequestDTO
 import com.example.demo.board.dto.BoardRequestDTO
 import com.example.demo.board.dto.BoardResponseDTO
@@ -26,6 +27,9 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.security.core.AuthenticatedPrincipal
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -41,7 +45,7 @@ class AdminController(
     /*
     * Board Part
     */
-    @PostMapping("/board/{id}")
+    @PostMapping("/board")
     @Operation(
         summary = "게시글 작성하기", description = "게시글을 작성합니다.", responses = [
             ApiResponse(
@@ -56,12 +60,11 @@ class AdminController(
                 content = []
             )]
     )
-    suspend fun write(
-        @Parameter(name = "id", `in` = ParameterIn.PATH, description = "작성하는 유저의 id입니다. 추후 제거됩니다.")
-        @PathVariable id : Long, @ModelAttribute boardRequestDTO: BoardRequestDTO) : Response<BoardResponseDTO> {
-        val userDto = userService.getUser(id)
+    suspend fun write(authentication: Authentication?, @ModelAttribute boardRequestDTO: BoardRequestDTO) : Response<BoardResponseDTO> {
+        val user = authentication.getUserOrThrow()
+        val userDto = userService.findUserByUserName(user.username)
         val fileDto = fileService.saveFile(userDto, boardRequestDTO.file)
-        return Response.ofSuccess(null, adminBoardService.write(id, fileDto, boardRequestDTO))
+        return Response.ofSuccess(null, adminBoardService.write(userDto.id!!, fileDto, boardRequestDTO))
     }
 
     @Operation(

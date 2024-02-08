@@ -1,16 +1,9 @@
 package com.example.demo.user.heart.service
 
-import com.example.demo.translate.service.TranslateService
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.exception.UserNotFoundException
-import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.heart.dto.TranslatorHeartResponseDTO
 import com.example.demo.user.heart.entity.TranslatorHeart
-import com.example.demo.user.heart.exception.HeartException
 import com.example.demo.user.heart.repository.TranslatorHeartRepository
-import com.example.demo.user.translator.dto.TranslatorDTO
-import com.example.demo.user.translator.repository.TranslatorRepository
 import com.example.demo.user.translator.service.TranslatorService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

@@ -27,8 +27,8 @@ class User(
     @Column(nullable = false, unique = false, length = 35)
     var phone: String,
 
-    @Column(nullable = true, unique = false, length = 50)
-    var email: String?,
+    @Column(nullable = false, unique = true, length = 50)
+    var email: String,
 
     @Column
     @Convert(converter = StringFlatter::class)

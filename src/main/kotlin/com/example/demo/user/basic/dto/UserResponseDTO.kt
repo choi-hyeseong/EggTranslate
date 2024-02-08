@@ -9,7 +9,7 @@ class UserResponseDTO (
     val userName : String,
     val name : String,
     val phone : String,
-    val email : String?,
+    val email : String,
     val languages : MutableList<String>,
     val userType: UserType
 ) {

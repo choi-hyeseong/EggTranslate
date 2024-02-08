@@ -3,7 +3,7 @@ package com.example.demo.user.teacher.service
 import com.example.demo.user.basic.data.DataFetcher
 import com.example.demo.user.basic.data.DataUpdater
 import com.example.demo.common.page.Pageable
-import com.example.demo.user.basic.exception.UserNotFoundException
+import com.example.demo.user.basic.exception.UserException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.teacher.dto.*
 import com.example.demo.user.teacher.entity.Teacher
@@ -60,12 +60,12 @@ class TeacherService(
     suspend fun findTeacherByUserId(id: Long): TeacherDTO =
         TeacherDTO(teacherRepository
             .findByUserId(id)
-            .orElseThrow { UserNotFoundException(id, "할당되지 않은 유저 id입니다.") }
+            .orElseThrow { UserException("할당되지 않은 유저 id입니다. id : $id") }
         )
 
     @Transactional
     suspend fun findTeacherEntityByUserId(id: Long): Teacher =
-        teacherRepository.findByUserId(id).orElseThrow { UserNotFoundException(id, "할당되지 않은 유저 id입니다.") }
+        teacherRepository.findByUserId(id).orElseThrow { UserException("할당되지 않은 유저 id입니다. id : $id") }
 
 
     @Transactional

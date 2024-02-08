@@ -3,25 +3,33 @@ package com.example.demo.user.basic.service
 import com.example.demo.user.basic.data.DataFetcher
 import com.example.demo.common.page.Pageable
 import com.example.demo.convertOrNull
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.dto.UserListItemDTO
-import com.example.demo.user.basic.dto.UserResponseDTO
-import com.example.demo.user.basic.dto.UserUpdateDTO
+import com.example.demo.user.basic.dto.*
 import com.example.demo.user.basic.entity.User
-import com.example.demo.user.basic.exception.UserNotFoundException
+import com.example.demo.user.basic.exception.UserException
 import com.example.demo.user.basic.repository.UserRepository
 import com.example.demo.user.basic.type.UserType
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.max
 
 @Service
-class UserService(private val userRepository: UserRepository,
+class UserService(
+    private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder
-    ) : DataFetcher<UserListItemDTO, UserResponseDTO> {
+) : DataFetcher<UserListItemDTO, UserResponseDTO> {
 
+    //로그인시 없는 유저이거나, 혹은 패스워드가 일치 하지 않을경우 로그인 실패 exception
+    @Transactional
+    fun login(userLoginDTO: UserLoginDTO): UserDto {
+        val user = userRepository.findByUsername(userLoginDTO.userName).getOrNull() //아이디 존재 여부를 알려줘선 안됨
+        if (user == null || !passwordEncoder.matches(userLoginDTO.password, user.password)) //match 하지 않는경우..
+            throw UserException("로그인에 실패 하였습니다.")
+
+        return UserDto(user)
+    }
 
     @Transactional
     suspend fun signUp(userDto: UserDto): Long? {
@@ -35,11 +43,17 @@ class UserService(private val userRepository: UserRepository,
     suspend fun existUser(username: String) = userRepository.findByUsername(username).isPresent
 
     @Transactional(readOnly = true)
+    fun findUserByEmail(email : String) : UserDto = UserDto(userRepository.findByEmail(email).orElseThrow { UserException("잘못된 유저 정보입니다.") })
+
+    @Transactional(readOnly = true)
+    suspend fun findUserByUserName(userName : String) : UserDto = UserDto(userRepository.findByUsername(userName).orElseThrow { UserException("잘못된 유저 정보입니다.") })
+
+    @Transactional(readOnly = true)
     suspend fun getUserEntity(id: Long): User {
         return userRepository
             .findById(id)
             .orElseThrow {
-                UserNotFoundException(id, "해당하는 유저가 없습니다.")
+                UserException("해당하는 유저가 없습니다. Id : $id")
             }
     }
 
@@ -62,21 +76,21 @@ class UserService(private val userRepository: UserRepository,
     }
 
     @Transactional
-    suspend fun updateUserType(id : Long, userType: UserType) {
+    suspend fun updateUserType(id: Long, userType: UserType) {
         val user = getUserEntity(id)
         user.userType = userType
         userRepository.save(user)
     }
 
     @Transactional
-    suspend fun deleteById(id : Long) {
+    suspend fun deleteById(id: Long) {
         // TODO 갖고 있는 모든 연관관계 제거
         userRepository.deleteById(id)
     }
 
 
     @Transactional
-    suspend fun updateUser(id : Long, userUpdateDTO: UserUpdateDTO?) {
+    suspend fun updateUser(id: Long, userUpdateDTO: UserUpdateDTO?) {
         val user = getUserEntity(id)
         if (userUpdateDTO != null) {
             user.update(userUpdateDTO)

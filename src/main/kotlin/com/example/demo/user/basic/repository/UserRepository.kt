@@ -8,4 +8,6 @@ interface UserRepository : JpaRepository<User, Long> {
 
     fun findByUsername(userName : String) : Optional<User>
 
+    fun findByEmail(email : String) : Optional<User>
+
 }

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 class UserInfoDTO(
     val name : String,
     val phone : String,
-    val email : String?,
+    val email : String,
     val languages : MutableList<String>
 ) {
     constructor(user: User) : this(user.name, user.phone, user.email, user.language)

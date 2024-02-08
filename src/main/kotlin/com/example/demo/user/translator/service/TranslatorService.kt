@@ -3,9 +3,8 @@ package com.example.demo.user.translator.service
 import com.example.demo.common.page.Pageable
 import com.example.demo.user.basic.data.DataFetcher
 import com.example.demo.user.basic.data.DataUpdater
-import com.example.demo.user.basic.exception.UserNotFoundException
+import com.example.demo.user.basic.exception.UserException
 import com.example.demo.user.basic.service.UserService
-import com.example.demo.user.teacher.dto.TeacherDTO
 import com.example.demo.user.translator.dto.*
 import com.example.demo.user.translator.entity.Translator
 import com.example.demo.user.translator.repository.TranslatorRepository
@@ -57,18 +56,18 @@ class TranslatorService(
     */
     @Transactional
     suspend fun findTranslatorEntityByUserId(userId: Long): Translator =
-        translatorRepository.findByUserId(userId).orElseThrow { UserNotFoundException(userId, "찾을 수 없는 번역가 id입니다.") }
+        translatorRepository.findByUserId(userId).orElseThrow { UserException("찾을 수 없는 번역가 id입니다. id : $userId") }
 
 
     @Transactional
     suspend fun findTranslatorEntityById(id: Long): Translator =
-        translatorRepository.findById(id).orElseThrow { UserNotFoundException(id, "찾을 수 없는 번역가 id입니다.") }
+        translatorRepository.findById(id).orElseThrow { UserException("찾을 수 없는 번역가 id입니다. id : $id") }
 
     @Transactional(readOnly = true)
     suspend fun findTranslatorByUserId(id: Long): TranslatorDTO =
         TranslatorDTO(translatorRepository
             .findByUserId(id)
-            .orElseThrow { UserNotFoundException(id, "해당 id로 번역가를 찾을 수 없습니다.") }
+            .orElseThrow { UserException("해당 id로 번역가를 찾을 수 없습니다. id : $id") }
         )
 
     @Transactional(readOnly = true)

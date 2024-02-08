@@ -7,7 +7,7 @@ import com.example.demo.logger
 import com.example.demo.translate.auto.service.TranslateManageService
 import com.example.demo.user.basic.data.DataUpdater
 import com.example.demo.user.basic.exception.ParentException
-import com.example.demo.user.basic.exception.UserNotFoundException
+import com.example.demo.user.basic.exception.UserException
 import com.example.demo.user.basic.service.UserService
 import com.example.demo.user.parent.child.dto.ChildDTO
 import com.example.demo.user.parent.child.entity.Child
@@ -45,7 +45,7 @@ class ParentService(
     suspend fun findByParentUserId(id: Long): ParentDTO =
         ParentDTO(parentRepository
             .findByUserId(id)
-            .orElseThrow { UserNotFoundException(id, "존재하지 않는 부모 id 입니다.") }
+            .orElseThrow { UserException("존재하지 않는 부모 id 입니다. id : $id") }
         )
 
     @Transactional(readOnly = true)
@@ -60,13 +60,13 @@ class ParentService(
     suspend fun findByParentEntityId(id: Long): Parent =
        parentRepository
             .findById(id)
-            .orElseThrow { UserNotFoundException(id, "존재하지 않는 부모 id 입니다.") }
+            .orElseThrow { UserException("존재하지 않는 부모 id 입니다. id : $id") }
 
     @Transactional
     suspend fun findByParentEntityUserId(id: Long): Parent =
         parentRepository
             .findByUserId(id)
-            .orElseThrow { UserNotFoundException(id, "존재하지 않는 부모 id 입니다.") }
+            .orElseThrow { UserException("존재하지 않는 부모 id 입니다. id : $id") }
 
     @Transactional
     suspend fun deleteByUserId(id : Long) {
