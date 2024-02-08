@@ -29,20 +29,18 @@ class JwtAuthenticationFilter(private val userAuthenticateService: UserAuthentic
     //토큰이 만료되거나 exception 발생 (토큰을 제공한경우) - 해당 요청에 적합한 응답 제공
     //토큰을 제공 안한경우 - 스프링 시큐리티 예외
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
-
         val token = resolveTokenFromHeader(request as HttpServletRequest)
-
         try {
             SecurityContextHolder.getContext().authentication =
                 userAuthenticateService.authenticate(token) //유효한 토큰일경우 authentication을 반환함.
-            chain?.doFilter(request, response)
         }
         catch (e: JWTException) {
-            if (e.accessToken != null) //토큰이 있는경우
+            if (e.accessToken != null) { //토큰이 있는경우
                 sendTokenInvalid(response as HttpServletResponse?, e)
-            else
-                chain?.doFilter(request, response)
+                return
+            }
         }
+        chain?.doFilter(request, response)
 
 
     }

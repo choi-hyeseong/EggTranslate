@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
+import kotlin.jvm.Throws
 
 @Service
 class UserAuthenticateService(private val userService: UserService, private val jwtTokenProvider: JWTTokenProvider) {
@@ -21,6 +22,7 @@ class UserAuthenticateService(private val userService: UserService, private val 
     }
 
     //for filter
+    @Throws(JWTException::class)
     fun authenticate(accessToken : String?) : Authentication {
         try {
             val claim = jwtTokenProvider.parseClaims(accessToken)
@@ -31,11 +33,7 @@ class UserAuthenticateService(private val userService: UserService, private val 
             return UsernamePasswordAuthenticationToken(principal, "", principal.authorities)
         }
         catch (e : Exception) {
-            if (e is JWTException)
-                throw e
-            else
-                throw JWTException("잘못된 유저 정보입니다. 다시 토큰을 발급받아주세요.", accessToken, e)
+            throw JWTException.wrap(e, accessToken) //JWT Exception이면 그대로, 아닌경우 JWTException으로 wrapping
         }
-
     }
 }
