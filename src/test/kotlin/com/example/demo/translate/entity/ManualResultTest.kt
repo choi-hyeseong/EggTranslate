@@ -54,7 +54,7 @@ class ManualResultTest {
         password = "PASS",
         name = "테스트",
         phone = "010",
-        email = null,
+        email = "",
         languages = mutableListOf("한글", "영어"),
         userType = UserType.TEACHER
     ).toEntity()
@@ -65,7 +65,7 @@ class ManualResultTest {
         password = "PASS",
         name = "부모님",
         phone = "010",
-        email = null,
+        email = "",
         languages = mutableListOf("한글", "영어"),
         userType = UserType.PARENT
     ).toEntity()
@@ -106,7 +106,6 @@ class ManualResultTest {
         val request = TranslateResultDTO(
             null,
             UserDto(parentUser),
-            UserType.PARENT,
             autoTrans,
             ChildDTO(parent.children[0]),
             null
@@ -157,7 +156,6 @@ class ManualResultTest {
         val request = TranslateResultDTO(
             null,
             UserDto(parentUser),
-            UserType.PARENT,
             autoTrans,
             ChildDTO(parent.children[0]),
             null

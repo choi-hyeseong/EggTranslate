@@ -26,7 +26,7 @@ class UserServiceTest {
             "1234",
             "이름",
             "폰",
-            null,
+            "",
             mutableListOf(),
             UserType.TEACHER
         )
@@ -46,7 +46,7 @@ class UserServiceTest {
             "1234",
             "이름",
             "폰",
-            null,
+            "",
             mutableListOf(),
             UserType.TEACHER
         )
@@ -74,7 +74,7 @@ class UserServiceTest {
             "1234",
             "이름",
             "폰",
-            null,
+            "",
             mutableListOf(),
             UserType.TEACHER
         )
@@ -84,7 +84,7 @@ class UserServiceTest {
             "1234",
             "이름",
             "폰",
-            null,
+            "",
             mutableListOf(),
             UserType.TEACHER
         )
