@@ -27,7 +27,7 @@ class TranslatorHeartTest(
         password = "PASS",
         name = "테스트",
         phone = "010",
-        email = "",
+        email = "EMAIL1",
         languages = mutableListOf("한글", "영어"),
         userType = UserType.PARENT
     )
@@ -38,7 +38,7 @@ class TranslatorHeartTest(
         password = "PASS",
         name = "테스트",
         phone = "010",
-        email = "",
+        email = "EMAIL2",
         languages = mutableListOf("한글", "영어"),
         userType = UserType.PARENT
     )
@@ -49,7 +49,7 @@ class TranslatorHeartTest(
         password = "PASS",
         name = "테스트",
         phone = "010",
-        email = "",
+        email = "EMAIL3 ",
         languages = mutableListOf("한글", "영어"),
         userType = UserType.PARENT
     )

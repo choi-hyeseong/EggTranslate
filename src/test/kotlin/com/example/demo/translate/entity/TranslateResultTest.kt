@@ -51,7 +51,7 @@ class TranslateResultTest {
         password = "PASS",
         name = "테스트",
         phone = "010",
-        email = "",
+        email = "EMAIL1",
         languages = mutableListOf("한글", "영어"),
         userType = UserType.TEACHER
     ).toEntity()
@@ -62,7 +62,7 @@ class TranslateResultTest {
         password = "PASS",
         name = "부모님",
         phone = "010",
-        email = "",
+        email = "EMAIL2",
         languages = mutableListOf("한글", "영어"),
         userType = UserType.PARENT
     ).toEntity()
