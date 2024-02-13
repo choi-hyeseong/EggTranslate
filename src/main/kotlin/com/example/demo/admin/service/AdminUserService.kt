@@ -1,7 +1,9 @@
 package com.example.demo.admin.service
 
 import com.example.demo.admin.dto.AdminSignUpDTO
+import com.example.demo.admin.model.AdminGenerationData
 import com.example.demo.common.page.Pageable
+import com.example.demo.logger
 import com.example.demo.profile.service.ProfileService
 import com.example.demo.signup.dto.TranslatorSignUpDTO
 import com.example.demo.signup.dto.UserSignUpDTO
@@ -17,8 +19,11 @@ import com.example.demo.user.teacher.dto.*
 import com.example.demo.user.teacher.service.TeacherService
 import com.example.demo.user.translator.dto.*
 import com.example.demo.user.translator.service.TranslatorService
+import kotlinx.coroutines.runBlocking
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import javax.annotation.PostConstruct
 
 @Service
 class AdminUserService(
@@ -28,7 +33,28 @@ class AdminUserService(
     val translatorService: TranslatorService,
     val registrationService: RegistrationService,
     val profileService: ProfileService,
+    private val adminGenerationData: AdminGenerationData
 ) {
+
+    private val log = logger()
+
+    /**
+     * Property에 관리자 자동 생성이 켜져있고, 관리자가 존재하지 않는경우 관리자를 생성함
+     */
+    @PostConstruct
+    @Transactional
+    fun handlePostConstruct() {
+        runBlocking {
+            if (!userService.existByUserType(UserType.ADMIN) && adminGenerationData.enable) //Admin이 존재하지 않을경우
+                kotlin.runCatching {
+                    createAdmin(adminGenerationData.toAdminDTO())
+                }.onSuccess {
+                    log.info("관리자 계정이 존재하지 않아 신규 계정을 생성합니다. login id : {}", it.userName)
+                }.onFailure {
+                    log.warn("관리자 계정 자동 생성에 실패하였습니다. properties의 값을 확인하십시오. error : {}", it.message)
+                }
+        }
+    }
 
     @Transactional
     suspend fun findUserList(page : Int, amount : Int) : Pageable<UserListItemDTO> {

@@ -40,6 +40,9 @@ class UserService(
     suspend fun existUser(id: Long) = userRepository.existsById(id)
 
     @Transactional(readOnly = true)
+    suspend fun existByUserType(userType: UserType) = userRepository.existsByUserType(userType)
+
+    @Transactional(readOnly = true)
     suspend fun existUserByUserName(userName: String) = userRepository.existsByUsername(userName)
 
     @Transactional(readOnly = true)
