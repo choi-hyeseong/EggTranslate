@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -69,7 +71,7 @@ class DocumentController(private val documentTranslateService: DocumentTranslate
         @Parameter(name = "id", `in` = ParameterIn.PATH, description = "요청할 파일의 id입니다.")
         @PathVariable(value = "id", required = true) id : Long) : ResponseEntity<Resource> {
         val document = documentService.findDocumentById(id)
-        val filename = URLEncoder.encode(document.originName, "UTF-8")
+        val filename = withContext(Dispatchers.IO) {URLEncoder.encode(document.originName, "UTF-8") }
         return ResponseEntity(FileUtil.convertFileToResource(document), HttpHeaders().apply {
             add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=$filename")
         }, HttpStatus.OK)
