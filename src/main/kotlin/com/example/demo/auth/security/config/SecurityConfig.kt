@@ -60,3 +60,10 @@ fun Authentication?.getUserOrThrow() : UserDetails {
     else
         throw UserException("로그인 후 이용해주세요.")
 }
+
+fun Authentication?.getUserOrNull() : UserDetails? {
+    return if (this != null && this.principal != null)
+        this.principal as UserDetails
+    else
+       null
+}
