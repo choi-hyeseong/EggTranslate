@@ -3,8 +3,7 @@ package com.example.demo.translate.auto.dto
 import com.example.demo.convertOrNull
 import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.translate.manual.dto.ManualResultResponseDTO
-import com.example.demo.user.basic.type.UserType
-import com.fasterxml.jackson.annotation.JsonInclude
+import com.example.demo.member.user.type.UserType
 
 data class TranslateResultResponseDTO(
     val id: Long?,

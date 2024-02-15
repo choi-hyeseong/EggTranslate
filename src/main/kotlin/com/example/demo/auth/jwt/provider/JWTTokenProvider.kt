@@ -5,7 +5,7 @@ import com.example.demo.auth.jwt.exception.JWTException
 import com.example.demo.auth.jwt.model.UserClaim
 import com.example.demo.auth.jwt.parser.ClaimMapper
 import com.example.demo.logger
-import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.member.user.dto.UserDto
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders

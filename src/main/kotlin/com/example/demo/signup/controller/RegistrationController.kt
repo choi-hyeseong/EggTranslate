@@ -1,18 +1,15 @@
 package com.example.demo.signup.controller
 
-import com.azure.core.annotation.Post
 import com.example.demo.common.response.Response
 import com.example.demo.signup.dto.ParentSignUpDTO
 import com.example.demo.signup.dto.TeacherSignUpDTO
 import com.example.demo.signup.dto.TranslatorSignUpDTO
 import com.example.demo.signup.service.RegistrationService
 import com.example.demo.signup.validation.SignUpValid
-import com.example.demo.user.parent.dto.ParentDTO
-import com.example.demo.user.parent.entity.Parent
-import com.example.demo.user.teacher.dto.TeacherDTO
-import com.example.demo.user.translator.dto.TranslatorDTO
+import com.example.demo.member.parent.dto.ParentDTO
+import com.example.demo.member.teacher.dto.TeacherDTO
+import com.example.demo.member.translator.dto.TranslatorDTO
 import lombok.RequiredArgsConstructor
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController

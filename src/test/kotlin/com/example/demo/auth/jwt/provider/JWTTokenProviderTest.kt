@@ -1,7 +1,7 @@
 package com.example.demo.auth.jwt.provider
 
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.type.UserType
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.type.UserType
 import io.jsonwebtoken.ExpiredJwtException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows

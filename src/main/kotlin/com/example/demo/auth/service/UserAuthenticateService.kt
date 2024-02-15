@@ -3,8 +3,8 @@ package com.example.demo.auth.service
 import com.example.demo.auth.jwt.dto.TokenDTO
 import com.example.demo.auth.jwt.exception.JWTException
 import com.example.demo.auth.jwt.provider.JWTTokenProvider
-import com.example.demo.user.basic.dto.UserLoginDTO
-import com.example.demo.user.basic.service.UserService
+import com.example.demo.member.user.dto.UserLoginDTO
+import com.example.demo.member.user.service.UserService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority

@@ -1,13 +1,12 @@
 package com.example.demo.translate.auto.service
 
 import com.example.demo.docs.service.DocumentService
-import com.example.demo.docs.service.DocumentTranslateService
 import com.example.demo.file.service.FileService
 import com.example.demo.translate.auto.dto.TranslateResultDTO
 import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.translate.auto.repository.TranslateResultRepository
 import com.example.demo.translate.exception.TranslateException
-import com.example.demo.user.basic.service.UserService
+import com.example.demo.member.user.service.UserService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

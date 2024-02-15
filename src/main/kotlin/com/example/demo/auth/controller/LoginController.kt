@@ -2,7 +2,7 @@ package com.example.demo.auth.controller
 
 import com.example.demo.auth.jwt.dto.TokenDTO
 import com.example.demo.auth.service.UserAuthenticateService
-import com.example.demo.user.basic.dto.UserLoginDTO
+import com.example.demo.member.user.dto.UserLoginDTO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse

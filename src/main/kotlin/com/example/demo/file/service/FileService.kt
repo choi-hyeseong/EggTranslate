@@ -6,8 +6,8 @@ import com.example.demo.file.exception.FileException
 import com.example.demo.file.repository.FileRepository
 import com.example.demo.file.util.FileUtil
 import com.example.demo.logger
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.service.UserService
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.service.UserService
 import jakarta.transaction.Transactional
 import kotlinx.coroutines.*
 import org.springframework.beans.factory.annotation.Value

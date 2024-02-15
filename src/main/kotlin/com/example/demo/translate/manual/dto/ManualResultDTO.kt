@@ -3,8 +3,8 @@ package com.example.demo.translate.manual.dto
 import com.example.demo.translate.manual.entity.ManualResult
 import com.example.demo.translate.manual.entity.ManualTranslate
 import com.example.demo.translate.manual.type.TranslateState
-import com.example.demo.user.translator.dto.TranslatorDTO
-import com.example.demo.user.translator.entity.Translator
+import com.example.demo.member.translator.dto.TranslatorDTO
+import com.example.demo.member.translator.entity.Translator
 
 class ManualResultDTO(
     var id: Long?,

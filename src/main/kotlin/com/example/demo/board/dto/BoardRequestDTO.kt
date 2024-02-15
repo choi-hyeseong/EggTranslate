@@ -3,7 +3,7 @@ package com.example.demo.board.dto
 import com.example.demo.board.entity.Board
 import com.example.demo.board.type.BoardVisibility
 import com.example.demo.file.entity.File
-import com.example.demo.user.basic.entity.User
+import com.example.demo.member.user.entity.User
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.web.multipart.MultipartFile
 

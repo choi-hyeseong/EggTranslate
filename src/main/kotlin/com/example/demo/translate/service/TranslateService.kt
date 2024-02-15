@@ -14,10 +14,9 @@ import com.example.demo.translate.manual.type.TranslateState
 import com.example.demo.translate.web.dto.TranslateRequestDTO
 import com.example.demo.translate.web.dto.TranslateResponseDTO
 import com.example.demo.translate.web.service.WebTranslateService
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.type.UserType
-import com.example.demo.user.parent.child.dto.ChildDTO
-import com.example.demo.user.translator.dto.TranslatorDTO
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.parent.child.dto.ChildDTO
+import com.example.demo.member.translator.dto.TranslatorDTO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope

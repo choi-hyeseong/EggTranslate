@@ -7,9 +7,9 @@ import com.example.demo.translate.auto.dto.TranslateFileDTO
 import com.example.demo.translate.manual.entity.ManualTranslate
 import com.example.demo.translate.manual.repository.ManualTranslateRepository
 import com.example.demo.translate.auto.repository.TranslateFileRepository
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.repository.UserRepository
-import com.example.demo.user.basic.type.UserType
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.repository.UserRepository
+import com.example.demo.member.user.type.UserType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test

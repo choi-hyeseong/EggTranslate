@@ -3,14 +3,12 @@ package com.example.demo.translate.auto.dto
 import com.example.demo.convertOrNull
 import com.example.demo.docs.dto.ConvertDocumentDTO
 import com.example.demo.docs.dto.DocumentDTO
-import com.example.demo.docs.entity.ConvertDocument
 import com.example.demo.docs.entity.Document
 import com.example.demo.file.dto.FileDTO
 import com.example.demo.file.entity.File
 import com.example.demo.file.dto.ConvertFileDTO
 import com.example.demo.translate.auto.entity.TranslateFile
-import com.example.demo.user.basic.entity.User
-import com.example.demo.voca.dto.VocaDTO
+import com.example.demo.member.user.entity.User
 import com.example.demo.voca.dto.VocaResponseDTO
 
 class TranslateFileDTO(

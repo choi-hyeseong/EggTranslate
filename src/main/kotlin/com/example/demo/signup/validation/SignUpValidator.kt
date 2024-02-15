@@ -5,9 +5,9 @@ import com.example.demo.signup.dto.ParentSignUpDTO
 import com.example.demo.signup.dto.TeacherSignUpDTO
 import com.example.demo.signup.dto.TranslatorSignUpDTO
 import com.example.demo.signup.exception.DuplicatedException
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.service.UserService
-import com.example.demo.user.basic.type.UserType
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.service.UserService
+import com.example.demo.member.user.type.UserType
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 import kotlinx.coroutines.*

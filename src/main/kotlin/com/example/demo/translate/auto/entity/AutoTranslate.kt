@@ -1,6 +1,5 @@
 package com.example.demo.translate.auto.entity
 
-import com.example.demo.user.basic.entity.User
 import jakarta.persistence.*
 
 @Entity

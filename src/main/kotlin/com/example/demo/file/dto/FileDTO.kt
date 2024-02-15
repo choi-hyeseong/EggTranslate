@@ -2,8 +2,8 @@ package com.example.demo.file.dto
 
 import com.example.demo.convertOrNull
 import com.example.demo.file.entity.File
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.entity.User
 
 class FileDTO(
     val id: Long?,

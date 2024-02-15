@@ -1,7 +1,7 @@
 package com.example.demo.signup.dto
 
-import com.example.demo.user.parent.child.dto.ChildDTO
-import com.example.demo.user.parent.child.type.Gender
+import com.example.demo.member.parent.child.dto.ChildDTO
+import com.example.demo.member.parent.child.type.Gender
 
 class ChildSignUpDTO(
         val name: String,

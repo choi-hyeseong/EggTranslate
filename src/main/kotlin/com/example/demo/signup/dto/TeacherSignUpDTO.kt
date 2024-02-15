@@ -1,7 +1,7 @@
 package com.example.demo.signup.dto
 
-import com.example.demo.user.basic.type.UserType
-import com.example.demo.user.teacher.dto.TeacherDTO
+import com.example.demo.member.user.type.UserType
+import com.example.demo.member.teacher.dto.TeacherDTO
 
 class TeacherSignUpDTO (
         val school : String,
@@ -11,5 +11,6 @@ class TeacherSignUpDTO (
         val address : String?,
         val user: UserSignUpDTO
 ) {
-    fun toTeacherDTO() : TeacherDTO = TeacherDTO(null, school, grade, className, course, address, user.toUserDTO(UserType.TEACHER))
+    fun toTeacherDTO() : TeacherDTO = TeacherDTO(null, school, grade, className, course, address, user.toUserDTO(
+        UserType.TEACHER))
 }

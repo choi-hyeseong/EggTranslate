@@ -6,10 +6,10 @@ import com.example.demo.translate.auto.entity.TranslateResult
 import com.example.demo.translate.manual.dto.ManualResultDTO
 import com.example.demo.translate.manual.dto.ManualResultResponseDTO
 import com.example.demo.translate.manual.entity.ManualResult
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
-import com.example.demo.user.basic.type.UserType
-import com.example.demo.user.parent.child.dto.ChildDTO
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.entity.User
+import com.example.demo.member.user.type.UserType
+import com.example.demo.member.parent.child.dto.ChildDTO
 
 class TranslateResultDTO(
     val id: Long?,

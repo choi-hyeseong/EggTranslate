@@ -7,8 +7,8 @@ import com.example.demo.translate.auto.service.TranslateManageService
 import com.example.demo.translate.auto.service.TranslateResultService
 import com.example.demo.translate.manual.dto.ManualTranslateRequestDTO
 import com.example.demo.translate.service.TranslateService
-import com.example.demo.user.basic.service.UserService
-import com.example.demo.user.translator.service.TranslatorService
+import com.example.demo.member.user.service.UserService
+import com.example.demo.member.translator.service.TranslatorService
 import org.springframework.web.bind.annotation.*
 
 @RestController

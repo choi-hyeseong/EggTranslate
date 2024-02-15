@@ -2,7 +2,7 @@ package com.example.demo.board.entity
 
 import com.example.demo.board.type.BoardVisibility
 import com.example.demo.file.entity.File
-import com.example.demo.user.basic.entity.User
+import com.example.demo.member.user.entity.User
 import jakarta.persistence.*
 
 @Entity

@@ -1,8 +1,7 @@
 package com.example.demo.signup.dto
 
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
-import com.example.demo.user.basic.type.UserType
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.type.UserType
 
 class UserSignUpDTO(
         val userName: String,

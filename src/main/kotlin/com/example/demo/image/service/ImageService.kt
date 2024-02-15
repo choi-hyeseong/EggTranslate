@@ -14,9 +14,9 @@ import com.example.demo.translate.auto.dto.TranslateResultData
 import com.example.demo.translate.auto.dto.TranslateResultResponseDTO
 import com.example.demo.translate.service.TranslateService
 import com.example.demo.translate.web.dto.TranslateRequestDTO
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.service.UserService
-import com.example.demo.user.parent.service.ParentService
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.service.UserService
+import com.example.demo.member.parent.service.ParentService
 import com.example.demo.voca.service.VocaService
 import kotlinx.coroutines.*
 import org.springframework.stereotype.Service

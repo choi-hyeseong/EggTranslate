@@ -7,7 +7,7 @@ import com.example.demo.docs.entity.Document
 import com.example.demo.docs.exception.DocumentException
 import com.example.demo.docs.repository.ConvertDocumentRepository
 import com.example.demo.docs.repository.DocumentRepository
-import com.example.demo.user.basic.service.UserService
+import com.example.demo.member.user.service.UserService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull

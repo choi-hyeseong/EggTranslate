@@ -4,8 +4,8 @@ import com.example.demo.convertOrNull
 import com.example.demo.docs.entity.Document
 import com.example.demo.docs.type.DocumentType
 import com.example.demo.file.dto.AbstractFileDTO
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.entity.User
 
 class DocumentDTO(
     val id: Long?,

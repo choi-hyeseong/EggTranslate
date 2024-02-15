@@ -6,7 +6,7 @@ import com.example.demo.file.util.FileUtil
 import com.example.demo.file.dto.ConvertFileDTO
 import com.example.demo.ocr.component.ocr.model.Area
 import com.example.demo.ocr.component.ocr.model.Paragraph
-import com.example.demo.user.basic.dto.UserDto
+import com.example.demo.member.user.dto.UserDto
 import jakarta.transaction.Transactional
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -1,11 +1,8 @@
 package com.example.demo.admin.model
 
 import com.example.demo.admin.dto.AdminSignUpDTO
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.exception.UserException
-import com.example.demo.user.basic.type.UserType
+import com.example.demo.member.exception.UserException
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.stereotype.Component
 import kotlin.jvm.Throws
 
 //admin 자동 생성 데이터 (프로퍼티)

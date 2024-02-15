@@ -2,9 +2,9 @@ package com.example.demo.translate.auto.entity
 
 import com.example.demo.common.database.entity.BaseEntity
 import com.example.demo.translate.manual.entity.ManualResult
-import com.example.demo.user.basic.entity.User
-import com.example.demo.user.basic.type.UserType
-import com.example.demo.user.parent.child.entity.Child
+import com.example.demo.member.user.entity.User
+import com.example.demo.member.user.type.UserType
+import com.example.demo.member.parent.child.entity.Child
 import jakarta.persistence.*
 
 @Entity

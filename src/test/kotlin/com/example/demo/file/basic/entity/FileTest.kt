@@ -2,9 +2,9 @@ package com.example.demo.file.basic.entity
 
 import com.example.demo.file.dto.FileDTO
 import com.example.demo.file.repository.FileRepository
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.repository.UserRepository
-import com.example.demo.user.basic.type.UserType
+import com.example.demo.member.user.dto.UserDto
+import com.example.demo.member.user.repository.UserRepository
+import com.example.demo.member.user.type.UserType
 import jakarta.transaction.Transactional
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

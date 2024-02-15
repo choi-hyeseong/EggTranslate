@@ -10,15 +10,12 @@ import com.example.demo.common.page.Pageable
 import com.example.demo.board.repository.BoardRepository
 import com.example.demo.convertOrNull
 import com.example.demo.file.dto.FileDTO
-import com.example.demo.file.entity.File
 import com.example.demo.file.service.FileService
-import com.example.demo.user.basic.data.DataFetcher
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.service.UserService
+import com.example.demo.member.user.data.DataFetcher
+import com.example.demo.member.user.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
-import org.springframework.web.multipart.MultipartFile
 import kotlin.math.max
 
 @Service

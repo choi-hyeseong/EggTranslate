@@ -2,7 +2,7 @@ package com.example.demo.translate.manual.entity
 
 import com.example.demo.common.database.entity.BaseEntity
 import com.example.demo.translate.manual.type.TranslateState
-import com.example.demo.user.translator.entity.Translator
+import com.example.demo.member.translator.entity.Translator
 import jakarta.persistence.*
 
 //사실상 request entity

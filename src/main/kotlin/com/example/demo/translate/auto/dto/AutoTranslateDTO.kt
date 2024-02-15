@@ -2,8 +2,6 @@ package com.example.demo.translate.auto.dto
 
 import com.example.demo.translate.auto.entity.AutoTranslate
 import com.example.demo.translate.auto.entity.TranslateFile
-import com.example.demo.user.basic.dto.UserDto
-import com.example.demo.user.basic.entity.User
 
 class AutoTranslateDTO(
         val id : Long?,
