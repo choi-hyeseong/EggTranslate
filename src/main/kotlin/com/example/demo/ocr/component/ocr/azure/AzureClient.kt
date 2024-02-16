@@ -29,7 +29,7 @@ import java.util.regex.Pattern
 @Component
 class AzureClient(private val asyncDocumentAnalysis: DocumentAnalysisAsyncClient) {
 
-    private val timeout: Long = 30
+    private val timeout: Long = 30 //async client는 지정 안되는듯?
 
     //SyncPoller 기본값이 5초마다 끌어옴.. 0.25초마다 끌어오게 변경
     private val pollIntervalMillis: Long = 250
@@ -50,6 +50,7 @@ class AzureClient(private val asyncDocumentAnalysis: DocumentAnalysisAsyncClient
             val response = parseFluxRequest(request)
             return withContext(Dispatchers.IO) { response.blockFirst()!! } //실제 webflux를 사용하는게 아니므로 최종적인 block
         } catch (e: Exception) {
+            //azure 외의 exception은 async exception으로 처리 되서 spring이 해줌
             if (e is AzureRequestException)
                 throw e
             else
@@ -59,6 +60,8 @@ class AzureClient(private val asyncDocumentAnalysis: DocumentAnalysisAsyncClient
 }
 
 private fun parseFluxRequest(request: PollerFlux<OperationResult, AnalyzeResult>): Flux<AzureResponseDTO> {
+    //flatmap은 내부 값만 바꿔주지 R 자체로 바꿔주는건 아님 (Flux<R>)
+    //그리고 내부의 Mono를 평탄화 해줌 (flatMap) -> Flux<Mono<T>> -> Flux<T>
     return request.flatMap {
         val result = it.finalResult
         val status: LongRunningOperationStatus = it.status
