@@ -1,5 +1,6 @@
 package com.example.demo.ocr.component.ocr.azure
 
+import com.azure.ai.formrecognizer.documentanalysis.DocumentAnalysisAsyncClient
 import com.azure.ai.formrecognizer.documentanalysis.DocumentAnalysisClient
 import com.azure.ai.formrecognizer.documentanalysis.DocumentAnalysisClientBuilder
 import com.azure.core.credential.AzureKeyCredential
@@ -17,10 +18,10 @@ class AzureComponent {
     private lateinit var azureEndpoint: String
 
     @Bean
-    fun provideAzureClient(): DocumentAnalysisClient {
+    fun provideAsyncAnalysisClient(): DocumentAnalysisAsyncClient {
         return DocumentAnalysisClientBuilder()
             .credential(AzureKeyCredential(azureKey))
             .endpoint(azureEndpoint)
-            .buildClient()
+            .buildAsyncClient()
     }
 }
