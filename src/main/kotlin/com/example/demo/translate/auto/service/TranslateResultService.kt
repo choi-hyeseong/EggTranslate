@@ -37,8 +37,6 @@ class TranslateResultService(
 
     @Transactional
     suspend fun findStatistics(start : Date, end : Date) : List<StatisticsQueryResponseDTO> {
-        println(start.toLocalDateTIme())
-        println(end)
         return translateResultRepository.findStatistics(start.toLocalDateTIme(), end.toLocalDateTIme()).map { it.toResponseDTO() }
     }
 
