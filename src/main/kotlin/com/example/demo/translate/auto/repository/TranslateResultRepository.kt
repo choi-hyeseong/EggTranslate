@@ -23,11 +23,11 @@ interface TranslateResultRepository : JpaRepository<TranslateResult, Long> {
     fun findStatistics(start : LocalDateTime, end : LocalDateTime) : List<StatisticQueryResponse>
 
     @Query(value = """
-        select DATE(created_date) as find_date, count(*)
+        select DATE(created_date) as date, count(*) as count
         from translate_result
         where user_id = :id
-        group by find_date
-        having find_date between :start and :end
+        group by date
+        having date between :start and :end
     """,  nativeQuery = true)
     fun findStatisticsWithUserId(id : Long, start : LocalDateTime, end : LocalDateTime) : List<StatisticQueryResponse>
 }

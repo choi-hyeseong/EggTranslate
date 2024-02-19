@@ -13,12 +13,12 @@ class AdminStatisticsService(
 ) {
 
     @Transactional
-    suspend fun parseAllStatistics(statType: StatType, start : Date, end : Date) : StatisticsResponseDTO {
-        return statisticsFactory.findParser(statType).parse(start, end)
+    suspend fun parseAllStatistics(start : Date, end : Date) : StatisticsResponseDTO {
+        return statisticsFactory.findParser(StatType.ALL).parse(start, end)
     }
 
     @Transactional
-    suspend fun parseUserStatistics(statType: StatType, userId : Long, start : Date, end : Date) : StatisticsResponseDTO {
-        return statisticsFactory.findParser(statType, userId).parse(start, end)
+    suspend fun parseUserStatistics(userId : Long, start : Date, end : Date) : StatisticsResponseDTO {
+        return statisticsFactory.findParser(StatType.USER, userId).parse(start, end)
     }
 }

@@ -377,11 +377,11 @@ class AdminController(
     */
     @GetMapping("/statistics/all")
     suspend fun findStatistics(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start : Date, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) end : Date) : Response<StatisticsResponseDTO> {
-        return Response.ofSuccess(null, adminStatisticsService.parseAllStatistics(StatType.ALL, start, end))
+        return Response.ofSuccess(null, adminStatisticsService.parseAllStatistics(start, end))
     }
 
     @GetMapping("/statistics/user")
     suspend fun findStatistics(@RequestParam(required = true) id : Long,  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start : Date, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) end : Date) : Response<StatisticsResponseDTO> {
-        return Response.ofSuccess(null, adminStatisticsService.parseAllStatistics(StatType.ALL, start, end))
+        return Response.ofSuccess(null, adminStatisticsService.parseUserStatistics(id, start, end))
     }
 }
