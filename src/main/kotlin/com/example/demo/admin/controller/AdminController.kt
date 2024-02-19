@@ -2,7 +2,10 @@ package com.example.demo.admin.controller
 
 import com.example.demo.admin.dto.AdminSignUpDTO
 import com.example.demo.admin.service.AdminBoardService
+import com.example.demo.admin.service.AdminStatisticsService
 import com.example.demo.admin.service.AdminUserService
+import com.example.demo.admin.statistics.dto.StatisticsResponseDTO
+import com.example.demo.admin.statistics.type.StatType
 import com.example.demo.auth.security.config.getUserOrThrow
 import com.example.demo.board.dto.BoardEditRequestDTO
 import com.example.demo.board.dto.BoardRequestDTO
@@ -25,8 +28,10 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
+import java.util.Date
 
 @RestController
 @RequestMapping("/api/admin")
@@ -35,7 +40,8 @@ class AdminController(
     private val userService: UserService,
     private val fileService: FileService,
     private val adminBoardService: AdminBoardService,
-    private val adminUserService: AdminUserService
+    private val adminUserService: AdminUserService,
+    private val adminStatisticsService: AdminStatisticsService
 ) {
 
     /*
@@ -364,5 +370,18 @@ class AdminController(
     @PostMapping("")
     suspend fun createAdmin(@SignUpValid @RequestBody adminSignUpDTO: AdminSignUpDTO): Response<UserDto> {
         return Response.ofSuccess("관리자가 추가되었습니다.", adminUserService.createAdmin(adminSignUpDTO))
+    }
+
+    /*
+    *   StatisticsPart
+    */
+    @GetMapping("/statistics/all")
+    suspend fun findStatistics(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start : Date, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) end : Date) : Response<StatisticsResponseDTO> {
+        return Response.ofSuccess(null, adminStatisticsService.parseAllStatistics(StatType.ALL, start, end))
+    }
+
+    @GetMapping("/statistics/user")
+    suspend fun findStatistics(@RequestParam(required = true) id : Long,  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start : Date, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) end : Date) : Response<StatisticsResponseDTO> {
+        return Response.ofSuccess(null, adminStatisticsService.parseAllStatistics(StatType.ALL, start, end))
     }
 }

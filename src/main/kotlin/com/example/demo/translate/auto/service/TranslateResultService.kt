@@ -1,5 +1,8 @@
 package com.example.demo.translate.auto.service
 
+import com.example.demo.admin.statistics.dto.StatisticsQueryResponseDTO
+import com.example.demo.admin.statistics.dto.toResponseDTO
+import com.example.demo.admin.statistics.parser.toLocalDateTIme
 import com.example.demo.docs.service.DocumentService
 import com.example.demo.file.service.FileService
 import com.example.demo.translate.auto.dto.TranslateResultDTO
@@ -9,6 +12,7 @@ import com.example.demo.translate.exception.TranslateException
 import com.example.demo.member.user.service.UserService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.Date
 
 @Service
 class TranslateResultService(
@@ -29,6 +33,18 @@ class TranslateResultService(
         }.toMutableList()
         val autoTranslate = translateResultDTO.autoTranslate.toEntity(translateFiles)
         return translateResultRepository.save(translateResultDTO.toEntity(user, autoTranslate, null)).id
+    }
+
+    @Transactional
+    suspend fun findStatistics(start : Date, end : Date) : List<StatisticsQueryResponseDTO> {
+        println(start.toLocalDateTIme())
+        println(end)
+        return translateResultRepository.findStatistics(start.toLocalDateTIme(), end.toLocalDateTIme()).map { it.toResponseDTO() }
+    }
+
+    @Transactional
+    suspend fun findStatistics(id : Long, start : Date, end : Date) : List<StatisticsQueryResponseDTO> {
+        return translateResultRepository.findStatisticsWithUserId(id, start.toLocalDateTIme(), end.toLocalDateTIme()).map { it.toResponseDTO() }
     }
 
     @Transactional
