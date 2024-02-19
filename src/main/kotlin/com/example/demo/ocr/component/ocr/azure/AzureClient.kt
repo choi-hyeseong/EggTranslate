@@ -7,7 +7,6 @@ import com.azure.ai.formrecognizer.documentanalysis.models.Point
 import com.azure.core.util.BinaryData
 import com.azure.core.util.polling.AsyncPollResponse
 import com.azure.core.util.polling.LongRunningOperationStatus
-import com.azure.core.util.polling.PollerFlux
 import com.example.demo.ocr.component.ocr.azure.dto.AzureResponseDTO
 import com.example.demo.ocr.component.ocr.model.Area
 import com.example.demo.ocr.component.ocr.model.Paragraph
@@ -59,36 +58,37 @@ class AzureClient(private val asyncDocumentAnalysis: DocumentAnalysisAsyncClient
                 throw AzureRequestException(HttpStatus.INTERNAL_SERVER_ERROR, e.message ?: e.localizedMessage)
         }
     }
-}
 
-private fun parseFluxResponse(request: Flux<AsyncPollResponse<OperationResult, AnalyzeResult>>): Flux<AzureResponseDTO> {
-    //flatmap은 내부 값만 바꿔주지 R 자체로 바꿔주는건 아님 (Flux<R>)
-    //그리고 내부의 Mono를 평탄화 해줌 (flatMap) -> Flux<Mono<T>> -> Flux<T>
-    return request.flatMap {
-        val result = it.finalResult
-        val status: LongRunningOperationStatus = it.status
-        if (status == LongRunningOperationStatus.FAILED)
-        //실패했을경우 Mono의 Error로 Exception을 반환
-            Mono.error(AzureRequestException(HttpStatus.INTERNAL_SERVER_ERROR, "failed to request."))
-        else
-        //성공한경우 Response 파싱. FlatMap이므로 Mono<Mono<~>> 가 아닌 Mono로 가져올 수 있음 (평탄화)
-            result.flatMap { res ->
-                if (res.paragraphs.isNullOrEmpty())
-                //문단이 비어있을경우 Mono의 Error로 파싱
-                    Mono.error(AzureRequestException(HttpStatus.BAD_REQUEST, "인식된 텍스트가 없습니다."))
-                else
-                //성공했을경우 Mono의 just로 Mono로 파싱후 반환
-                    Mono.just(AzureResponseDTO(res.content, parseParagraph(res)))
-            }
-    }
-}
 
-private fun parseParagraph(result: AnalyzeResult): List<Paragraph> {
-    val paragraphList: MutableList<Paragraph> = mutableListOf()
-    result.paragraphs.forEach {
-        val polygons = it.boundingRegions[0].boundingPolygon
-        polygons.sortWith { p1: Point, p2: Point -> (p1.x + p1.y).compareTo((p2.x + p2.y)) }
-        paragraphList.add(Paragraph(it.content, Area(polygons[0], polygons[3])))
+    private fun parseFluxResponse(request: Flux<AsyncPollResponse<OperationResult, AnalyzeResult>>): Flux<AzureResponseDTO> {
+        //flatmap은 내부 값만 바꿔주지 R 자체로 바꿔주는건 아님 (Flux<R>)
+        //그리고 내부의 Mono를 평탄화 해줌 (flatMap) -> Flux<Mono<T>> -> Flux<T>
+        return request.flatMap {
+            val result = it.finalResult
+            val status: LongRunningOperationStatus = it.status
+            if (status == LongRunningOperationStatus.FAILED)
+            //실패했을경우 Mono의 Error로 Exception을 반환
+                Mono.error(AzureRequestException(HttpStatus.INTERNAL_SERVER_ERROR, "failed to request."))
+            else
+            //성공한경우 Response 파싱. FlatMap이므로 Mono<Mono<~>> 가 아닌 Mono로 가져올 수 있음 (평탄화)
+                result.flatMap { res ->
+                    if (res.paragraphs.isNullOrEmpty())
+                    //문단이 비어있을경우 Mono의 Error로 파싱
+                        Mono.error(AzureRequestException(HttpStatus.BAD_REQUEST, "인식된 텍스트가 없습니다."))
+                    else
+                    //성공했을경우 Mono의 just로 Mono로 파싱후 반환
+                        Mono.just(AzureResponseDTO(res.content, parseParagraph(res)))
+                }
+        }
     }
-    return paragraphList
+
+    private fun parseParagraph(result: AnalyzeResult): List<Paragraph> {
+        val paragraphList: MutableList<Paragraph> = mutableListOf()
+        result.paragraphs.forEach {
+            val polygons = it.boundingRegions[0].boundingPolygon
+            polygons.sortWith { p1: Point, p2: Point -> (p1.x + p1.y).compareTo((p2.x + p2.y)) }
+            paragraphList.add(Paragraph(it.content, Area(polygons[0], polygons[3])))
+        }
+        return paragraphList
+    }
 }
