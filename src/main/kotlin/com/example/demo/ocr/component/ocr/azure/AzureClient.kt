@@ -5,9 +5,9 @@ import com.azure.ai.formrecognizer.documentanalysis.models.AnalyzeResult
 import com.azure.ai.formrecognizer.documentanalysis.models.OperationResult
 import com.azure.ai.formrecognizer.documentanalysis.models.Point
 import com.azure.core.util.BinaryData
+import com.azure.core.util.polling.AsyncPollResponse
 import com.azure.core.util.polling.LongRunningOperationStatus
 import com.azure.core.util.polling.PollerFlux
-import com.example.demo.logger
 import com.example.demo.ocr.component.ocr.azure.dto.AzureResponseDTO
 import com.example.demo.ocr.component.ocr.model.Area
 import com.example.demo.ocr.component.ocr.model.Paragraph
@@ -44,10 +44,12 @@ class AzureClient(private val asyncDocumentAnalysis: DocumentAnalysisAsyncClient
         val documentData = BinaryData.fromBytes(file.bytes)
         try {
             //AsyncPoller를 가져옴 (PollInterval은 0.25s)
-            val request: PollerFlux<OperationResult, AnalyzeResult> =
-                asyncDocumentAnalysis.beginAnalyzeDocument("prebuilt-layout", documentData).apply { setPollInterval(Duration.ofMillis(pollIntervalMillis)) }
+            val request: Flux<AsyncPollResponse<OperationResult, AnalyzeResult>> =
+                asyncDocumentAnalysis.beginAnalyzeDocument("prebuilt-layout", documentData)
+                    .apply { setPollInterval(Duration.ofMillis(pollIntervalMillis)) }
+                    .timeout(Duration.ofSeconds(timeout))
             //결과값을 mapping함 (flatmap으로 평탄화) 언제? : 결과를 받았을때
-            val response = parseFluxRequest(request)
+            val response = parseFluxResponse(request)
             return withContext(Dispatchers.IO) { response.blockFirst()!! } //실제 webflux를 사용하는게 아니므로 최종적인 block
         } catch (e: Exception) {
             //azure 외의 exception은 async exception으로 처리 되서 spring이 해줌
@@ -59,7 +61,7 @@ class AzureClient(private val asyncDocumentAnalysis: DocumentAnalysisAsyncClient
     }
 }
 
-private fun parseFluxRequest(request: PollerFlux<OperationResult, AnalyzeResult>): Flux<AzureResponseDTO> {
+private fun parseFluxResponse(request: Flux<AsyncPollResponse<OperationResult, AnalyzeResult>>): Flux<AzureResponseDTO> {
     //flatmap은 내부 값만 바꿔주지 R 자체로 바꿔주는건 아님 (Flux<R>)
     //그리고 내부의 Mono를 평탄화 해줌 (flatMap) -> Flux<Mono<T>> -> Flux<T>
     return request.flatMap {
