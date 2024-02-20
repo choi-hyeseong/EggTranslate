@@ -87,6 +87,7 @@ class AzureClientTest {
     //시간초과가 발생한경우
     @Test
     fun TEST_THROWN_TIMEOUT() {
+        every { response.status } returns LongRunningOperationStatus.SUCCESSFULLY_COMPLETED
         every { response.finalResult } throws RuntimeException(TimeoutException())
 
         val throws = assertThrows(AzureRequestException::class.java) {
@@ -97,9 +98,11 @@ class AzureClientTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, throws.code)
     }
 
+    //Azure Ratelimit 발생시
     @Test
     fun TEST_THROWN_RATE_LIMIT() {
         val message = "RATE_LIMIT"
+        every { response.status } returns LongRunningOperationStatus.SUCCESSFULLY_COMPLETED
         every { response.finalResult } throws HttpRequestException(message, mockk())
         val throws = assertThrows(AzureRequestException::class.java) {
             runBlocking {
