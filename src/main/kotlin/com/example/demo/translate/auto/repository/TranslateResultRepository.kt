@@ -30,4 +30,16 @@ interface TranslateResultRepository : JpaRepository<TranslateResult, Long> {
         having date between :start and :end
     """,  nativeQuery = true)
     fun findStatisticsWithUserId(id : Long, start : LocalDateTime, end : LocalDateTime) : List<StatisticQueryResponse>
+
+    @Query(value = """
+        SELECT DATE(t.created_date) AS date, COUNT(DISTINCT t.id) AS count
+        FROM translate_result AS t
+        INNER JOIN autotranslate AS a ON t.auto_translate_id = a.id 
+        INNER JOIN translate_file AS tf ON a.id = tf.autotranslate_id
+        WHERE to_lang = :lang
+        GROUP BY DATE(t.created_date), to_lang
+        HAVING date between :start and :end
+    
+    """, nativeQuery = true)
+    fun findStatisticsWithLang(lang : String, start: LocalDateTime, end: LocalDateTime) : List<StatisticQueryResponse>
 }

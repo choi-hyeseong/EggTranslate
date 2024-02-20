@@ -46,6 +46,11 @@ class TranslateResultService(
     }
 
     @Transactional
+    suspend fun findStatistics(lang : String, start : Date, end : Date) : List<StatisticsQueryResponseDTO> {
+        return translateResultRepository.findStatisticsWithLang(lang, start.toLocalDateTIme(), end.toLocalDateTIme()).map { it.toResponseDTO() }
+    }
+
+    @Transactional
     suspend fun findTranslateResult(id: Long): TranslateResultDTO {
         return TranslateResultDTO(findTranslateResultEntity(id))
     }

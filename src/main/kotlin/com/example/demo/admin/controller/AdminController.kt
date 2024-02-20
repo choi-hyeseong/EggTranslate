@@ -162,7 +162,8 @@ class AdminController(
     @GetMapping("/user/{id}")
     suspend fun userInfo(
         @Parameter(name = "id", description = "유저의 id입니다.", `in` = ParameterIn.PATH)
-        @PathVariable id: Long): Response<UserResponseDTO> {
+        @PathVariable id: Long
+    ): Response<UserResponseDTO> {
         return Response.ofSuccess(null, adminUserService.findUserDetail(id))
     }
 
@@ -238,7 +239,8 @@ class AdminController(
     @GetMapping("/user/parent/{id}")
     suspend fun parentInfo(
         @Parameter(name = "id", description = "조회할 부모의 유저 id입니다.", `in` = ParameterIn.PATH)
-        @PathVariable id: Long): Response<ParentResponseDTO> {
+        @PathVariable id: Long
+    ): Response<ParentResponseDTO> {
         return Response.ofSuccess(null, adminUserService.findParentDetail(id))
     }
 
@@ -361,7 +363,8 @@ class AdminController(
     @PutMapping("/{id}")
     suspend fun convertAdmin(
         @Parameter(name = "id", description = "해당 유저의 id입니다.")
-        @PathVariable id: Long): Response<UserDto> {
+        @PathVariable id: Long
+    ): Response<UserDto> {
         return Response.ofSuccess("해당 유저가 관리자로 설정되었습니다.", adminUserService.convertAdmin(id))
     }
 
@@ -376,12 +379,28 @@ class AdminController(
     *   StatisticsPart
     */
     @GetMapping("/statistics/all")
-    suspend fun findStatistics(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start : Date, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) end : Date) : Response<StatisticsResponseDTO> {
+    suspend fun findStatistics(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start: Date,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) end: Date
+    ): Response<StatisticsResponseDTO> {
         return Response.ofSuccess(null, adminStatisticsService.parseAllStatistics(start, end))
     }
 
     @GetMapping("/statistics/user")
-    suspend fun findStatistics(@RequestParam(required = true) id : Long,  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start : Date, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) end : Date) : Response<StatisticsResponseDTO> {
+    suspend fun findStatistics(
+        @RequestParam(required = true) id: Long,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start: Date,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) end: Date
+    ): Response<StatisticsResponseDTO> {
         return Response.ofSuccess(null, adminStatisticsService.parseUserStatistics(id, start, end))
+    }
+
+    @GetMapping("/statistics/lang")
+    suspend fun findStatistics(
+        @RequestParam(required = true) lang : String,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start: Date,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) end: Date
+    ) : Response<StatisticsResponseDTO> {
+        return Response.ofSuccess(null, adminStatisticsService.parseLangStatistics(lang, start, end))
     }
 }

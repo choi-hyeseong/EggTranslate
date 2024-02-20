@@ -21,4 +21,9 @@ class AdminStatisticsService(
     suspend fun parseUserStatistics(userId : Long, start : Date, end : Date) : StatisticsResponseDTO {
         return statisticsFactory.findParser(StatType.USER, userId).parse(start, end)
     }
+
+    @Transactional
+    suspend fun parseLangStatistics(lang : String, start: Date, end: Date) : StatisticsResponseDTO {
+        return statisticsFactory.findParser(StatType.LANG, lang = lang).parse(start, end)
+    }
 }
