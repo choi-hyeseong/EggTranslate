@@ -54,6 +54,8 @@ class AzureClient(private val asyncDocumentAnalysis: DocumentAnalysisAsyncClient
             //azure 외의 exception은 async exception으로 처리 되서 spring이 해줌
             if (e is AzureRequestException)
                 throw e
+            else if (e.cause is AzureRequestException)
+                throw e.cause as AzureRequestException
             else
                 throw AzureRequestException(HttpStatus.INTERNAL_SERVER_ERROR, e.message ?: e.localizedMessage)
         }
@@ -73,7 +75,7 @@ class AzureClient(private val asyncDocumentAnalysis: DocumentAnalysisAsyncClient
             //성공한경우 Response 파싱. FlatMap이므로 Mono<Mono<~>> 가 아닌 Mono로 가져올 수 있음 (평탄화)
                 result.flatMap { res ->
                     if (res.paragraphs.isNullOrEmpty())
-                    //문단이 비어있을경우 Mono의 Error로 파싱
+                    //문단이 비어있을경우 throw
                         Mono.error(AzureRequestException(HttpStatus.BAD_REQUEST, "인식된 텍스트가 없습니다."))
                     else
                     //성공했을경우 Mono의 just로 Mono로 파싱후 반환
