@@ -1,6 +1,8 @@
 package com.example.demo.profile.service
 
+import com.example.demo.auth.security.config.getUserOrThrow
 import com.example.demo.board.service.BoardService
+import com.example.demo.common.response.Response
 import com.example.demo.docs.service.DocumentService
 import com.example.demo.file.service.FileService
 import com.example.demo.translate.auto.service.TranslateManageService
@@ -9,18 +11,24 @@ import com.example.demo.member.user.service.UserService
 import com.example.demo.member.user.type.UserType
 import com.example.demo.member.heart.service.HeartService
 import com.example.demo.member.parent.dto.ParentConvertDTO
+import com.example.demo.member.parent.dto.ParentResponseDTO
 import com.example.demo.member.parent.dto.ParentUpdateDTO
 import com.example.demo.member.parent.service.ParentService
 import com.example.demo.member.teacher.dto.TeacherConvertDTO
 import com.example.demo.member.teacher.dto.TeacherDTO
+import com.example.demo.member.teacher.dto.TeacherResponseDTO
 import com.example.demo.member.teacher.dto.TeacherUpdateDTO
 import com.example.demo.member.teacher.service.TeacherService
 import com.example.demo.member.translator.dto.TranslatorConvertDTO
 import com.example.demo.member.translator.dto.TranslatorDTO
+import com.example.demo.member.translator.dto.TranslatorResponseDTO
 import com.example.demo.member.translator.dto.TranslatorUpdateDTO
 import com.example.demo.member.translator.service.TranslatorService
+import com.example.demo.member.user.dto.UserResponseDTO
+import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.GetMapping
 
 @Service
 @Transactional
@@ -35,6 +43,37 @@ class ProfileService(
     private val heartService: HeartService,
     private val boardService: BoardService
     ) {
+
+    /*
+    *   Info part
+     */
+    @Transactional
+    suspend fun getUserProfile(authentication: Authentication) : UserResponseDTO {
+        val username = authentication.getUserOrThrow().username
+        return userService.findUserByUserName(username).toResponseDTO()
+    }
+
+    @Transactional
+    suspend fun getParentProfile(authentication: Authentication) : ParentResponseDTO {
+        val username = authentication.getUserOrThrow().username
+        val user = userService.findUserByUserName(username)
+        return parentService.findByParentUserId(user.id!!).toResponseDTO()
+    }
+
+    @Transactional
+    suspend fun getTranslatorProfile(authentication: Authentication) : TranslatorResponseDTO {
+        val username = authentication.getUserOrThrow().username
+        val user = userService.findUserByUserName(username)
+        return translatorService.findTranslatorByUserId(user.id!!).toResponseDTO()
+    }
+
+    @Transactional
+    suspend fun getTeacherProfile(authentication: Authentication) : TeacherResponseDTO {
+        val username = authentication.getUserOrThrow().username
+        val user = userService.findUserByUserName(username)
+        return teacherService.findTeacherByUserId(user.id!!).toResponseDTO()
+    }
+
 
     /*
     * Update Part
